@@ -73,6 +73,54 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     PI2 = (PI2 - 9.81 * rhoi) / 10**6  # 管内静液柱压力
     PO2 = (PO2 - 9.81 * rhoi) / 10**6  # 环空静液柱压力
 
+
+    # 流速计算
+    Vp = Q / (np.pi * rt**2)                # 管内流速
+    Va = 4 * Q / (np.pi * (Dw**2 - 4 * Rt**2))  # 环空流速
+
+    # 钻铤井段
+    Vpzt = Q / (np.pi * rtzt**2)               # 管内流速
+    Vazt = 4 * Q / (np.pi * (Dw**2 - 4 * Rtzt**2))  # 环空流速
+
+    # 钻柱接头影响系数
+    fjt = Lp / (Lp + Li) + Li / (Lp + Li) * (rzz / rzzjt)**4.8
+
+    # Ppzz , Pazz = 0
+    if wc == 1:
+    # 钻柱井段
+        Repzz = rhoi * rzz * Vp / miu / (1 + taof * rzz / (6 * miu * Vp))
+        Reazz = rhoi * (Dw - Rzz) * Va / miu / (1 + taof * (Dw - Rzz) / (8 * miu * Va))
+    
+        Lzz_vec = np.arange(1, Lzz + 1).reshape(-1, 1)  # 保持列向量
+        if Repzz < 2000:
+            Ppzz = 40.7437 * miu * Lzz_vec * Ql / rzzcm**4 + taof * Lzz_vec / (187.5 * rzzcm)
+        else:
+            Ppzz = 5.1655 * miu**0.2 * rhoo**0.8 * Lzz_vec * Ql**1.8 / rzzcm**4.8
+    
+        if Reazz < 2000:
+            Pazz = 61.1155 * miu * Lzz_vec * Ql / (Dwcm - Rzzcm)**3 / (Dwcm + Rzzcm) + 6 * 10**-3 * taof * Lzz_vec / (Dwcm - Rzzcm)
+        else:
+            Pazz = 5.7503 * miu**0.2 * rhoo**0.8 * Lzz_vec * Ql**1.8 / (Dwcm - Rzzcm)**3 / (Dwcm + Rzzcm)**1.8
+    elif wc == 2:  # 幂律流体
+        # 钻柱井段
+        Repzz = rhoi * rzz**n * Vp**(2-n) / 8**(n-1) / K / ((3*n+1) / (4*n))**n
+        Reazz = rhoi * (Dw - Rzz)**n * Va**(2-n) / 12**(n-1) / K / ((2*n+1) / (3*n))**n
+        
+        if Repzz < 3470 - 1370 * n:
+            Ppzz = ((8000 * (3*n+1) * Ql) / (np.pi * n * rzzcm**3))**n * Lzz_vec * K / 250 / rzzcm
+        else:
+            Ppzz = 5.1655 * miu**0.2 * rhoo**0.8 * Lzz_vec * Ql**1.8 / rzzcm**4.8
+        
+        if Reazz < 3470 - 1370 * n:
+            Pazz = ((16000 * (2*n+1) * Ql) / (np.pi * n * (Dwcm - Rzzcm)**2 * (Dwcm + Rzzcm)))**n * Lzz_vec * K / 250 / (Dwcm - Rzzcm)
+        else:
+            Pazz = 5.7503 * miu**0.2 * rhoo**0.8 * Lzz_vec * Ql**1.8 / (Dwcm - Rzzcm)**3 / (Dwcm + Rzzcm)**1.8
+        
+    
+
+
+
+
     
 
 
