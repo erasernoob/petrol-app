@@ -73,7 +73,6 @@ def deal_curve_data2(data1):
     return Mk, mk, Sk, alphak, phik
 
 
-
 def deal_input_data(data):
     Xs = np.zeros((data.shape[0], 1))
     Ys = np.zeros((data.shape[0], 1))
@@ -185,6 +184,7 @@ def spline_interp(Mk,mk,Sk,alphak,phik,S0):
     return alphacal, phical
 
 
+# gpt
 def prepare_data(sspan,Mk,mk,Sk,alphak,phik):
     # 初始化输出变量
     alphas = np.zeros(len(sspan))
@@ -245,9 +245,56 @@ def prepare_data(sspan,Mk,mk,Sk,alphak,phik):
 
     return alphas, phis, ks, dks, ddks, kphis, kalphas, taos
 
-def deal_trank(Sk,alpha,phi):
+def deal_trank(Sk, alpha, phi):
+    #     data=xlsread(filename);
+    n = len(Sk)  # n=numel(Sk);
+    Xs = np.zeros(n)  # Xs=zeros(n,1);
+    Ys = np.zeros(n)  # Ys=zeros(n,1);
+    Zs = np.zeros(n)  # Zs=zeros(n,1);
+    Length = np.zeros(n)  # Length=zeros(n,1);
+    Length = np.array(Sk)  # Length=Sk(:,1);
+  
+    for i in range(1, len(Xs)):  # for i=2:length(Xs)
+        alpha1 = alpha[i - 1]  # alpha1=alpha(i-1);
+        alpha2 = alpha[i]      # alpha2=alpha(i);
+        phi1 = phi[i - 1]      # phi1=phi(i-1);
+        phi2 = phi[i]          # phi2=phi(i);
+        #         ppp=abs(phi1-phi2);
+        #         if ppp>pi&&phi1<pi
+        #             phi1=phi1+2*pi;
+        #         elseif ppp>pi&&phi1>pi
+        #             phi1=abs(phi1-2*pi);
+        #         end
+        ds = Sk[i] - Sk[i - 1]  # ds=Sk(i)-Sk(i-1);
+        if alpha1 != alpha2 and phi1 != phi2:  # if alpha1~=alpha2&&phi1~=phi2
+            dx = ds * (np.cos(alpha1) - np.cos(alpha2)) / (alpha2 - alpha1) / (phi2 - phi1) * (np.sin(phi2) - np.sin(phi1))
+            dy = ds * (np.cos(alpha1) - np.cos(alpha2)) / (alpha2 - alpha1) / (phi2 - phi1) * (np.cos(phi1) - np.cos(phi2))
+            dz = ds / (alpha2 - alpha1) * (np.sin(alpha2) - np.sin(alpha1))
+        elif alpha1 == alpha2 and phi1 != phi2:  # elseif alpha1==alpha2&&phi1~=phi2
+            #             dx=ds*sin(alpha1)/(phi2-phi1)*(sin(phi2)-sin(phi1));
+            dx = ds * np.sin(alpha2) / (phi2 - phi1) * (np.sin(phi2) - np.sin(phi1))
+            #             dy=ds*sin(alpha1)/(phi2-phi1)*(cos(phi1)-cos(phi2));
+            dy = ds * np.sin(alpha2) / (phi2 - phi1) * (np.cos(phi1) - np.cos(phi2))
+            #             dz=ds*cos(alpha1);
+            dz = ds * np.cos(alpha2)
+        elif alpha1 != alpha2 and phi1 == phi2:  # elseif alpha1~=alpha2&&phi1==phi2
+            #             dx=ds/(alpha2-alpha1)*(cos(alpha1)-cos(alpha2))*cos(phi1);
+            dx = ds / (alpha2 - alpha1) * (np.cos(alpha1) - np.cos(alpha2)) * np.cos(phi2)
+            #             dy=ds/(alpha2-alpha1)*(cos(alpha1)-cos(alpha2))*sin(phi1);
+            dy = ds / (alpha2 - alpha1) * (np.cos(alpha1) - np.cos(alpha2)) * np.sin(phi2)
+            dz = ds / (alpha2 - alpha1) * (np.sin(alpha2) - np.sin(alpha1))
+        else:
+            #             dx=ds*sin(alpha1)*cos(phi1);
+            dx = ds * np.sin(alpha2) * np.cos(phi2)
+            #             dy=ds*sin(alpha1)*sin(phi1);
+            dy = ds * np.sin(alpha2) * np.sin(phi2)
+            #             dz=ds*cos(alpha1);
+            dz = ds * np.cos(alpha2)
+        Xs[i] = Xs[i - 1] + dx  # Xs(i)=Xs(i-1)+dx;
+        Ys[i] = Ys[i - 1] + dy  # Ys(i)=Ys(i-1)+dy;
+        Zs[i] = Zs[i - 1] + dz  # Zs(i)=Zs(i-1)+dz;
 
-    return Length,Xs,Ys,Zs
+    return Length, Xs, Ys, Zs
 
     
     
