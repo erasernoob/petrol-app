@@ -8,7 +8,7 @@ from Hydro import Hydro
 # 输入参数————————————————————————————————————————————
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-excel_path = os.path.join(script_dir, 'KL16-1-A25井眼轨迹.xlsx')
+excel_path = os.path.join(script_dir, 'BZ29-6-A26H井眼轨迹_6209m.xlsx')
 guiji = pd.read_excel(excel_path).values  # 与 xlsread 类似
 
 # 基本参数————————————————————————————————————————————
@@ -78,7 +78,8 @@ if yx == 0:
     plt.ylabel('井深（m）')         # Y轴标签
     plt.gca().invert_yaxis()        # Y轴反转，使井深从下到上变化
     plt.legend(loc='lower left')    # 图例位置设置
-    plt.show()
+    plt.savefig('output1.png')
+    # plt.show()
 
     # 导出钻柱循环压力数据——————————————————————————————————————————————————————
     pd.DataFrame(Pgn).to_excel('钻柱循环压力.xlsx', sheet_name='Sheet1', index=False)
@@ -91,7 +92,7 @@ if yx == 0:
     plt.xlabel('ECD（g/cm3）')
     plt.ylabel('井深（m）')
     plt.gca().invert_yaxis()        # Y轴反转，使井深从下到上变化
-    plt.show()
+    # plt.show()
 
     # 导出ECD数据——————————————————————————————————————————————————————
     pd.DataFrame(ECD).to_excel('ECD.xlsx', sheet_name='Sheet1', index=False)
@@ -105,7 +106,7 @@ elif yx == 1:
     plt.ylabel('井深（m）')         # Y轴标签
     plt.gca().invert_yaxis()        # Y轴反转，使井深从下到上变化
     plt.legend(loc='lower left')    # 图例位置设置
-    plt.show()
+    # plt.show()
 
     # 导出钻柱循环压力数据——————————————————————————————————————————————————————
     pd.DataFrame(Pgnyx).to_excel('钻柱循环压力.xlsx', sheet_name='Sheet1', index=False)
@@ -118,7 +119,7 @@ elif yx == 1:
     plt.xlabel('ECD（g/cm3）')
     plt.ylabel('井深（m）')
     plt.gca().invert_yaxis()        # Y轴反转，使井深从下到上变化
-    plt.show()
+    # plt.show()
 
     # 导出ECD数据——————————————————————————————————————————————————————
     pd.DataFrame(ECDyx).to_excel('ECD.xlsx', sheet_name='Sheet1', index=False)

@@ -3,74 +3,96 @@ from scipy.signal import savgol_filter
 from scipy.interpolate import CubicSpline
 
 
+import numpy as np
+from scipy.interpolate import interp1d
+from scipy.linalg import solve
+
 def deal_curve_data2(data1):
-    # 去除井眼轨迹中的重复值，并按升序排序
-    sortedData = data1[np.argsort(np.round(data1[:, 0]))]  # 按第一列升序排序
-    _, uniqueIndices = np.unique(sortedData[:, 0], return_index=True)  # 获取第一列的唯一索引
-    data = sortedData[np.sort(uniqueIndices)]  # 通过索引获取唯一的行数据
-
-    # 提取数据
-    S = np.round(data[:, 0]).astype(int).reshape(-1, 1)
-    alphaa = data[:, 1].reshape(-1, 1)
-    phia = data[:, 2].reshape(-1, 1)
-    n = int(S[-1, 0])
-
-    # 进行 Cubic Spline 插值
-    i_values = np.arange(1, n + 1).reshape(-1, 1)  # 生成 1 到 n 的列向量
-    spline_alpha = CubicSpline(S.flatten(), alphaa.flatten())  # 'spline' 插值
-    spline_phi = CubicSpline(S.flatten(), phia.flatten())  # 'spline' 插值
-    alphas = np.abs(spline_alpha(i_values)).reshape(-1, 1)  # 取绝对值
-    phis = np.abs(spline_phi(i_values)).reshape(-1, 1)  # 取绝对值
-
-    # 取模 360
+    # 去除重复值并按升序排序
+    data1_rounded = np.round(data1).astype(int)
+    sorted_indices = np.argsort(data1_rounded[:, 0])
+    sorted_data = data1_rounded[sorted_indices]
+    # 获取唯一行（保持顺序）
+    _, unique_indices = np.unique(sorted_data[:, 0], return_index=True)
+    unique_indices = np.sort(unique_indices)  # 保持原始顺序
+    data = sorted_data[unique_indices]
+    
+    # 提取并处理数据
+    S = data[:, 0].astype(int)
+    alphaa = data[:, 1]
+    phia = data[:, 3]  # 注意：原MATLAB代码中是第三列，索引为2（Python从0开始）
+    
+    n = int(np.round(S[-1]))
+    alphas = np.zeros(n)
+    phis = np.zeros(n)
+    
+    # 创建插值函数（使用三次样条）
+    if len(S) > 3:
+        interp_kind = 'cubic'
+    else:
+        interp_kind = 'linear'  # 数据点少于3时使用线性插值
+        
+    alpha_interp = interp1d(S, alphaa, kind=interp_kind, fill_value='extrapolate')
+    phi_interp = interp1d(S, phia, kind=interp_kind, fill_value='extrapolate')
+    
+    for i in range(n):
+        alphas[i] = np.abs(alpha_interp(i+1))  # MATLAB的S从1开始
+        phis[i] = np.abs(phi_interp(i+1))
+    
+    # 取模360度
     alphas = np.mod(alphas, 360)
     phis = np.mod(phis, 360)
-
-    # 重新定义 S
-    S = np.arange(1, n + 1).reshape(-1, 1)
-    alpha = np.flipud(alphas) * np.pi / 180  # 翻转并转换为弧度
-    phi = np.flipud(phis) * np.pi / 180  # 翻转并转换为弧度
-
-    # 初始化矩阵
-    np_count = S.shape[0]  # 点数
-    A = np.zeros((np_count, np_count))
-    D1 = np.zeros((np_count, 1))
-    D2 = np.zeros((np_count, 1))
-
-    # 计算步长 Ls
-    Ls = S[1:] - S[:-1]
-
-    # 计算矩阵 A 和向量 D1, D2
-    for i in range(1, np_count - 1):
-        Lk0 = Ls[i - 1, 0]
-        Lk1 = Ls[i, 0]
-        alphak1 = alpha[i + 1, 0]
-        alphak0 = alpha[i, 0]
-        alphak00 = alpha[i - 1, 0]
-        phik1 = phi[i + 1, 0]
-        phik0 = phi[i, 0]
-        phik00 = phi[i - 1, 0]
-
-        D1[i, 0] = 6 / (Lk0 + Lk1) * ((alphak1 - alphak0) / Lk1 - (alphak0 - alphak00) / Lk0)
-        D2[i, 0] = 6 / (Lk0 + Lk1) * ((phik1 - phik0) / Lk1 - (phik0 - phik00) / Lk0)
-
+    
+    # 转换为弧度并翻转
+    S = np.arange(1, n+1)
+    alpha = np.flipud(alphas) * np.pi / 180
+    phi = np.flipud(phis) * np.pi / 180
+    np_ = len(S)
+    
+    # 初始化矩阵和向量
+    A = np.zeros((np_, np_))
+    D1 = np.zeros(np_)
+    D2 = np.zeros(np_)
+    Ls = np.diff(S)
+    
+    # 构建三对角矩阵
+    for i in range(1, np_-1):
+        Lk0 = Ls[i-1]
+        Lk1 = Ls[i]
+        
+        alphak1 = alpha[i+1]
+        alphak0 = alpha[i]
+        alphak00 = alpha[i-1]
+        
+        phik1 = phi[i+1]
+        phik0 = phi[i]
+        phik00 = phi[i-1]
+        
+        # 计算D向量
+        D1[i] = 6 / (Lk0 + Lk1) * ((alphak1 - alphak0)/Lk1 - (alphak0 - alphak00)/Lk0)
+        D2[i] = 6 / (Lk0 + Lk1) * ((phik1 - phik0)/Lk1 - (phik0 - phik00)/Lk0)
+        
+        # 填充矩阵A
         lamk = Lk1 / (Lk0 + Lk1)
         miuk = 1 - lamk
-        A[i, i - 1: i + 2] = [miuk, 2, lamk]
+        A[i, i-1] = miuk
+        A[i, i] = 2
+        A[i, i+1] = lamk
+    
+    # 求解方程组
+    Mk = np.zeros(np_)
+    mk = np.zeros(np_)
+    if np_ > 2:
+        # 提取中间方程组
+        A_sub = A[1:-1, 1:-1]
+        D1_sub = D1[1:-1]
+        D2_sub = D2[1:-1]
+        
+        Mk[1:-1] = solve(A_sub, D1_sub)
+        mk[1:-1] = solve(A_sub, D2_sub)
+    
+    return Mk, mk, S, alpha, phi
 
-    # 计算 Mk, mk
-    Mk = np.zeros((np_count, 1))
-    mk = np.zeros((np_count, 1))
-    A_sub = A[1:-1, 1:-1]
-    Mk[1:-1] = np.linalg.solve(A_sub, D1[1:-1])
-    mk[1:-1] = np.linalg.solve(A_sub, D2[1:-1])
-
-    # 输出结果
-    Sk = S
-    alphak = alpha
-    phik = phi
-
-    return Mk, mk, Sk, alphak, phik
 
 
 def deal_input_data(data):

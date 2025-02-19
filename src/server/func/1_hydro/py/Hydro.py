@@ -297,55 +297,55 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
                 fd = 0.316 / Reazz ** 0.25
 
         # 计算 Payxzz，确保矩阵维度一致
-    Payxzz = (0.0026068625 * H * Pazz / 10 / fd * 
+        Payxzz = (0.0026068625 * H * Pazz / 10 / fd * 
                 (Va ** 2 / g / (Dw - Rzz) / (S - 1)) ** (-1.25) + 
                 (1 + 0.00581695 * H) * Pazz / 10)
     
-    # 钻铤井段
-    if wc == 1:
-        if Reazt < 2000:
-            fdzt = 64 / Reazt
-        else:
-            fdzt = 0.316 / Reazt ** 0.25
-    elif wc == 2 or wc == 3:
-        if Reazt < 3470 - 1370 * n:
-            fdzt = 64 / Reazt
-        else:
-            fdzt = 0.316 / Reazt ** 0.25
+        # 钻铤井段
+        if wc == 1:
+            if Reazt < 2000:
+                fdzt = 64 / Reazt
+            else:
+                fdzt = 0.316 / Reazt ** 0.25
+        elif wc == 2 or wc == 3:
+            if Reazt < 3470 - 1370 * n:
+                fdzt = 64 / Reazt
+            else:
+                fdzt = 0.316 / Reazt ** 0.25
 
-    # 计算 Payxzt
-    Payxzt = (0.0026068625 * H * Pazt / 10 / fdzt * (Vazt ** 2 / g / (Dw - Rzt) / (S - 1)) ** (-1.25) + (1 + 0.00581695 * H) * Pazt / 10)
+        # 计算 Payxzt
+        Payxzt = (0.0026068625 * H * Pazt / 10 / fdzt * (Vazt ** 2 / g / (Dw - Rzt) / (S - 1)) ** (-1.25) + (1 + 0.00581695 * H) * Pazt / 10)
 
-    # 计算 Payxztt
-    Payxztt = Payxzz[-1] + Payxzt
-    Payx = np.vstack((Payxzz, Payxztt))  # 保持与 MATLAB 计算结果的结构一致
+        # 计算 Payxztt
+        Payxztt = Payxzz[-1] + Payxzt
+        Payx = np.vstack((Payxzz, Payxztt))  # 保持与 MATLAB 计算结果的结构一致
 
-    # 考虑岩屑的环空循环压力
-    Phkyx = PO2 + Payx
+        # 考虑岩屑的环空循环压力
+        Phkyx = PO2 + Payx
 
-    # 考虑岩屑的管内循环压力
-    nn = ntrans
-    Pgnyx = np.zeros((nn, 1))
-    Pgnyx[-1] = Phkyx[-1] + dertaPzt
+        # 考虑岩屑的管内循环压力
+        nn = ntrans
+        Pgnyx = np.zeros((nn, 1))
+        Pgnyx[-1] = Phkyx[-1] + dertaPzt
 
-    for i in range(nn - 1):
-        PI2yx = PI2[-(i + 1)] - PI2[-(i + 2)]
-        Ppyx = Pp[-(i + 1)] - Pp[-(i + 2)]
-        Pgnyx[-(i + 2)] = Pgnyx[-(i + 1)] - PI2yx + Ppyx
+        for i in range(nn - 1):
+            PI2yx = PI2[-(i + 1)] - PI2[-(i + 2)]
+            Ppyx = Pp[-(i + 1)] - Pp[-(i + 2)]
+            Pgnyx[-(i + 2)] = Pgnyx[-(i + 1)] - PI2yx + Ppyx
 
-    # 考虑岩屑的 ECD
-    ECDyx = Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
+        # 考虑岩屑的 ECD
+        ECDyx = Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
 
-    # 考虑岩屑的总循环压耗
-    P = Pgnyx[0] + Pdm
+        # 考虑岩屑的总循环压耗
+        P = Pgnyx[0] + Pdm
 
-    # 立管压力
-    Plg = Pgnyx[0]
+        # 立管压力
+        Plg = Pgnyx[0]
 
-    # 置零不使用的变量
-    Pgn = 0
-    Phk = 0
-    ECD = 0
+        # 置零不使用的变量
+        Pgn = 0
+        Phk = 0
+        ECD = 0
 
     return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
     
