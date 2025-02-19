@@ -1,8 +1,6 @@
 function [Mk,mk,Sk,alphak,phik]=deal_curve_data2(data1)
 %%  去除井眼轨迹中的重复值，并且按升序排序
     sortedData = sortrows(round(data1), 1); % 按第一列进行升序排序
-%     uniqueData = unique(sortedData, 'rows'); % 去除重复行
-%     data = uniqueData(:, 1:3);
    [~, uniqueIndices] = unique(sortedData(:, 1), 'stable'); % 获取第一列的唯一索引
    data = sortedData(uniqueIndices, :); % 通过索引获取唯一的行数据 
  %%
