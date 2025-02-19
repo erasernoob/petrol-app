@@ -2,8 +2,12 @@
 # 返回值：
 # return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
 
-import numpy as np
 import utils
+
+import numpy as np
+from scipy.optimize import fsolve
+from scipy.interpolate import CubicSpline
+
 
 def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz,Lzz,Rzt,rzt,Lzt,L1,d1,L2,d2,L3,d3,L4,d4,Lp,Li,rzzjt,yxmd,H,yx):
     data = guiji # matrix
@@ -85,7 +89,6 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     # 钻柱接头影响系数
     fjt = Lp / (Lp + Li) + Li / (Lp + Li) * (rzz / rzzjt)**4.8
 
-    # Ppzz , Pazz = 0
     if wc == 1:
     # 钻柱井段
         Repzz = rhoi * rzz * Vp / miu / (1 + taof * rzz / (6 * miu * Vp))
@@ -115,21 +118,236 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             Pazz = ((16000 * (2*n+1) * Ql) / (np.pi * n * (Dwcm - Rzzcm)**2 * (Dwcm + Rzzcm)))**n * Lzz_vec * K / 250 / (Dwcm - Rzzcm)
         else:
             Pazz = 5.7503 * miu**0.2 * rhoo**0.8 * Lzz_vec * Ql**1.8 / (Dwcm - Rzzcm)**3 / (Dwcm + Rzzcm)**1.8
+        # 钻铤井段
+        Repzt = rhoi * rzt**n * Vpzt**(2-n) / 8**(n-1) / K / ((3*n+1) / (4*n))**n
+        Reazt = rhoi * (Dw - Rzt)**n * Vazt**(2-n) / 12**(n-1) / K / ((2*n+1) / (3*n))**n
+
+        Lzt_vec = np.arange(1, Lzt + 1).reshape(-1, 1)  # 保持列向量
+
+        if Repzt < 3470 - 1370 * n:
+            Ppzt = ((8000 * (3*n+1) * Ql) / (np.pi * n * rztcm**3))**n * Lzt_vec * K / 250 / rztcm
+        else:
+            Ppzt = 5.1655 * miu**0.2 * rhoo**0.8 * Lzt_vec * Ql**1.8 / rztcm**4.8
+
+        if Reazt < 3470 - 1370 * n:
+            Pazt = ((16000 * (2*n+1) * Ql) / (np.pi * n * (Dwcm - Rztcm)**2 * (Dwcm + Rztcm)))**n * Lzt_vec * K / 250 / (Dwcm - Rztcm)
+        else:
+            Pazt = 5.7503 * miu**0.2 * rhoo**0.8 * Lzt_vec * Ql**1.8 / (Dwcm - Rztcm)**3 / (Dwcm + Rztcm)**1.8
+    elif wc == 3: # 赫巴流体
+        # 管内雷诺数
+        Repzz = (8**(1-n) * rhoi * rzz**n * Vp**(2-n) / K / ((3*n+1)/(4*n))**n / 
+                (1 + (3*n+1) / (2*n+1) * (n/(6*n+2))**n * (rzz/Vp)**n * taof / K))
+
+        # 环空雷诺数
+        Reazz = (12**(1-n) * rhoi * (Dw-Rzz)**n * Va**(2-n) / K / ((2*n+1)/(3*n))**n / 
+                (1 + (2*n+1)**(1-n) / (n+1) * (n/4)**n * ((Dw-Rzz)/Va)**n * taof / K))
+
+        # 临界雷诺数
+        Reczz = 3470 - 1370 * n
+
+        # 管内壁面剪切力
+        taowpzz = taof + K * (8 * Q / np.pi / (rzz/2)**3)**n
+
+        # 环空壁面剪切力
+        taowazz = taof + K * (8 * Q / np.pi / ((Dw/2)**3 - (Rzz/2)**3))**n
+
+        # 计算管内摩擦系数
+        if Repzz < Reczz:
+            fpzz = 16 / Repzz
+        else:
+            equation = lambda fpzz: (1 / np.sqrt(fpzz) - 
+                                        (2.69/n - 2.95 + 4.53/n * np.log10(Repzz * fpzz**(1-0.5*n)) + 
+                                        4.53/n * np.log10(1 - taof/taowpzz)))
+            fpzz = fsolve(equation, 0.01)[0]
+
+        # 计算环空摩擦系数
+        if Reazz < Reczz:
+            fazz = 24 / Reazz
+        else:
+            equation_fazz = lambda fazz: (1 / np.sqrt(fazz) - 
+                                        (2.69/n - 2.95 + 4.53/n * np.log10(Reazz * fazz**(1-0.5*n)) + 
+                                        4.53/n * np.log10(1 - taof/taowazz)))
+            fazz = fsolve(equation_fazz, 0.01)[0]
+
+        # 生成列向量
+        Lzz_vec = np.arange(1, Lzz + 1).reshape(-1, 1)
+
+        # 管内压降
+        Ppzz = 2 * fpzz * rhoi * Lzz_vec * Vp**2 / rzz / 10**6 * 10
+
+        # 环空压降
+        Pazz = 2 * fazz * rhoi * Lzz_vec * Va**2 / (Dw - Rzz) / 10**6 * 10
+
+        # 钻铤井段
+        # 管内雷诺数
+        Repzt = (8**(1 - n) * rhoi * rzt**n * Vpzt**(2 - n) /
+                (K * ((3 * n + 1) / (4 * n))**n *
+                (1 + (3 * n + 1) / (2 * n + 1) * (n / (6 * n + 2))**n *
+                    (rzt / Vpzt)**n * taof / K)))
+
+        # 环空雷诺数
+        Reazt = (12**(1 - n) * rhoi * (Dw - Rzt)**n * Vazt**(2 - n) /
+                (K * ((2 * n + 1) / (3 * n))**n *
+                (1 + (2 * n + 1)**(1 - n) / (n + 1) * (n / 4)**n *
+                    ((Dw - Rzt) / Vazt)**n * taof / K)))
+
+        # 临界雷诺数
+        Reczt = 3470 - 1370 * n
+
+        # 管内壁面剪切力
+        # taowpzt = taof + K * (8 * Vpzt / rzt)**n
+        taowpzt = taof + K * (8 * Q / np.pi / (rzt / 2)**3)**n
+
+        # 环空壁面剪切力
+        # taowazt = taof + K * (6 * Vazt / (Dw - Rzt))**n
+        taowazt = taof + K * (8 * Q / np.pi / ((Dw / 2)**3 - (Rzt / 2)**3))**n
+
+        # 管内摩擦系数
+        if Repzt < Reczt:
+            fpzt = 16 / Repzt
+        else:
+            equation_fpzt = lambda fpzt: (1 / np.sqrt(fpzt) -
+                                        (2.69 / n - 2.95 + 4.53 / n * np.log10(Repzt * fpzt**(1 - 0.5 * n)) +
+                                        4.53 / n * np.log10(1 - taof / taowpzt)))
+            fpzt = fsolve(equation_fpzt, 0.01)[0]
+
+        # 环空摩擦系数
+        if Reazt < Reczt:
+            fazt = 24 / Reazt
+        else:
+            equation_fazt = lambda fazt: (1 / np.sqrt(fazt) -
+                                        (2.69 / n - 2.95 + 4.53 / n * np.log10(Reazt * fazt**(1 - 0.5 * n)) +
+                                        4.53 / n * np.log10(1 - taof / taowazt)))
+            fazt = fsolve(equation_fazt, 0.01)[0]
+
+        # 管内压降
+        Ppzt = 2 * fpzt * rhoi * np.arange(1, Lzt + 1).reshape(-1, 1) * Vpzt**2 / rzt / 10**6 * 10
+
+        # 环空压降
+        Pazt = 2 * fazt * rhoi * np.arange(1, Lzt + 1).reshape(-1, 1) * Vazt**2 / (Dw - Rzt) / 10**6 * 10
+
+    # 计算总压降
+    Ppztt = Ppzz[-1] + Ppzt
+    Paztt = Pazz[-1] + Pazt
+    # TODO 存在列向量问题
+    # Ppp = np.concatenate((Ppzz, Ppztt))
+    # Paa = np.concatenate((Pazz, Paztt))
+
+    Ppp = np.vstack((Ppzz, Ppztt))
+    Paa = np.vstack((Pazz, Paztt))
+
+    Pp = fjt * Ppp / 10
+    Pa = Paa / 10
+
+    # 垂深插值
+    Length, Xs, Ys, Zs = utils.deal_input_data(data)
+    cs = Xs[0] - Xs
+    aa = data[:, 0]
+    T = cs
+    aacs = np.arange(1, np.max(aa) + 1).reshape(-1, 1)
+    Tcs = CubicSpline(aa, T, bc_type='natural')(aacs)
+
+    # 限制插值范围（MATLAB 的 interp1 默认不进行外推）
+    mask = (aacs >= np.min(aa)) & (aacs <= np.max(aa))
+    Tcs[~mask.flatten()] = np.nan  # 将超出范围的点设为 NaN
+
+    
+    if yx == 0:
+    # 环空循环压力
+        Phk = PO2 + Pa
         
+        # 管内循环压力
+        nn = ntrans
+        Pgn = np.zeros((nn, 1))
+        Pgn[-1] = Phk[-1] + dertaPzt
+        
+        for i in range(nn - 1):
+            PI2yx = PI2[-(i + 1)] - PI2[-(i + 2)]
+            Ppyx = Pp[-(i + 1)] - Pp[-(i + 2)]
+            Pgn[-(i + 2)] = Pgn[-(i + 1)] - PI2yx + Ppyx  # 反向填充 Pgn
+
+        # ECD 计算
+        ECD = Pa * 1e6 / 9.81 / 1000 / Tcs + rhoi / 1000
+
+        # 总循环压耗
+        P = Pgn[0] + Pdm
+
+        # 立管压力
+        Plg = Pgn[0]
+
+        # 赋值 0
+        Pgnyx = 0
+        Phkyx = 0
+        ECDyx = 0
+
+    elif yx == 1:
+        # 考虑岩屑的环空压耗
+        S = yxmd / rhoi
+
+        # 钻柱井段
+        if wc == 1:
+            if Reazz < 2000:
+                fd = 64 / Reazz
+            else:
+                fd = 0.316 / Reazz ** 0.25
+        elif wc == 2 or wc == 3:
+            if Reazz < 3470 - 1370 * n:
+                fd = 64 / Reazz
+            else:
+                fd = 0.316 / Reazz ** 0.25
+
+        # 计算 Payxzz，确保矩阵维度一致
+        Payxzz = (0.0026068625 * H * Pazz / 10 / fd * 
+                (Va ** 2 / g / (Dw - Rzz) / (S - 1)) ** (-1.25) + 
+                (1 + 0.00581695 * H) * Pazz / 10)
     
+    # 钻铤井段
+    if wc == 1:
+        if Reazt < 2000:
+            fdzt = 64 / Reazt
+        else:
+            fdzt = 0.316 / Reazt ** 0.25
+    elif wc == 2 or wc == 3:
+        if Reazt < 3470 - 1370 * n:
+            fdzt = 64 / Reazt
+        else:
+            fdzt = 0.316 / Reazt ** 0.25
 
+    # 计算 Payxzt
+    Payxzt = (0.0026068625 * H * Pazt / 10 / fdzt * 
+            (Vazt ** 2 / g / (Dw - Rzt) / (S - 1)) ** (-1.25) + 
+            (1 + 0.00581695 * H) * Pazt / 10)
 
+    # 计算 Payxztt
+    Payxztt = Payxzz[-1] + Payxzt
+    Payx = np.vstack((Payxzz, Payxztt))  # 保持与 MATLAB 计算结果的结构一致
 
+    # 考虑岩屑的环空循环压力
+    Phkyx = PO2 + Payx
 
-    
+    # 考虑岩屑的管内循环压力
+    nn = ntrans
+    Pgnyx = np.zeros((nn, 1))
+    Pgnyx[-1] = Phkyx[-1] + dertaPzt
 
+    for i in range(nn - 1):
+        PI2yx = PI2[-(i + 1)] - PI2[-(i + 2)]
+        Ppyx = Pp[-(i + 1)] - Pp[-(i + 2)]
+        Pgnyx[-(i + 2)] = Pgnyx[-(i + 1)] - PI2yx + Ppyx
 
+    # 考虑岩屑的 ECD
+    ECDyx = Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
 
+    # 考虑岩屑的总循环压耗
+    P = Pgnyx[0] + Pdm
 
-    
-    
-    
+    # 立管压力
+    Plg = Pgnyx[0]
 
+    # 置零不使用的变量
+    Pgn = 0
+    Phk = 0
+    ECD = 0
 
     return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
     
