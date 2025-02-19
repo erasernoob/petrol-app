@@ -1,11 +1,15 @@
+import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import Hydro
+from Hydro import Hydro
 
 
 # 输入参数————————————————————————————————————————————
-guiji = pd.read_excel('KL16-1-A25井眼轨迹.xlsx').values  # 与 xlsread 类似
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+excel_path = os.path.join(script_dir, 'KL16-1-A25井眼轨迹.xlsx')
+guiji = pd.read_excel(excel_path).values  # 与 xlsread 类似
 
 # 基本参数————————————————————————————————————————————
 pailiang = 1500      # 排量，L/min

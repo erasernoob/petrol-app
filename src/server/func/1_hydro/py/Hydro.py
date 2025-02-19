@@ -47,9 +47,9 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     dertaPzt = (0.05 * Ql**2 * rhoi / 1000) / (0.95**2 * S**2)
 
     ds = 1 
-    len = ntrans - 1
-    nt = len / ds
-    sspan = np.arange(0, len + ds, ds) # 创建步长为ds的等差数列
+    length = ntrans - 1
+    nt = length / ds
+    sspan = np.arange(0, length + ds, ds) # 创建步长为ds的等差数列
     SW = sspan.reshape(-1, 1)  # 转换为列向量（类似 MATLAB 的列向量）
 
 
@@ -64,8 +64,8 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     PO2 = np.zeros((ntrans, 1))
 
     for i in range(0, ntrans):  # MATLAB 以 1 开始，Python 以 0 开始，需要 +1
-        PI1[i] = rhoi * g * np.cos(alpha[ntrans - i + 1])  # i-1 转换为 Python 索引
-        PO1[i] = rhoi * g * np.cos(alpha[ntrans - i + 1])  
+        PI1[i] = rhoi * g * np.cos(alpha[ntrans - i - 1])  # i-1 转换为 Python 索引
+        PO1[i] = rhoi * g * np.cos(alpha[ntrans - i - 1])  
     
     PI2[0] = PI1[0] 
     PO2[0] = PO1[0] 
@@ -229,7 +229,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     # 计算总压降
     Ppztt = Ppzz[-1] + Ppzt
     Paztt = Pazz[-1] + Pazt
-    # TODO 存在列向量问题
+    # TODO: 存在列向量问题
     # Ppp = np.concatenate((Ppzz, Ppztt))
     # Paa = np.concatenate((Pazz, Paztt))
 
@@ -297,7 +297,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
                 fd = 0.316 / Reazz ** 0.25
 
         # 计算 Payxzz，确保矩阵维度一致
-        Payxzz = (0.0026068625 * H * Pazz / 10 / fd * 
+    Payxzz = (0.0026068625 * H * Pazz / 10 / fd * 
                 (Va ** 2 / g / (Dw - Rzz) / (S - 1)) ** (-1.25) + 
                 (1 + 0.00581695 * H) * Pazz / 10)
     
@@ -314,9 +314,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             fdzt = 0.316 / Reazt ** 0.25
 
     # 计算 Payxzt
-    Payxzt = (0.0026068625 * H * Pazt / 10 / fdzt * 
-            (Vazt ** 2 / g / (Dw - Rzt) / (S - 1)) ** (-1.25) + 
-            (1 + 0.00581695 * H) * Pazt / 10)
+    Payxzt = (0.0026068625 * H * Pazt / 10 / fdzt * (Vazt ** 2 / g / (Dw - Rzt) / (S - 1)) ** (-1.25) + (1 + 0.00581695 * H) * Pazt / 10)
 
     # 计算 Payxztt
     Payxztt = Payxzz[-1] + Payxzt
