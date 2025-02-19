@@ -128,6 +128,7 @@ def deal_input_data(data):
 
 
 def diff_func(vars, span):
+    # TODO: 这里需要确保是1D数组吗
     vars = np.asarray(vars).flatten()  # 确保 vars 是 1D 数组
     span = np.asarray(span).flatten()
 
@@ -147,6 +148,7 @@ def diff_func(vars, span):
 
     return diff_var
 
+# gpt
 def spline_interp(Mk,mk,Sk,alphak,phik,S0):
     np_val = len(Mk)
     
