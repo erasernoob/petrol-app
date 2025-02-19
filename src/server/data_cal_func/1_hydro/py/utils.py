@@ -127,9 +127,6 @@ def deal_input_data(data):
 
     return Length, Xs, Ys, Zs
 
-def deal_trank(Sk,alpha,phi):
-
-    return Length,Xs,Ys,Zs
 
 def diff_func(vars, span):
     vars = np.asarray(vars).flatten()  # 确保 vars 是 1D 数组
@@ -154,6 +151,10 @@ def diff_func(vars, span):
 def prepare_data():
 
     return 1
+
+def deal_trank(Sk,alpha,phi):
+
+    return Length,Xs,Ys,Zs
 
     
     
