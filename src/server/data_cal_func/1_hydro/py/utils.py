@@ -148,9 +148,102 @@ def diff_func(vars, span):
 
     return diff_var
 
-def prepare_data():
+def spline_interp(Mk,mk,Sk,alphak,phik,S0):
+    np_val = len(Mk)
+    
+    if S0 >= Sk[-1]:
+        iter = np_val - 1
+    else:
+        for i in range(np_val - 1):
+            if Sk[i] <= S0 < Sk[i + 1]:
+                iter = i
+                break
+    
+    if S0 < min(Sk):
+        iter = 0
+    
+    M0 = Mk[iter]
+    M1 = Mk[iter + 1]
+    m0 = mk[iter]
+    m1 = mk[iter + 1]
+    alpha0 = alphak[iter]
+    alpha1 = alphak[iter + 1]
+    phi0 = phik[iter]
+    phi1 = phik[iter + 1]
+    Sr = Sk[iter + 1]
+    Sl = Sk[iter]
+    Lk = Sk[iter + 1] - Sk[iter]
+    
+    C1 = alpha1 / Lk - M1 * Lk / 6
+    C0 = alpha0 / Lk - M0 * Lk / 6
+    c1 = phi1 / Lk - M1 * Lk / 6
+    c0 = phi0 / Lk - M0 * Lk / 6
+    
+    alphacal = M0 * (Sr - S0)**3 / (6 * Lk) + M1 * (S0 - Sl)**3 / (6 * Lk) + C1 * (S0 - Sl) + C0 * (Sr - S0)
+    phical = m0 * (Sr - S0)**3 / (6 * Lk) + m1 * (S0 - Sl)**3 / (6 * Lk) + c1 * (S0 - Sl) + c0 * (Sr - S0)
+    
+    return alphacal, phical
 
-    return 1
+
+def prepare_data(sspan,Mk,mk,Sk,alphak,phik):
+    # 初始化输出变量
+    alphas = np.zeros(len(sspan))
+    phis = np.zeros(len(sspan))
+    taos = np.zeros(len(sspan))
+
+    # 插值计算 alphas 和 phis
+    for i in range(len(sspan)):
+        alphas[i], phis[i] = spline_interp(Mk, mk, Sk, alphak, phik, sspan[i])
+
+    # 调用求导函数计算 kphis 和 kalphas
+    kphis = diff_func(phis, sspan)
+    kalphas = diff_func(alphas, sspan)
+
+    # 计算 ks, dks, ddks
+    ks = np.sqrt(kalphas**2 + kphis**2 * np.sin(alphas)**2)
+    dks = diff_func(ks, sspan)
+    ddks = diff_func(dks, sspan)
+
+    # 计算 taos
+    for i in range(len(sspan)):
+        if i == 0:
+            alpha1 = alphas[0]
+            alpha2 = alphas[1]
+            phi1 = phis[0]
+            phi2 = phis[1]
+            ds = sspan[1] - sspan[0]
+        elif i == len(sspan) - 1:
+            alpha1 = alphas[-2]
+            alpha2 = alphas[-1]
+            phi1 = phis[-2]
+            phi2 = phis[-1]
+            ds = 2 * (sspan[1] - sspan[0])
+        else:
+            alpha1 = alphas[i - 1]
+            alpha2 = alphas[i + 1]
+            phi1 = phis[i - 1]
+            phi2 = phis[i + 1]
+            ds = sspan[1] - sspan[0]
+
+        dp = (phi2 - phi1) / 2
+        da = (alpha2 - alpha1) / 2
+        ac = (alpha1 + alpha2) / 2
+        edl = np.sqrt(da**2 + dp**2 * np.sin(ac)**2)
+
+        theta = np.arccos(
+            da**2 / edl**2 * np.cos(dp) -
+            da * dp / edl**2 * (np.sin(alpha2) * np.cos(alpha2) - np.sin(alpha1) * np.cos(alpha1)) * np.sin(dp) +
+            dp**2 / edl**2 * np.sin(alpha1) * np.sin(alpha2) * (np.sin(alpha1) * np.sin(alpha2) + np.cos(alpha1) * np.cos(alpha2) * np.cos(dp))
+        )
+        theta = np.real(theta)
+        taos[i] = theta / ds
+
+    # 处理 taos 中的 NaN 值
+    for i in range(len(sspan)):
+        if np.isnan(taos[i]):
+            taos[i] = 0
+
+    return alphas, phis, ks, dks, ddks, kphis, kalphas, taos
 
 def deal_trank(Sk,alpha,phi):
 
