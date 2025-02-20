@@ -1,21 +1,27 @@
 import { Card, Tabs, Layout } from "@arco-design/web-react"
 import { Link } from "@arco-design/web-react";
+import { RouterProvider } from "react-router-dom";
+import routerList from "../../../routers";
 
 
 export default function InputSider (props) {
   const TabPane = Tabs.TabPane
   const Sider = Layout.Sider
+
+  const route = props.route
+
   return(
     <Card
       title='参数列表'
       style={{
         width: '100%',
         height: '100%',
-        overflow: "hidden",
-        fontSize: '100px',
-        maxHeight: 'calc(100% - 40px)'
+        maxWidth: 'calc(100% - 1.7px)',
+        // fontSize: '10px',
+        maxHeight: 'calc(100% - 2px)'
       }}
     >
+      <RouterProvider router={routerList} />
     </Card>
    )
    

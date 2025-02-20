@@ -12,13 +12,14 @@ const modules = [
 
     },
     {
-        title: '延伸极限',
-
-    },
-    {
         title: '钻头状态',
 
     },
+    {
+        title: '延伸极限',
+
+    },
+
     {
         title: '风险预警',
 

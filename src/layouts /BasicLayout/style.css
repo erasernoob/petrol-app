@@ -9,11 +9,13 @@
 }
 
 .arco-tabs-header-title-text {
-    font-size: 30px;
+    /* border-style:solid; */
+    font-size: 20px;
 }
 
 .arco-tabs-header-size-large.arco-tabs-header-nav-capsule .arco-tabs-header-title {
-    padding: 20px;
+    border-width: 10px;
+    padding: 20px
 }
 
 .input-sider {

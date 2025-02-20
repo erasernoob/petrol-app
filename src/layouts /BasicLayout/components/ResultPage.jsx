@@ -1,4 +1,6 @@
 import { Card } from '@arco-design/web-react'
+import { RouterProvider } from 'react-router-dom'
+import routerList from '../../../routers'
 
 export default function ResultContent() {
     return (
@@ -8,11 +10,11 @@ export default function ResultContent() {
         width: '100%',
         height: '100%',
         overflow: "hidden",
-        fontSize: '100px',
-        maxHeight: 'calc(100% - 40px)',
+        maxHeight: 'calc(100% - 1px)',
         borderTop: '0px'
       }}
     >
+      {/* <RouterProvider router={routerList} /> */}
     </Card>
 
     )

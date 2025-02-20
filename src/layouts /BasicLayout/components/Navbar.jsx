@@ -14,13 +14,15 @@ const Header = Layout.Header
 
 export default function NavBar() {
     const tabList = modules.map((module, idx) => {
-        return <TabPane key={idx} title={module.title} style={style}></TabPane>
+        return <TabPane key={idx} title={module.title} style={style} disabled={idx == 0} ></TabPane>
     })
     return (
-        <Header>
+        <>
         <Tabs className={"nav-bar"} type={"card"} size="large">
             {tabList}
         </Tabs>
-        </Header>
+        </>
+
    )
+   
 }
