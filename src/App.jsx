@@ -12,9 +12,9 @@ function App() {
 
   return (
     <ConfigProvider theme={{ fontSize: 9 }}>
-      <BasicLayout></BasicLayout>
+      <BasicLayout />
     </ConfigProvider>
-  );
+ );
 }
 
 export default App;

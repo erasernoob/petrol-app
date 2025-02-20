@@ -1,28 +1,26 @@
-import { Layout } from "@arco-design/web-react"
 import { Tabs, Typography} from '@arco-design/web-react';
-import { modules } from "../../../store/module"
+import { routeList } from "../../../routers";
 
 const style = {
-//   textAlign: 'center',
-//   marginTop: 20,
-//   padding: "20px"
 
 };
 
-const TabPane = Tabs.TabPane
-const Header = Layout.Header
+const myNavigate = (item) => {
+    location.hash = item
+}
+
+const { TabPane } = Tabs
 
 export default function NavBar() {
-    const tabList = modules.map((module, idx) => {
-        return <TabPane key={idx} title={module.title} style={style} disabled={idx == 0} ></TabPane>
+    const tabList = routeList.map((route, idx) => {
+        return <TabPane key={route.path} title={route.name} style={style}>
+        </TabPane>
     })
+
     return (
-        <>
-        <Tabs className={"nav-bar"} type={"card"} size="large">
+        <Tabs className={"nav-bar"} type={"card"} size="large" onChange={(key) => myNavigate(key)}>
             {tabList}
         </Tabs>
-        </>
 
    )
-   
 }

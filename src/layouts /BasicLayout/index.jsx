@@ -3,6 +3,7 @@ import "./style.css"
 import NavBar from "./components/Navbar";
 import InputPage from "./components/InputPage"
 import ResultPage from "./components/ResultPage";
+import { Outlet } from "react-router-dom";
 
 
 const Sider = Layout.Sider;
@@ -15,9 +16,7 @@ export default function BasicLayout() {
     return (
         <div className="basic-layout">
             <Layout style={{ height: '100%' }}>
-                <Header>
                     <NavBar />
-                </Header>
                 <Layout>
                     <Sider className={"input-sider"} style={{width: '30%', marginRight:'5px'}}>
                     <InputPage />

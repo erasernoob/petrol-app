@@ -30,7 +30,7 @@ export const routeList = [
     },
 ]
 
-const routerList = createBrowserRouter(routeList)
+const routerList = createHashRouter(routeList)
 
 export default routerList
 
