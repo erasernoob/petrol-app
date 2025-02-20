@@ -1,0 +1,21 @@
+.basic-layout {
+    width: 100%;
+    height: 100%;
+}
+
+.nav-bar { 
+    /* font-size: 100px; */
+    /* height: 100px; */
+}
+
+.arco-tabs-header-title-text {
+    font-size: 30px;
+}
+
+.arco-tabs-header-size-large.arco-tabs-header-nav-capsule .arco-tabs-header-title {
+    padding: 20px;
+}
+
+.input-sider {
+    width: 400px;
+}

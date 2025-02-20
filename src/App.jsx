@@ -2,14 +2,18 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/core";
 import "./App.css";
+import { Button } from "@arco-design/web-react";
+import "@arco-design/web-react/dist/css/arco.css";
+import { ConfigProvider } from "@arco-design/web-react";
+import BasicLayout from "./layouts /BasicLayout";
 
 function App() {
 
 
   return (
-    <div>
-      <h1>水力模组系数计算系统</h1>
-    </div>
+    <ConfigProvider theme={{ fontSize: 9 }}>
+      <BasicLayout></BasicLayout>
+    </ConfigProvider>
   );
 }
 
