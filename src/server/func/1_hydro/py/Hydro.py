@@ -247,9 +247,8 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     aacs = np.arange(1, np.max(aa) + 1).reshape(-1, 1)
     Tcs = CubicSpline(aa, T, bc_type='natural')(aacs)
 
-    # 限制插值范围（MATLAB 的 interp1 默认不进行外推）
-    mask = (aacs >= np.min(aa)) & (aacs <= np.max(aa))
-    Tcs[~mask.flatten()] = np.nan  # 将超出范围的点设为 NaN
+    # 一维数组转换为二维数组
+    Tcs = Tcs.reshape(-1, 1)
 
     
     if yx == 0:
@@ -333,6 +332,11 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             Ppyx = Pp[-(i + 1)] - Pp[-(i + 2)]
             Pgnyx[-(i + 2)] = Pgnyx[-(i + 1)] - PI2yx + Ppyx
 
+
+        print(f"Pa:{Pa}")
+        print(f"Tcs:{Tcs}")
+        print(f"rhoi:{rhoi}")
+        
         # 考虑岩屑的 ECD
         ECDyx = Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
 

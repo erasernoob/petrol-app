@@ -20,7 +20,7 @@ def deal_curve_data2(data1):
     # 提取并处理数据
     S = data[:, 0].astype(int)
     alphaa = data[:, 1]
-    phia = data[:, 3]  # 注意：原MATLAB代码中是第三列，索引为2（Python从0开始）
+    phia = data[:, 2]  # 注意：原MATLAB代码中是第三列，索引为2（Python从0开始）
     
     n = int(np.round(S[-1]))
     alphas = np.zeros(n)
