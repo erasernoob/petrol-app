@@ -2,8 +2,6 @@ import numpy as np
 from scipy.signal import savgol_filter
 from scipy.interpolate import CubicSpline
 
-
-import numpy as np
 from scipy.interpolate import interp1d
 from scipy.linalg import solve
 

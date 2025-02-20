@@ -2,11 +2,8 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib
 from Hydro import Hydro
 
-matplotlib.rcParams['font.sans-serif'] = ['Ubuntu Sans']  # 适用于大多数系统
-matplotlib.rcParams['axes.unicode_minus'] = False  # 避免负号显示问题
 
 
 # 输入参数————————————————————————————————————————————
@@ -113,9 +110,9 @@ elif yx == 1:
     # plt.show()
 
     # 导出钻柱循环压力数据——————————————————————————————————————————————————————
-    pd.DataFrame(Pgnyx).to_excel('钻柱循环压力.xlsx', sheet_name='Sheet1', index=False)
+    pd.DataFrame(Pgnyx).to_excel('钻柱循环压力.xlsx', sheet_name='Sheet1', index=False, header=False)
     # 导出环空循环压力数据——————————————————————————————————————————————————————
-    pd.DataFrame(Phkyx).to_excel('环空循环压力.xlsx', sheet_name='Sheet1', index=False)
+    pd.DataFrame(Phkyx).to_excel('环空循环压力.xlsx', sheet_name='Sheet1', index=False, header=False)
 
     # 作ECD图————————————————————————————————————————————
     # plt.figure()
@@ -127,4 +124,4 @@ elif yx == 1:
 
     print(f"ECDyx:{ECDyx}")
     # 导出ECD数据——————————————————————————————————————————————————————
-    pd.DataFrame(ECDyx).to_excel('ECD.xlsx', sheet_name='Sheet1', index=False)
+    pd.DataFrame(ECDyx).to_excel('ECD.xlsx', sheet_name='Sheet1', index=False, header=False)
