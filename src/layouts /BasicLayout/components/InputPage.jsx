@@ -5,11 +5,6 @@ import routerList from "../../../routers";
 
 
 export default function InputSider (props) {
-  const TabPane = Tabs.TabPane
-  const Sider = Layout.Sider
-
-  const route = props.route
-
   return(
     <Card
       title='参数列表'
