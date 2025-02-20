@@ -14,6 +14,7 @@ dist-ssr
 lib/
 lib64/
 *.xlsx
+*.csv
 site-packages
 
 # Editor directories and files

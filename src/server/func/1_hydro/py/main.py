@@ -12,7 +12,7 @@ matplotlib.rcParams['axes.unicode_minus'] = False  # 避免负号显示问题
 # 输入参数————————————————————————————————————————————
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-excel_path = os.path.join(script_dir, 'KL16-1-A25井眼轨迹.xlsx')
+excel_path = os.path.join(script_dir, 'BZ29-6-A26H井眼轨迹_6209m.xlsx')
 guiji = pd.read_excel(excel_path).values  # 与 xlsread 类似
 
 # 基本参数————————————————————————————————————————————
@@ -20,7 +20,7 @@ pailiang = 1500      # 排量，L/min
 Dw = 0.2159          # 井眼直径，m
 Rzz = 0.127          # 钻柱外径，m
 rzz = 0.1086         # 钻柱内径，m
-Lzz = 4190           # 钻柱长度，m
+Lzz = 6199           # 钻柱长度，m
 Rzt = 0.15875        # 钻铤外径，m
 rzt = 0.07144        # 钻铤内径，m
 Lzt = 10             # 钻铤长度，m
@@ -57,7 +57,7 @@ L4 = 11.4            # 方钻杆长度，m
 d4 = 0.0826          # 方钻杆内径，m
 
 # 岩屑床——————————————————————————————————————————————
-yx = 1               # 是否考虑岩屑：0不考虑，1考虑
+yx = 0               # 是否考虑岩屑：0不考虑，1考虑
 yxmd = 2500          # 岩屑密度，kg/m3
 H = 10               # 岩屑床高度，%
 
@@ -86,9 +86,9 @@ if yx == 0:
     # plt.show()
 
     # 导出钻柱循环压力数据——————————————————————————————————————————————————————
-    pd.DataFrame(Pgn).to_excel('钻柱循环压力.xlsx', sheet_name='Sheet1', index=False)
+    pd.DataFrame(Pgn).to_excel('钻柱循环压力.xlsx', sheet_name='Sheet1', index=False, header=False)
     # 导出环空循环压力数据——————————————————————————————————————————————————————
-    pd.DataFrame(Phk).to_excel('环空循环压力.xlsx', sheet_name='Sheet1', index=False)
+    pd.DataFrame(Phk).to_excel('环空循环压力.xlsx', sheet_name='Sheet1', index=False, header=False)
 
     # 作ECD图————————————————————————————————————————————
     # plt.figure()
@@ -99,8 +99,7 @@ if yx == 0:
     # # plt.show()
 
     # 导出ECD数据——————————————————————————————————————————————————————
-    print(f"ECD:{ECD}")
-    pd.DataFrame(ECD).to_excel('ECD.xlsx', sheet_name='Sheet1', index=False)
+    pd.DataFrame(ECD.flatten()).to_excel('ECD.xlsx', sheet_name='Sheet1', index=False, header=False)
 
 elif yx == 1:
     # 作循环压力图—————————————————————————————————————————————————————————
