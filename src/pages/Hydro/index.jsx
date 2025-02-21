@@ -11,10 +11,13 @@ export default function HydroPage() {
   const [form] = Form.useForm();
 
   return (
-    <div>
-    <FileUpLoader />
-    <DynamicForm data={hydro[0]} />
+    <div >
+      <div className='fileup-loader'>
+          <FileUpLoader />
+      </div>
+      <div className='input-form'>
+          <DynamicForm datas={hydro} tabs={tabsName} />
+      </div>
     </div>
-   
   );
 }

@@ -1,78 +1,47 @@
-import { Form, InputNumber, Button, Input } from "@arco-design/web-react";
+import { Tabs } from "@arco-design/web-react";
+import { Form, Button, Input } from "@arco-design/web-react";
 
-const { FormItem } = Form.Item
-const DynamicForm = ({ data, onSubmit }) => {
+const DynamicForm = ({ datas, handleSubmit, tabs }) => {
 
-    const [form] = Form.useForm();
+  const tabsName = tabs
+  const  TabPane  = Tabs.TabPane
+  const [form] = Form.useForm();
+  const FormItem = Form.Item
 
-    const entries = Object.entries(data)
+
 
 
   return (
-    <Form
-      form={form}
-      style={{ width: 600 }}
-      initialValues={{ }}
-      autoComplete='off'
-      onValuesChange={(v, vs) => {
-        console.log(v, vs);
-      }}
-      onSubmit={(v) => {
-        console.log(v);
-      }}
-    >
-      {/* <FormItem label='Username' field='name' rules={[{ required: true }]}>
-        <Input placeholder='please enter your username' />
-      </FormItem>
-      <FormItem
-        label='Age'
-        field='age'
-        rules={[{ required: true, type: 'number', min: 0, max: 99 }]}
-      >
-        <InputNumber placeholder='please enter your age' />
-      </FormItem>
-      <FormItem wrapperCol={{ offset: 5 }}>
-        <Button type='primary' htmlType='submit' style={{ marginRight: 24 }}>
-          Submit
-        </Button>
-        <Button
-          style={{ marginRight: 24 }}
-          onClick={() => {
-            form.resetFields();
-          }}
-        >
-          Reset
-        </Button>
-        <Button
-          type='text'
-          onClick={() => {
-            form.setFieldsValue({
-              name: 'admin',
-              age: 11,
-            });
-          }}
-        >
-          Fill Form
-        </Button>
+    <Form form={form} layout="horizontal">
+      <Tabs key="card" tabPosition="left">
+        {
+          datas.map((category, index) => {
+            const [categoryKey, data] = Object.entries(category)[0]
+            return (
+          <TabPane title={tabsName[index]} key={categoryKey}>
+            {Object.entries(data).map(([key, field]) => (
+              <FormItem
+                key={key}
+                label={field.name}
+                name={key}
+                rules={[{ required: true, message: `${field.name} 不能为空` }]}
+              >
+                <Input style={{}}/>
+              </FormItem>
+            ))}
 
-
-        <Button
-          type='text'
-          onClick={() => {
-            // 仅校验值，不会有 UI 表现
-            form.validate({validateOnly: true}).then(() => {
-              console.log('pass');
-            }).catch(e => {
-
-              console.log(e.errors)
-            });
-
-          }}
-        >
-          validateOnly
-        </Button>
-      </FormItem> */}
+          </TabPane>
+          )
+        })
+      }
+      </Tabs>
+      
+      {/* 提交按钮 */}
+      <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
+        提交
+      </Button>
     </Form>
+
   );
 };
 
