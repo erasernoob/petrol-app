@@ -23,6 +23,7 @@ site-packages
 .idea
 .DS_Store
 *.suo
+.env
 *.ntvs*
 *.njsproj
 *.sln

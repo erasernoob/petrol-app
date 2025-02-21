@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Upload, Message, Button } from '@arco-design/web-react';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+
 const isAcceptFile = (file) => {
   if (!file) return false;
   const fileExtension = file.name.split('.').pop().toLowerCase();
@@ -18,7 +21,7 @@ const FileUpLoader = () => {
     <Upload
       accept=".xlsx"
     //   TODO: 存在跨域问题
-      action="http://localhost:8000/uploadFile"
+      action={API_BASE_URL + "/uploadFile"}
       multiple={false} // 只允许单个上传
       disabled={disabled} // 上传一个文件后禁用
       onChange={(fileList) => {

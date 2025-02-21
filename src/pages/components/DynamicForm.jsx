@@ -1,12 +1,11 @@
-import { Form, InputNumber, Button } from "@arco-design/web-react";
+import { Form, InputNumber, Button, Input } from "@arco-design/web-react";
 
 const { FormItem } = Form.Item
 const DynamicForm = ({ data, onSubmit }) => {
 
     const [form] = Form.useForm();
 
-    const formItemList = data.entries()
-    console.log(formItemList)
+    const entries = Object.entries(data)
 
 
   return (
@@ -22,7 +21,7 @@ const DynamicForm = ({ data, onSubmit }) => {
         console.log(v);
       }}
     >
-      <FormItem label='Username' field='name' rules={[{ required: true }]}>
+      {/* <FormItem label='Username' field='name' rules={[{ required: true }]}>
         <Input placeholder='please enter your username' />
       </FormItem>
       <FormItem
@@ -72,7 +71,7 @@ const DynamicForm = ({ data, onSubmit }) => {
         >
           validateOnly
         </Button>
-      </FormItem>
+      </FormItem> */}
     </Form>
   );
 };
