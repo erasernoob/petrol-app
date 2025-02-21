@@ -15,7 +15,7 @@ export default function NavBar() {
     })
 
     return (
-        <Menu mode='horizontal' theme="dark">
+        <Menu mode='horizontal' theme="">
             {tabList}
         </Menu>
 

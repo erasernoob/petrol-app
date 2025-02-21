@@ -17,14 +17,14 @@ export const routeList = [
         element: <TorquePage />
     },
     {
-        name: '钻头状态',
-        path: '/drill',
-        element: <DrillPage />
-    },
-    {
         name: '延伸极限',
         path: '/limit',
         element: <LimitPage />
+    },
+    {
+        name: '钻头状态',
+        path: '/drill',
+        element: <DrillPage />
     },
     {
         name: '风险预警',

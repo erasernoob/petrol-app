@@ -30,7 +30,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
                 <Input style={{}}/>
               </FormItem>
             ))}
-
           </TabPane>
           )
         })
@@ -38,7 +37,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       </Tabs>
       
       {/* 提交按钮 */}
-      <Button type="secondary" onClick={() => handleSubmit()} >计算</Button>
+      <Button type="secondary" style={{width: '200px', margin: '0 auto'}} onClick={() => handleSubmit()} >计算</Button>
     </Form>
 
   );

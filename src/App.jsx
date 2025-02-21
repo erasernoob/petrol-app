@@ -9,7 +9,7 @@ import BasicLayout from "./layouts /BasicLayout";
 
 function App() {
 
-  document.body.setAttribute('arco-theme', 'dark');
+  // document.body.setAttribute('arco-theme', 'dark');
 
   return (
       <BasicLayout />
