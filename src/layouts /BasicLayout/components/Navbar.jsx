@@ -1,26 +1,26 @@
-import { Tabs, Typography} from '@arco-design/web-react';
+import { Tabs, Menu, Typography} from '@arco-design/web-react';
 import { routeList } from "../../../routers";
 
-const style = {
-
-};
-
+const MenuItem = Menu.Item;
 const myNavigate = (item) => {
     location.hash = item
 }
 
-const { TabPane } = Tabs
 
 export default function NavBar() {
     const tabList = routeList.map((route, idx) => {
-        return <TabPane key={route.path} title={route.name} style={style}>
-        </TabPane>
+        return <MenuItem key={route.path} onClick={() => myNavigate(route.path)}>
+            {route.name}
+        </MenuItem>
     })
 
     return (
-        <Tabs className={"nav-bar"} type={"card"} size="large" onChange={(key) => myNavigate(key)}>
+        <Menu mode='horizontal'>
             {tabList}
-        </Tabs>
+        </Menu>
+        // <Tabs className={"nav-bar"} type={"card"} size="large" onChange={(key) => myNavigate(key)}>
+        //     {tabList}
+        // </Tabs>
 
    )
 }

@@ -12,12 +12,12 @@ export default function HydroPage() {
 
   return (
     <div >
-      <div className='fileup-loader'>
+      {/* <div className='fileup-loader'> */}
           <FileUpLoader />
-      </div>
-      <div className='input-form'>
+      {/* </div> */}
+      {/* <div className='input-form'> */}
           <DynamicForm datas={hydro} tabs={tabsName} />
-      </div>
+      {/* </div> */}
     </div>
   );
 }
