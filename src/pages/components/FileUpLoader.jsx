@@ -19,6 +19,7 @@ const FileUpLoader = () => {
 
   return (
     <Upload
+      type="drag"
       accept=".xlsx"
     //   TODO: 存在跨域问题
       action={API_BASE_URL + "/uploadFile"}

@@ -9,11 +9,10 @@ import BasicLayout from "./layouts /BasicLayout";
 
 function App() {
 
+  document.body.setAttribute('arco-theme', 'dark');
 
   return (
-    <ConfigProvider theme={{ fontSize: 9 }}>
       <BasicLayout />
-    </ConfigProvider>
  );
 }
 

@@ -1,5 +1,6 @@
 import { Tabs } from "@arco-design/web-react";
 import { Form, Button, Input } from "@arco-design/web-react";
+import MyButton from "../../layouts /BasicLayout/components/MyButton.";
 
 const DynamicForm = ({ datas, handleSubmit, tabs }) => {
 
@@ -37,9 +38,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       </Tabs>
       
       {/* 提交按钮 */}
-      <Button type="primary" onClick={handleSubmit} style={{ marginTop: 16 }}>
-        提交
-      </Button>
+      <Button type="secondary" onClick={() => handleSubmit()} >计算</Button>
     </Form>
 
   );

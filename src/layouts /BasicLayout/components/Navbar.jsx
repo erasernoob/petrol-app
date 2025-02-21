@@ -15,12 +15,10 @@ export default function NavBar() {
     })
 
     return (
-        <Menu mode='horizontal'>
+        <Menu mode='horizontal' theme="dark">
             {tabList}
         </Menu>
-        // <Tabs className={"nav-bar"} type={"card"} size="large" onChange={(key) => myNavigate(key)}>
-        //     {tabList}
-        // </Tabs>
+
 
    )
 }
