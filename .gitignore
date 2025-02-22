@@ -16,6 +16,7 @@ lib64/
 *.xlsx
 *.csv
 site-packages
+venv/
 
 # Editor directories and files
 .vscode/*

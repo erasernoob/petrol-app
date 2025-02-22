@@ -1,66 +1,16 @@
 import { Tabs } from "@arco-design/web-react";
-import { Message } from "@arco-design/web-react";
-import { useEffect, useRef } from "react";
 import { Form, Button, Input } from "@arco-design/web-react";
 import MyButton from "../../layouts /BasicLayout/components/MyButton.";
+import { post } from "./axios";
 
 const DynamicForm = ({ datas, handleSubmit, tabs }) => {
 
   const tabsName = tabs
   const  TabPane  = Tabs.TabPane
-  const { form, disabled, isSubmitting } = Form.useFormContext();
-
   const FormItem = Form.Item
 
-  function DemoButton() {
   const { form, disabled, isSubmitting } = Form.useFormContext();
-  const messageRef = useRef(null)
 
-  useEffect(() => {
-    if (isSubmitting) {
-      messageRef.current = 'id-' + Date.now()
-      Message.loading({
-        id: messageRef.current,
-        content: 'submitting',
-        duration: 0
-      });
-    } else {
-      if (messageRef.current) {
-        const isError = Object.keys(form.getFieldsError()).length > 0;
-
-        Message[isError ? 'error' : 'success']({
-          id: messageRef.current,
-          content: isError ? 'validate failed' : 'submitted',
-          duration: 3000
-        });
-      }
-      messageRef.current = null
-    }
-  }, [isSubmitting])
-    return (
-    <>
-      <Button
-        type='primary'
-        htmlType='submit'
-        disabled={disabled}
-        loading={isSubmitting}
-        style={{ marginRight: 24 }}
-      >
-        Submit
-      </Button>
-      <Button
-        disabled={disabled}
-        style={{ marginRight: 24 }}
-        onClick={() => {
-          form.resetFields();
-        }}
-      >
-        Reset
-      </Button>
-    </>
-  );
-
-}
 
   return (
     <div className="form-wrapper">
@@ -68,7 +18,10 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
           layout="horizontal"
           size="large"
           onSubmit={async (data) => {
-            console.log(JSON.stringify(data))
+              handleSubmit(data)
+            // console.log(JSON.stringify(data))
+            // const response = await post('/hydro', JSON.stringify(data))
+            // console.log(response)
            }}
     >
       <Tabs type="card" tabPosition="left" className='custom-tabs' size="large">
@@ -103,7 +56,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       
         {/* {DemoButton()} */}
    </Form>
-
     </div>
   );
 

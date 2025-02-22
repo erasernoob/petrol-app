@@ -1,4 +1,4 @@
-#!/home/erasernoob/funproj/petrol-app/src/server/venv/bin/python3
+#!/home/erasernoob/funproj/petrol-app/src/api/server/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from api.server.entity.DTO import Hydro
 
 app = FastAPI()
-
 origins = [
     # "http://localhost:5173",  # Vite 开发服务器默认端口
     "http://localhost:1420",  # Tauri 开发时的前端端口
     "*"  # ⚠️ 不推荐在生产环境中使用 "*"，建议指定域名
 ]
-
 # 添加 CORS 中间件
 app.add_middleware(
     CORSMiddleware,
@@ -18,13 +18,6 @@ app.add_middleware(
     allow_headers=["*"],  # 允许所有请求头
 )
 
-# hydro
-
-@app.post("/hydro")
-async def getHydroParams(data):
-    print(data)
-
-
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
@@ -32,3 +25,11 @@ async def root():
 @app.post("/uploadFile")
 async def getUploadedFile():
     return {"message": "Hello World"}
+
+
+
+# hydro---------------------------------------------
+
+@app.post("/hydro")
+async def getHydroParams(data : Hydro):
+    print(data)
