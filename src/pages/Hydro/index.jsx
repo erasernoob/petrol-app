@@ -10,9 +10,8 @@ const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面
 
 const handleSubmit = async (data) => {
             const response = await post('/hydro', JSON.stringify(data))
-            console.log(response)
+            console.log(response.data)
   }
-
 
 
 export default function HydroPage() {

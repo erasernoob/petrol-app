@@ -2,14 +2,23 @@ import { Tabs } from "@arco-design/web-react";
 import { Form, Button, Input } from "@arco-design/web-react";
 import MyButton from "../../layouts /BasicLayout/components/MyButton.";
 import { post } from "./axios";
+import { useEffect, useRef, useState } from "react";
 
 const DynamicForm = ({ datas, handleSubmit, tabs }) => {
+
+  const [tabTime, setTabTime] = useState(0) 
+  // const [, setTabTime] = useState(0) 
 
   const tabsName = tabs
   const  TabPane  = Tabs.TabPane
   const FormItem = Form.Item
 
-  const { form, disabled, isSubmitting } = Form.useFormContext();
+  const [form] = Form.useForm()
+
+  const formItemRef = useRef(null)
+
+  
+  
 
 
   return (
@@ -17,14 +26,12 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
     <Form 
           layout="horizontal"
           size="large"
+          form={form}
           onSubmit={async (data) => {
               handleSubmit(data)
-            // console.log(JSON.stringify(data))
-            // const response = await post('/hydro', JSON.stringify(data))
-            // console.log(response)
            }}
     >
-      <Tabs type="card" tabPosition="left" className='custom-tabs' size="large">
+      <Tabs type="card" tabPosition="left" className='custom-tabs' size="large" onChange={() => setTabTime(() => tabTime + 1)}>
         {
           datas.map((category, index) => {
             const [categoryKey, data] = Object.entries(category)[0]
@@ -38,7 +45,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
                 field={key}
                 // TODO: 测试用
                 initialValue={field.value}
-                rules={[{ required: false, message: `${field.name} 不能为空` }]}
+                rules={[{ required: true, message: `${field.name} 不能为空` }]}
               >
                 <Input className='input-component'/>
               </FormItem> : <></>
@@ -50,8 +57,8 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       </Tabs>
       
       <FormItem wrapperCol={{offset: 6}}>
-        <Button type="primary" className='button submit-button'  htmlType="submit" >计算</Button>
-        <Button type="primary" className='button reset-button'   >重置</Button>
+        <Button type="primary" className='button submit-button' disabled={tabTime < tabs.length - 1}  htmlType="submit" >计算</Button>
+        <Button type="primary" className='button reset-button'>重置</Button>
       </FormItem>
       
         {/* {DemoButton()} */}
