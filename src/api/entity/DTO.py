@@ -36,5 +36,3 @@ class HydroDTO(BaseModel):
     H: float         # 岩屑床高度 (%)
 
 
-# 实例化模型
-hydro_instance = Hydro(**data)

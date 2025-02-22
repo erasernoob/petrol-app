@@ -11,9 +11,13 @@ import { increment } from '../../features/counterSlice';
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 
 const handleSubmit = async (data) => {
-  const response = await post('/hydro', JSON.stringify(data))
+  try {
+    const response = post('/hdo', JSON.stringify(data))
+  } catch (error) {
+    console.log(error)
+  }
+  
 }
-
 
 export default function HydroPage() {
 
