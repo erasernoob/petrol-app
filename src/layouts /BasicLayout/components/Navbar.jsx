@@ -9,7 +9,7 @@ const myNavigate = (item) => {
 
 export default function NavBar() {
     const tabList = routeList.map((route, idx) => {
-        return <MenuItem key={route.path} onClick={() => myNavigate(route.path)}>
+        return <MenuItem key={route.path} type="" onClick={() => myNavigate(route.path)}>
             {route.name}
         </MenuItem>
     })
@@ -18,7 +18,5 @@ export default function NavBar() {
         <Menu mode='horizontal' theme="">
             {tabList}
         </Menu>
-
-
    )
 }

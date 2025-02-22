@@ -14,7 +14,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
 
   return (
     <Form form={form} layout="horizontal">
-      <Tabs key="card" tabPosition="left">
+      <Tabs type="card" tabPosition="left" className='custom-tabs' size="large">
         {
           datas.map((category, index) => {
             const [categoryKey, data] = Object.entries(category)[0]
