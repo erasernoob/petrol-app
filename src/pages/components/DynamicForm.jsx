@@ -1,25 +1,16 @@
 import { Tabs } from "@arco-design/web-react";
 import { Form, Button, Input } from "@arco-design/web-react";
-import MyButton from "../../layouts /BasicLayout/components/MyButton.";
-import { post } from "./axios";
 import { useEffect, useRef, useState } from "react";
 
 const DynamicForm = ({ datas, handleSubmit, tabs }) => {
 
   const [tabTime, setTabTime] = useState(0) 
-  // const [, setTabTime] = useState(0) 
 
   const tabsName = tabs
   const  TabPane  = Tabs.TabPane
   const FormItem = Form.Item
 
   const [form] = Form.useForm()
-
-  const formItemRef = useRef(null)
-
-  
-  
-
 
   return (
     <div className="form-wrapper">
@@ -61,7 +52,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
         <Button type="primary" className='button reset-button'>重置</Button>
       </FormItem>
       
-        {/* {DemoButton()} */}
    </Form>
     </div>
   );
