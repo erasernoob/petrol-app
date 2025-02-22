@@ -14,8 +14,40 @@
     /* border: 1px solid var(--color-neutral-3); */
 }
 
+.custom-tabsPane {
+    width: 800px;
+    height: 500px;
+    padding-top: 20px;
+}
+
+.button-wrapper {
+    display: flex;
+}
+
+.button-wrapper button {
+    margin: 20px auto
+    
+}
+
+
+.submit-button {
+    width: 200px;
+    margin-top: 20px;
+}
+
 .file-uploader {
     
+}
+
+.input-component {
+    width: 200px;
+}
+
+.custom-tabs {
+}
+
+.form-wrapper {
+    padding-top: 20px;
 }
 
 .input-form {
