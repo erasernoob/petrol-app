@@ -7,5 +7,4 @@ router = APIRouter()
 
 @router.post("/hydro")
 async def get_hydro_params(data: HydroDTO):
-    print(data)
     return {"message": "Hydro data received", "data": data}
