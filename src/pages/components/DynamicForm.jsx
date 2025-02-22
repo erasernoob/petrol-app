@@ -1,4 +1,6 @@
 import { Tabs } from "@arco-design/web-react";
+import { Message } from "@arco-design/web-react";
+import { useEffect, useRef } from "react";
 import { Form, Button, Input } from "@arco-design/web-react";
 import MyButton from "../../layouts /BasicLayout/components/MyButton.";
 
@@ -6,16 +8,69 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
 
   const tabsName = tabs
   const  TabPane  = Tabs.TabPane
-  const [form] = Form.useForm();
+  const { form, disabled, isSubmitting } = Form.useFormContext();
+
   const FormItem = Form.Item
-  console.log('')
 
+  function DemoButton() {
+  const { form, disabled, isSubmitting } = Form.useFormContext();
+  const messageRef = useRef(null)
 
+  useEffect(() => {
+    if (isSubmitting) {
+      messageRef.current = 'id-' + Date.now()
+      Message.loading({
+        id: messageRef.current,
+        content: 'submitting',
+        duration: 0
+      });
+    } else {
+      if (messageRef.current) {
+        const isError = Object.keys(form.getFieldsError()).length > 0;
 
+        Message[isError ? 'error' : 'success']({
+          id: messageRef.current,
+          content: isError ? 'validate failed' : 'submitted',
+          duration: 3000
+        });
+      }
+      messageRef.current = null
+    }
+  }, [isSubmitting])
+    return (
+    <>
+      <Button
+        type='primary'
+        htmlType='submit'
+        disabled={disabled}
+        loading={isSubmitting}
+        style={{ marginRight: 24 }}
+      >
+        Submit
+      </Button>
+      <Button
+        disabled={disabled}
+        style={{ marginRight: 24 }}
+        onClick={() => {
+          form.resetFields();
+        }}
+      >
+        Reset
+      </Button>
+    </>
+  );
+
+}
 
   return (
     <div className="form-wrapper">
-    <Form form={form} layout="horizontal">
+    <Form 
+          layout="horizontal"
+          size="large"
+          onSubmit={async (data) => {
+            console.log(JSON.stringify(data))
+           }}
+    >
       <Tabs type="card" tabPosition="left" className='custom-tabs' size="large">
         {
           datas.map((category, index) => {
@@ -27,8 +82,10 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
               <FormItem
                 key={key}
                 label={field.name}
-                name={key}
-                rules={[{ required: true, message: `${field.name} 不能为空` }]}
+                field={key}
+                // TODO: 测试用
+                initialValue={field.value}
+                rules={[{ required: false, message: `${field.name} 不能为空` }]}
               >
                 <Input className='input-component'/>
               </FormItem> : <></>
@@ -39,11 +96,12 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       }
       </Tabs>
       
-      {/* 提交按钮 */}
-      <div className="button-wrapper">
-      <Button type="primary" className='button submit-button'  onClick={() => handleSubmit()} >计算</Button>
-      <Button type="primary" className='button reset-button'  onClick={() => handleReset()} >重置</Button>
-      </div>
+      <FormItem wrapperCol={{offset: 6}}>
+        <Button type="primary" className='button submit-button'  htmlType="submit" >计算</Button>
+        <Button type="primary" className='button reset-button'   >重置</Button>
+      </FormItem>
+      
+        {/* {DemoButton()} */}
    </Form>
 
     </div>

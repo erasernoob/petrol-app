@@ -18,6 +18,13 @@ app.add_middleware(
     allow_headers=["*"],  # 允许所有请求头
 )
 
+# hydro
+
+@app.post("/hydro")
+async def getHydroParams(data):
+    print(data)
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}

@@ -9,9 +9,8 @@ const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面
 
 
 export default function HydroPage() {
-  const [form] = Form.useForm();
-  const handleSubmit = () => {
-    console.log('haha')
+  const handleSubmit = (data) => {
+    console.log(data)
   }
 
 
