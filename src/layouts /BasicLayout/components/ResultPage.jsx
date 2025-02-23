@@ -11,8 +11,9 @@ export default function ResultContent() {
     return hydroData
       .map(item => ({
         depth: item["井深 (m)"],
-        drillPressure: item["钻柱压力 (Pgn, MPa)"],
-        annularPressure: item["环空压力 (Phk, MPa)"],
+        // TODO: for test 
+        drillPressure: item["钻柱压力 (Pgn, MPa)"] < 0 ? 0 : item['钻柱压力 (Pgn, MPa)'],
+        annularPressure: item["环空压力 (Phk, MPa)"] < 0 ?  0 : item["环空压力 (Phk, MPa)"],
         ecd: item["ECD (g/cm³)"]
       }))
       // 数据抽样（每5个点取1个）
@@ -20,7 +21,7 @@ export default function ResultContent() {
 
   // ECharts 配置
   const option = useMemo(() => ({
-    animation: false, // 禁用动画
+    animation: true, // 禁用动画
     large: true,      // 开启大数据模式
     largeThreshold: 500, // 超过500点时启用优化
     dataset: { source: chartData },
@@ -29,54 +30,54 @@ export default function ResultContent() {
       start: 0,
       end: 100
     }],
-    xAxis: {
-      type: 'category',
+    yAxis: {
+      type: 'value',
       name: '井深 (m)',
-      data: chartData.map(item => item.depth)
+      inverse: true
     },
-    yAxis: [
-      {
+    xAxis: [
+     {
         name: '压力 (MPa)',
         type: 'value'
       },
-      {
-        name: 'ECD (g/cm³)',
-        type: 'value',
-        offset: 0,
-        alignTicks: true
-      }
+      // {
+      //   name: 'ECD (g/cm³)',
+      //   type: 'value',
+      //   offset: 0,
+      //   alignTicks: true
+      // }
     ],
     series: [
       {
         name: '钻柱压力',
         type: 'line',
         yAxisIndex: 0,
-        encode: { x: 'depth', y: 'drillPressure' },
+        encode: { x: 'drillPressure', y: 'depth' },
         sampling: 'lttb', // 采用最佳采样算法
-        smooth: false,     // 禁用平滑
-        lineStyle: { width: 1 },
+        smooth: true,     // 禁用平滑
+        lineStyle: { width: 2 },
         showSymbol: false
       },
       {
         name: '环空压力',
         type: 'line',
         yAxisIndex: 0,
-        encode: { x: 'depth', y: 'annularPressure' },
+        encode: { x: 'annularPressure', y: 'depth' },
         sampling: 'lttb',
         smooth: false,
-        lineStyle: { width: 1 },
+        lineStyle: { width: 2 },
         showSymbol: false
       },
-      {
-        name: 'ECD',
-        type: 'line',
-        yAxisIndex: 1,
-        encode: { x: 'depth', y: 'ecd' },
-        sampling: 'lttb',
-        smooth: false,
-        lineStyle: { width: 1 },
-        showSymbol: false
-      }
+      // {
+      //   name: 'ECD',
+      //   type: 'line',
+      //   yAxisIndex: 1,
+      //   encode: { x: 'depth', y: 'ecd' },
+      //   sampling: 'lttb',
+      //   smooth: false,
+      //   lineStyle: { width: 1 },
+      //   showSymbol: false
+      // }
     ],
     tooltip: {
       trigger: 'axis',
