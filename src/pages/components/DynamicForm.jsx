@@ -1,6 +1,5 @@
 import { Tabs } from "@arco-design/web-react";
 import { Form, Button, Input } from "@arco-design/web-react";
-import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useRef, useState } from "react";
 
 const DynamicForm = ({ datas, handleSubmit, tabs }) => {

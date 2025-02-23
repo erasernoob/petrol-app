@@ -86,15 +86,11 @@ export default function ResultContent() {
   }), [chartData])
 
   return (
-    <Card
-      title="计算结果"
-      style={{ width: '100%', height: '100%' }}
-      bodyStyle={{ padding: '10px', height: '95%' }}
-    >
+    <>
       {chartData.length > 0 ? (
         <ReactECharts
           option={option}
-          style={{ height: '100%', width: '100%' }}
+          style={{ height: '80%', width: '80%' }}
           opts={{ renderer: 'canvas' }} // 强制使用Canvas
           notMerge={true}
         />
@@ -103,6 +99,7 @@ export default function ResultContent() {
           数据加载中...
         </div>
       )}
-    </Card>
-  )
+ 
+    </>
+ )
 }

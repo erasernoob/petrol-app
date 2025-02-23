@@ -12,12 +12,12 @@ const Header = Layout.Header;
 export default function BasicLayout() {
 
     return (
-        <>
-        <NavBar />
         <div className="basic-layout">
+            <NavBar />
+        <div className="content">
             <RouterProvider router={routerList}></RouterProvider>
         </div>
-        </>
+        </div>
    )
 
 }

@@ -1,9 +1,8 @@
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { open } from '@tauri-apps/plugin-dialog';
-import FileUpLoader from '../components/FileUpLoader';
-import { hydro } from '../../data/Params'
-import DynamicForm from '../components/DynamicForm';
-import { post } from '../components/axios';
+import FileUpLoader from './FileUpLoader';
+import DynamicForm from './DynamicForm';
+import { post } from '../../components/axios';
 import '../style.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
@@ -11,27 +10,8 @@ import { basename } from '@tauri-apps/api/path';
 import Papa from 'papaparse';
 import { setHydro } from '../../store/dataSlice'; 
 
-const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 
-export default function Sider() {
-
-  const [file, setFile] = useState({name: '', path: ''})
-  const { hydroData } = useSelector((state) => state.data)
-  const dispatch = useDispatch()
-
-  const handleSubmit = async (data) => {
-    // TODO: 
-    // if (!file.path) return
-    try {
-      data.file_path = file.path ? file.path : ''
-      const response = await post('/hydro', JSON.stringify(data))
-      const res = Papa.parse(response, {header: true, dynamicTyping: true})
-      dispatch(setHydro(res.data))
-      Message.success('计算成功！')
-    } catch (error) {
-      Message.error('计算内部出现错误，请检查')
-    }
-  }
+export default function Sider({form, tabsName, handleSubmit, datas, file={name: ''}, setFile}) {
 
   const handleUpload = async () => {
     const filePath = await open({ multiple: false })
@@ -61,7 +41,7 @@ export default function Sider() {
       </div>
 
       <div className='input-form'>
-        <DynamicForm handleSubmit={handleSubmit} datas={hydro} tabs={tabsName} />
+        {form}
       </div>
     </div>
   );
