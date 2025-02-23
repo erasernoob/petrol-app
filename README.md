@@ -1,4 +1,12 @@
-# Tauri + React
+# Tauri + React + Redux + FastAPI
 
-This template should help get you started developing with Tauri and React in Vite.
+## To Start (for now dev)
+
+> backend
+```
+uvicorn api:app dev
+```
+
+
+
 

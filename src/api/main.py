@@ -1,7 +1,7 @@
 # api/main.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.routes import hydro   # 导入拆分的路由
+from routes import hydro   # 导入拆分的路由
 
 app = FastAPI()
 

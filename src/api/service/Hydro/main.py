@@ -1,8 +1,8 @@
 import pandas as pd
 from fastapi import Response
 import io
-from api.entity.DTO import HydroDTO
-import Hydro
+from entity.DTO import HydroDTO
+from service.Hydro import Hydro
 
 def process_hydro_data(hydro_dto : HydroDTO):
     # 读取 Excel 文件
@@ -32,7 +32,6 @@ def process_hydro_data(hydro_dto : HydroDTO):
     output = io.StringIO()
     df.to_csv(output, index=False, encoding="utf-8")
     csv_data = output.getvalue()
-
     return Response(content=csv_data, media_type="text/csv",
                     headers={"Content-Disposition": "attachment; filename=hydro_data.csv"})
     

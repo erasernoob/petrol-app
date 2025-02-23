@@ -2,7 +2,8 @@
 # 返回值：
 # return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
 
-import utils
+
+from . import utils
 
 import numpy as np
 from scipy.optimize import fsolve
