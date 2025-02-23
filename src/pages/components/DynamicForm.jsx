@@ -22,7 +22,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
               handleSubmit(data)
            }}
     >
-      <Tabs type="card" tabPosition="left" className='custom-tabs' size="large" onChange={() => setTabTime(() => tabTime + 1)}>
+      <Tabs type="card" tabPosition="left" className='custom-tabs' size="large" lazyload={false} onChange={() => setTabTime(() => tabTime + 1)}>
         {
           datas.map((category, index) => {
             const [categoryKey, data] = Object.entries(category)[0]
@@ -48,8 +48,8 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       </Tabs>
       
       <FormItem wrapperCol={{offset: 6}}>
-        <Button type="primary" className='button submit-button' disabled={tabTime < tabs.length - 1}  htmlType="submit" >计算</Button>
-        <Button type="primary" className='button reset-button'>重置</Button>
+        <Button type="primary" className='button submit-button' disabled={tabTime < tabs.length - 1 && !form.validate()}  htmlType="submit" >计算</Button>
+        <Button type="primary" className='button reset-button' onClick={() => {form.resetFields()}}>重置</Button>
       </FormItem>
       
    </Form>

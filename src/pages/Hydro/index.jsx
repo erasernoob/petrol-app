@@ -12,7 +12,7 @@ const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面
 
 const handleSubmit = async (data) => {
   try {
-    const response = post('/hdo', JSON.stringify(data))
+    const response = post('/hydro', JSON.stringify(data))
   } catch (error) {
     console.log(error)
   }
@@ -32,12 +32,6 @@ const dispatch = useDispatch()
       </div>
       <div className='input-form'>
         <DynamicForm handleSubmit={handleSubmit} datas={hydro} tabs={tabsName} />
-        <div>
-          <span>{counter}</span>
-        <Button onClick={() => dispatch(increment())}>点我 + 1</Button>
-        </div>
-
-
       </div>
     </div>
   );
