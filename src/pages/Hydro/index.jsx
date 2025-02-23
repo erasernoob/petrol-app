@@ -9,13 +9,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { basename } from '@tauri-apps/api/path';
 import Papa from 'papaparse';
+import { setHydro } from '../../store/dataSlice'; 
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 
 export default function HydroPage() {
 
   const [file, setFile] = useState({name: '', path: ''})
-  const counter = useSelector(state => state.counter.value)
+  const { hydroData } = useSelector((state) => state.data)
   const dispatch = useDispatch()
 
   const handleSubmit = async (data) => {
@@ -24,10 +25,9 @@ export default function HydroPage() {
     try {
       data.file_path = file.path ? file.path : ''
       const response = await post('/hydro', JSON.stringify(data))
-      const e = Papa.parse(response, {header: true})
-      const d = JSON.stringify(e.data)
-      console.log(d)
-
+      const res = Papa.parse(response, {header: true, dynamicTyping: true})
+      dispatch(setHydro(res.data))
+      Message.success('计算成功！')
     } catch (error) {
       Message.error('计算内部出现错误，请检查')
     }
