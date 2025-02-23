@@ -8,7 +8,7 @@ import LimitPage from "../pages/Limit"
 export const routeList = [
     {
         name: '数据管理系统',
-        // for test
+        // TODO: change to the database system url
         path: 'http://www.baidu.com',
         element: <></>
     },

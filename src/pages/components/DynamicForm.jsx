@@ -1,5 +1,6 @@
 import { Tabs } from "@arco-design/web-react";
 import { Form, Button, Input } from "@arco-design/web-react";
+import { open } from "@tauri-apps/plugin-dialog";
 import { useEffect, useRef, useState } from "react";
 
 const DynamicForm = ({ datas, handleSubmit, tabs }) => {
@@ -50,6 +51,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       <FormItem wrapperCol={{offset: 6}}>
         <Button type="primary" className='button submit-button' disabled={tabTime < tabs.length - 1 && !form.validate()}  htmlType="submit" >计算</Button>
         <Button type="primary" className='button reset-button' onClick={() => {form.resetFields()}}>重置</Button>
+       
       </FormItem>
       
    </Form>

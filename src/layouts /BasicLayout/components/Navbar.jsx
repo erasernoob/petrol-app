@@ -12,7 +12,7 @@ export default function NavBar() {
         
         return (idx != 0 ?  
         <MenuItem key={route.path} type="" onClick={() => myNavigate(route.path)}>
-            {route.name} </MenuItem> : <MenuItem key={route.path} type="" onClick={async () => await openUrl(route.path)}>
+            {route.name} </MenuItem> : <MenuItem key={route.path} type="line" onClick={async () => await openUrl(route.path)}>
             {route.name} </MenuItem>
         )
     })
