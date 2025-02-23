@@ -2,7 +2,6 @@
 # 返回值：
 # return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
 
-import utils
 
 import numpy as np
 from scipy.optimize import fsolve
@@ -53,7 +52,6 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
     SW = sspan.reshape(-1, 1)  # 转换为列向量（类似 MATLAB 的列向量）
 
 
-    print(data.shape)
     Mk, mk, Sk, alphak, phik = utils.deal_curve_data2(data)
     alpha, phi, ks, dks, ddks, kphis, kalphas, taos = utils.prepare_data(sspan, Mk, mk, Sk, alphak, phik)
 
@@ -353,4 +351,3 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         ECD = 0
 
     return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
-    
