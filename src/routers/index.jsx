@@ -7,6 +7,12 @@ import LimitPage from "../pages/Limit"
 
 export const routeList = [
     {
+        name: '数据管理系统',
+        // for test
+        path: 'http://www.baidu.com',
+        element: <></>
+    },
+    {
         name: '水力学',
         path: '/',
         element: <HydroPage />

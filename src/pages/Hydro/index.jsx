@@ -4,8 +4,8 @@ import { hydro } from '../../data/Params'
 import DynamicForm from '../components/DynamicForm';
 import { post } from '../components/axios';
 import '../style.css'
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { openPath } from '@tauri-apps/plugin-opener';
 import { increment } from '../../features/counterSlice';
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
