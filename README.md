@@ -2,9 +2,17 @@
 
 ## To Start (for now dev)
 
-> backend
+> TO start the backend
 ```
-uvicorn api:app dev
+cd src/api
+uvicorn main:app dev
+
+```
+> TO start the frontend
+```
+cd src/
+pnpm tauri dev
+
 ```
 
 
