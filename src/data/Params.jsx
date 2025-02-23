@@ -13,7 +13,7 @@ const hydro = [
   },
   {
     fluid: {
-      lbmx: { name: "流变模式 (1=宾汉, 2=幂律, 3=赫巴)", value: 1 },
+      lbmx: { name: "流变模式 (1=宾汉, 2=幂律, 3=赫巴)", value: 3 },
       fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
       n: { name: "流性指数", value: 0.48 },
       K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },

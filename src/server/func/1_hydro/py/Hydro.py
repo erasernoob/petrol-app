@@ -3,8 +3,6 @@
 # return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
 
 
-from . import utils
-
 import numpy as np
 from scipy.optimize import fsolve
 from scipy.interpolate import CubicSpline
@@ -353,4 +351,3 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         ECD = 0
 
     return P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk  # 返回元组
-    
