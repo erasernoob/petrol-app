@@ -228,29 +228,29 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         # 环空压降
         Pazt = 2 * fazt * rhoi * np.arange(1, Lzt + 1).reshape(-1, 1) * Vazt**2 / (Dw - Rzt) / 10**6 * 10
 
-    # 计算总压降
-    Ppztt = Ppzz[-1] + Ppzt
-    Paztt = Pazz[-1] + Pazt
-    # TODO: 存在列向量问题
-    # Ppp = np.concatenate((Ppzz, Ppztt))
-    # Paa = np.concatenate((Pazz, Paztt))
+        # 计算总压降
+        Ppztt = Ppzz[-1] + Ppzt
+        Paztt = Pazz[-1] + Pazt
+        # TODO: 存在列向量问题
+        # Ppp = np.concatenate((Ppzz, Ppztt))
+        # Paa = np.concatenate((Pazz, Paztt))
 
-    Ppp = np.vstack((Ppzz, Ppztt))
-    Paa = np.vstack((Pazz, Paztt))
+        Ppp = np.vstack((Ppzz, Ppztt))
+        Paa = np.vstack((Pazz, Paztt))
 
-    Pp = fjt * Ppp / 10
-    Pa = Paa / 10
+        pp = fjt * Ppp / 10
+        Pa = Paa / 10
 
-    # 垂深插值
-    Length, Xs, Ys, Zs = utils.deal_input_data(data)
-    cs = Xs[0] - Xs
-    aa = data[:, 0]
-    T = cs
-    aacs = np.arange(1, np.max(aa) + 1).reshape(-1, 1)
-    Tcs = CubicSpline(aa, T, bc_type='natural')(aacs)
+        # 垂深插值
+        Length, Xs, Ys, Zs = utils.deal_input_data(data)
+        cs = Xs[0] - Xs
+        aa = data[:, 0]
+        T = cs
+        aacs = np.arange(1, np.max(aa) + 1).reshape(-1, 1)
+        Tcs = CubicSpline(aa, T, bc_type='natural')(aacs)
 
-    # 一维数组转换为二维数组
-    Tcs = Tcs.reshape(-1, 1)
+        # 一维数组转换为二维数组
+        Tcs = Tcs.reshape(-1, 1)
 
     
     if yx == 0:

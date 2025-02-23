@@ -12,6 +12,7 @@ const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面
 
 const handleSubmit = async (data) => {
   try {
+    data.file_path = ''
     const response = post('/hydro', JSON.stringify(data))
   } catch (error) {
     console.log(error)

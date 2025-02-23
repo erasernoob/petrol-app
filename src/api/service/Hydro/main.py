@@ -4,12 +4,14 @@ import io
 from entity.DTO import HydroDTO
 from service.Hydro import Hydro
 
-def process_hydro_data(hydro_dto : HydroDTO):
+def  process_hydro_data(hydro_dto : HydroDTO):
     # 读取 Excel 文件
-    guiji = pd.read_excel(hydro_dto.file_path).values  
+    # guiji = pd.read_excel(hydro_dto.file_path).values  
+    guiji = pd.read_excel('/home/erasernoob/petrol-app/app_v16/水力学/KL16-1-A25井眼轨迹.xlsx').values
+    print(guiji)
 
     # 计算结果
-    P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk = Hydro(
+    P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk = Hydro.Hydro(
         guiji, hydro_dto.lbmx, hydro_dto.pailiang, hydro_dto.fluidden, 
         hydro_dto.n, hydro_dto.K, hydro_dto.miu, hydro_dto.taof, 
         hydro_dto.Dw, hydro_dto.A1, hydro_dto.C1, hydro_dto.A2, 

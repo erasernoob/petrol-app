@@ -9,5 +9,5 @@ router = APIRouter()
 @router.post("/hydro")
 async def get_hydro_params(data: HydroDTO):
     if data:
-        return await process_hydro_data
+        return  process_hydro_data(data)
 
