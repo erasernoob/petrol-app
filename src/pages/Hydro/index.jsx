@@ -8,13 +8,9 @@ import '../style.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import { basename } from '@tauri-apps/api/path';
+import Papa from 'papaparse';
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
-
-
-
-
-
 
 export default function HydroPage() {
 
@@ -23,11 +19,17 @@ export default function HydroPage() {
   const dispatch = useDispatch()
 
   const handleSubmit = async (data) => {
+    // TODO: 
+    // if (!file.path) return
     try {
-      data.file_path = file
-      const response = post('/hydro', JSON.stringify(data))
+      data.file_path = file.path ? file.path : ''
+      const response = await post('/hydro', JSON.stringify(data))
+      const e = Papa.parse(response, {header: true})
+      const d = JSON.stringify(e.data)
+      console.log(d)
+
     } catch (error) {
-      console.log(error)
+      Message.error('计算内部出现错误，请检查')
     }
   }
 

@@ -53,7 +53,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
         <Button type="primary" className='button reset-button' onClick={() => {form.resetFields()}}>重置</Button>
        
       </FormItem>
-      
    </Form>
     </div>
   );
