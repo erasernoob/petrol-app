@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 class HydroDTO(BaseModel):
+    file_path: str
     pailiang: float  # 排量 (L/min)
     Dw: float        # 井眼直径 (m)
     Rzz: float       # 钻柱外径 (m)
@@ -34,5 +35,6 @@ class HydroDTO(BaseModel):
     d4: float        # 方钻杆内径 (m)
     yxmd: float      # 岩屑密度 (kg/m³)
     H: float         # 岩屑床高度 (%)
+    yx: int
 
 
