@@ -1,46 +1,107 @@
 import { Card } from '@arco-design/web-react'
-import { LineChart, Line, XAxis, YAxis } from 'recharts'
+import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
-import { hydro } from '../../../data/Params';
+import { useMemo } from 'react'
 
 export default function ResultContent() {
   const { hydroData } = useSelector(state => state.data)
-  const chartData = hydroData.map(item => ({
-    depth: item["井深 (m)"],
-    drillPressure: item["钻柱压力 (Pgn, MPa)"],
-    annularPressure: item["环空压力 (Phk, MPa)"],
-    ecd: item["ECD (g/cm³)"]
-  }));
-  console.log(chartData)
+
+  // 数据处理（含性能优化）
+  const chartData = useMemo(() => {
+    return hydroData
+      .map(item => ({
+        depth: item["井深 (m)"],
+        drillPressure: item["钻柱压力 (Pgn, MPa)"],
+        annularPressure: item["环空压力 (Phk, MPa)"],
+        ecd: item["ECD (g/cm³)"]
+      }))
+      // 数据抽样（每5个点取1个）
+  }, [hydroData])
+
+  // ECharts 配置
+  const option = useMemo(() => ({
+    animation: false, // 禁用动画
+    large: true,      // 开启大数据模式
+    largeThreshold: 500, // 超过500点时启用优化
+    dataset: { source: chartData },
+    dataZoom: [{
+      type: 'inside', // 内置型数据缩放
+      start: 0,
+      end: 100
+    }],
+    xAxis: {
+      type: 'category',
+      name: '井深 (m)',
+      data: chartData.map(item => item.depth)
+    },
+    yAxis: [
+      {
+        name: '压力 (MPa)',
+        type: 'value'
+      },
+      {
+        name: 'ECD (g/cm³)',
+        type: 'value',
+        offset: 0,
+        alignTicks: true
+      }
+    ],
+    series: [
+      {
+        name: '钻柱压力',
+        type: 'line',
+        yAxisIndex: 0,
+        encode: { x: 'depth', y: 'drillPressure' },
+        sampling: 'lttb', // 采用最佳采样算法
+        smooth: false,     // 禁用平滑
+        lineStyle: { width: 1 },
+        showSymbol: false
+      },
+      {
+        name: '环空压力',
+        type: 'line',
+        yAxisIndex: 0,
+        encode: { x: 'depth', y: 'annularPressure' },
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 1 },
+        showSymbol: false
+      },
+      {
+        name: 'ECD',
+        type: 'line',
+        yAxisIndex: 1,
+        encode: { x: 'depth', y: 'ecd' },
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 1 },
+        showSymbol: false
+      }
+    ],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'cross' }
+    }
+  }), [chartData])
 
   return (
     <Card
-      title='计算结果'
-      style={{
-        width: '100%',
-        height: '100%',
-        overflow: "hidden",
-        maxHeight: 'calc(100% - 1px)',
-        borderTop: '0px'
-      }}
+      title="计算结果"
+      style={{ width: '100%', height: '100%' }}
+      bodyStyle={{ padding: '10px', height: '95%' }}
     >
-
-    {
-      hydroData.length > 0 ? (
-        <LineChart data={chartData}>
-          <XAxis dataKey="depth" />
-          <YAxis />
-          <Line type="monotone" dataKey="drillPressure" stroke="#8884d8" />
-          <Line type="monotone" dataKey="annularPressure" stroke="#82ca9d" />
-          <Line type="monotone" dataKey="ecd" stroke="#ff7300" />
-        </LineChart>
+      {chartData.length > 0 ? (
+        <ReactECharts
+          option={option}
+          style={{ height: '100%', width: '100%' }}
+          opts={{ renderer: 'canvas' }} // 强制使用Canvas
+          notMerge={true}
+        />
       ) : (
-        <div>数据加载中...</div>
-      )
-    }
-
-     </Card>
-
+        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          数据加载中...
+        </div>
+      )}
+    </Card>
   )
-
 }
