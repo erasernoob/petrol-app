@@ -1,5 +1,5 @@
 #!/bin/bash
-cd src/api
+cd ../src/api
 
 # 清理旧构建
 rm -rf build/ dist/

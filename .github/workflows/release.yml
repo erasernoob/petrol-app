@@ -1,0 +1,98 @@
+name: Release Build
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            tauri-target: deb
+            ext: deb
+          - os: macos-latest
+            tauri-target: app
+            ext: app.tar.gz
+          - os: windows-latest
+            tauri-target: msi
+            ext: msi
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 安装 pnpm
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'pnpm'
+
+    - name: Install pnpm
+      run: corepack enable && corepack prepare pnpm@latest --activate
+
+    # 安装 Python
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # 安装 Rust (Windows 需要额外处理)
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        profile: minimal
+        toolchain: stable
+        override: true
+        targets: |
+          ${{ contains(matrix.os, 'windows') && 'x86_64-pc-windows-msvc' || '' }}
+
+    # 构建 Python 后端
+    - name: Build Backend
+      run: |
+        cd scripts/
+        chmod +x build-backend.sh
+        ./build-backend.sh
+
+    # 前端依赖安装
+    - name: Install Frontend Dependencies
+      working-directory: ./src
+      run: pnpm install
+
+    # 前端构建
+    - name: Build Frontend
+      working-directory: ./src
+      run: pnpm build
+
+    # Tauri 构建
+    - name: Build Tauri
+      uses: tauri-apps/tauri-action@v0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        target: ${{ matrix.tauri-target }}
+        packageName: my-app
+        tagName: v__VERSION__
+        releaseName: 'Release v__VERSION__'
+        releaseBody: 'Auto-generated release'
+        distDir: ../src/dist
+        configPath: ./src-tauri/tauri.conf.json
+
+    # 重命名输出文件
+    - name: Rename Artifacts
+      run: |
+        mkdir release
+        mv src-tauri/target/release/*.${{ matrix.ext }} release/
+        mv src-tauri/target/release/bundle/*/*.app release/  # macOS
+
+    # 上传制品
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-app-${{ matrix.os }}
+        path: release/*
