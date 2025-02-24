@@ -8,8 +8,8 @@ import { useMemo } from "react"
  * @param {*} series     
  */
 
-export default function Option(chartData, yAxis, xAxis, series )  {
-    const option = useMemo(() => ({
+export default function Option(chartData, yAxis, xAxis, series)  {
+    return useMemo(() => ({
     animation: true, // 禁用动画
     large: true,      // 开启大数据模式
     largeThreshold: 500, // 超过500点时启用优化
@@ -19,32 +19,9 @@ export default function Option(chartData, yAxis, xAxis, series )  {
       start: 0,
       end: 100
     }],
-    yAxis: [
-    {
-      type: 'value',
-      name: '井深 (m)',
-      inverse: true
-    },],
-    xAxis: [
-      {
-        name: 'ECD (g/cm³)',
-        type: 'value',
-        offset: 0,
-        alignTicks: true
-      }
-    ],
-    series: [
-      {
-        name: 'ECD',
-        type: 'line',
-        yAxisIndex: 0,
-        encode: { x: 'ecd', y: 'depth' },
-        sampling: 'lttb',
-        smooth: false,
-        lineStyle: { width: 1 },
-        showSymbol: false
-      }
-    ],
+    yAxis: yAxis,
+    xAxis: xAxis,
+    series: series,
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'cross' }
