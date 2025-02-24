@@ -32,9 +32,15 @@ jobs:
       with:
         node-version: 20
         cache: 'pnpm'  # 确保缓存 pnpm
+    
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 9.12.3  # 指定 pnpm 版本，可以根据需要修改
 
-    - name: Install pnpm
-      run: npm install -g pnpm  # 安装 pnpm
+    - name: Check pnpm installation
+      run:  pnpm --version
+        
 
     # 安装 Python
     - name: Setup Python
