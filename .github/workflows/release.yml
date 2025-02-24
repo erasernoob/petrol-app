@@ -2,10 +2,8 @@ name: Release Build
 
 on:
   push:
-    # tags:
-      # - 'v*'
     branches:
-      master
+      - master
 
 jobs:
   build:
@@ -28,96 +26,95 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 1. 安装 pnpm
     - name: Setup pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 9.12.3  # 指定 pnpm 版本，可以根据需要修改
+        version: 9.12.3
 
-    - name: Check pnpm installation
-      run:  pnpm --version
-
-    # 安装 Node.js 和 pnpm
+    # 2. 配置 Node.js 和缓存
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
-        cache: 'pnpm'  # 确保缓存 pnpm
+        cache: 'pnpm'
+        cache-dependency-path: 'src/pnpm-lock.yaml'  # 修正路径
 
-    # 安装 Python
+    # 3. 安装 Python
     - name: Setup Python
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # 安装 Rust (Windows 需要额外处理)
+    # 4. 安装 Rust（合并步骤）
     - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        profile: minimal
-        toolchain: stable
-        override: true
-        targets: |
-          ${{ contains(matrix.os, 'windows') && 'x86_64-pc-windows-msvc' || '' }}
-
- 
-    - name: Build Backend
-      run: |
-        if [ "$RUNNER_OS" = "Windows" ]; then
-          cmd /c scripts/backend.bat  # 确保在 Windows 运行
-        else
-          cd scripts
-          chmod +x backend.sh
-          ./backend.sh
-        fi
-      shell: bash
-
-    - name: install Rust stable
       uses: dtolnay/rust-toolchain@stable
       with:
-        # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-        targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+        targets: |
+          ${{ 
+            matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' ||
+            matrix.os == 'windows-latest' && 'x86_64-pc-windows-msvc' || 
+            ''
+          }}
 
-    - name: install dependencies (ubuntu only)
-      if: ${{matrix.os == 'ubuntu-22.04'}} 
+    # 5. Ubuntu 系统依赖
+    - name: Install Linux Dependencies
+      if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |
-          sudo apt-get update
-          sudo apt-get install -y \
+        sudo apt-get update
+        sudo apt-get install -y \
           libwebkit2gtk-4.0-dev \
           libappindicator3-dev \
           librsvg2-dev \
-          patchelf \
-          libgobject-2.0-dev  # 🔥 解决 `gobject-2.0` 缺失的问题
+          patchelf
 
-    # 安装前端依赖
+    # 6. 构建后端
+    - name: Build Backend
+      run: |
+        cd scripts
+        if [ "$RUNNER_OS" = "Windows" ]; then
+          cmd /c backend.bat
+        else
+          chmod +x backend.sh
+          ./backend.sh
+        fi
+
+    # 7. 前端依赖安装
     - name: Install Frontend Dependencies
       working-directory: ./src
-      run: pnpm install  # 使用 pnpm 安装前端依赖
+      run: pnpm install
 
-    # 构建前端
+    # 8. 前端构建
     - name: Build Frontend
       working-directory: ./src
-      run: pnpm build  # 使用 pnpm 构建前端
+      run: pnpm build
 
-    # Tauri 构建
+    # 9. Tauri 构建（关键修正）
     - name: Build Tauri
       uses: tauri-apps/tauri-action@v0
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tagName: petrol-app-v__VERSION__
-        releaseName: 'Release v__VERSION__'
-        releaseBody: 'Auto-generated release'
-        distDir: ../dist
-        configPath: ./src-tauri/tauri.conf.json
+        target: ${{ matrix.tauri-target }}  # 添加目标平台
+        configPath: src-tauri/tauri.conf.json
+        distDir: ../dist  # 匹配前端实际输出目录
 
-    # 重命名输出文件
-    - name: Rename Artifacts
+    # 10. 处理制品
+    - name: Prepare Artifacts
       run: |
-        mkdir release
-        mv src-tauri/target/release/*.${{ matrix.ext }} release/
-        mv src-tauri/target/release/bundle/*/*.app release/  # macOS
+        mkdir -p release
+        # Windows
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          cp src-tauri/target/release/*.msi release/
+        # macOS
+        elif [ "${{ matrix.os }}" = "macos-latest" ]; then
+          find src-tauri/target/release -name '*.app' -exec cp -r {} release \;
+        # Linux
+        else
+          cp src-tauri/target/release/*.deb release/
+        fi
 
-    # 上传制品
+    # 11. 上传制品
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
       with:
