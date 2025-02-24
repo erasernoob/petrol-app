@@ -38,10 +38,6 @@ export default function ResultPage({data}) {
       inverse: true
     },
     xAxis: [
-    //  {
-    //     name: '压力 (MPa)',
-    //     type: 'value'
-    //   },
       {
         name: 'ECD (g/cm³)',
         type: 'value',
