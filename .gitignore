@@ -17,7 +17,9 @@ lib64/
 *.csv
 site-packages
 venv/
+build/
 __pycache__/
+*.pyc
 
 # Editor directories and files
 .vscode/*

@@ -5,7 +5,7 @@
 > TO start the backend
 ```
 cd src/api
-uvicorn main:app dev
+uvicorn main:app --reload
 
 ```
 > TO start the frontend
