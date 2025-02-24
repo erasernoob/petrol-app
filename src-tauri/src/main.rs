@@ -23,7 +23,12 @@ impl Drop for BackendProcess {
 
 fn main() {
     let exe_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")); // 指向src-tauri目录
-    let backend_path = exe_dir.join("bin").join("backend");
+    // 添加判断逻辑
+    let backend_path = if cfg!(target_os = "windows") {
+        exe_dir.join("bin").join("backend.exe")
+    } else {
+        exe_dir.join("bin").join("backend")
+    };
 
     let backend_process = Command::new(&backend_path)
         .stdout(Stdio::inherit())
