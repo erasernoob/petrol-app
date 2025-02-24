@@ -2,10 +2,11 @@ import { Radio } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
+import { Tag } from '@arco-design/web-react'
 
 const RadioGroup = Radio.Group
 
-export default function ResultContent() {
+export default function ResultPage({data}) {
   const { hydroData } = useSelector(state => state.data)
 
   // 数据处理（含性能优化）
@@ -123,6 +124,15 @@ export default function ResultContent() {
     setOption({...option1})
   }, [chartData])
 
+  console.log(data)
+  const tagList = (Object.entries(data).map(([key, value]) => {
+    return (
+          <>
+          <span>{key}</span><Tag size='large'>{value}</Tag>
+          </>
+    )
+        }))
+
   return (
     <>
     <RadioGroup
@@ -137,13 +147,23 @@ export default function ResultContent() {
       >
       </RadioGroup>
       {chartData.length > 0 ? (
-        <ReactECharts
+        <>
+         <ReactECharts
           option={option}
-          style={{ height: '80%', width: '80%' }}
+          style={{ height: '80%', width: '100%' }}
           opts={{ renderer: 'canvas' }} // 强制使用Canvas
           notMerge={true}
         />
-      ) : (
+        <div className="extra-value" style={{ display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          gap: '20px',
+          marginTop: '7px',
+          marginLeft: '0px' }}>
+          {tagList}
+        </div>
+        </>
+             ) : (
         <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           数据加载中...
         </div>

@@ -17,6 +17,7 @@ export default function HydroPage() {
     const dispatch = useDispatch()
 
     const [file, setFile] = useState({ name: '', path: '' })
+    const [extraData, setExtraData] = useState({})
 
     const handleSubmit = async (data) => {
         // TODO: 
@@ -26,7 +27,10 @@ export default function HydroPage() {
             const response = await post('/hydro', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true })
             dispatch(setHydro(res.data))
-            Message.success('计算成功！')
+            // 第二次请求
+            const values = await post('/hydro/data')
+            setExtraData(values)
+            Message.success('数据获取成功！')
         } catch (error) {
             Message.error('计算内部出现错误，请检查')
         }
@@ -49,7 +53,7 @@ export default function HydroPage() {
                 style={{ flex: '1', marginLeft: '5px', height:'100%' }}
                 bodyStyle={{ padding: '10px', height: '100%', flex: 1 }}
             >
-                <ResultPage />
+                <ResultPage data={extraData} />
             </Card>
         </div>
     )

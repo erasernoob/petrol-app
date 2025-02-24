@@ -5,7 +5,6 @@ from fastapi import APIRouter
 import pandas as pd
 from entity.DTO import HydroDTO
 from service.Hydro import Hydro
-from service.Hydro.main import process_hydro_data
 
 # 创建 APIRouter 实例
 router = APIRouter()
@@ -16,6 +15,9 @@ hydro_cache = {}
 
 @router.post("/hydro")
 async def get_hydro_chart_result(hydro_dto: HydroDTO):
+    global hydro_cache
+
+
     # 读取 Excel 文件
     # TODO: change this to upload the file
     # guiji = pd.read_excel(hydro_dto.file_path).values  
@@ -40,12 +42,12 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
         "ECD (g/cm³)": ECD.flatten()
     })
 
-    # **缓存数据**
-    hydro_cache["P"] = P
-    hydro_cache["Plg"] = Plg
-    hydro_cache["Pdm"] = Pdm
-    hydro_cache["dertaPzt"] = dertaPzt  # S 可能是 dertaPzt？你可以修改
-
+    hydro_cache = {
+    "总循环压耗（MPa）": float(P),  
+    "立管压力（MPa）": float(Plg),
+    "地面管汇压耗（MPa）": float(Pdm),
+    "钻头压降（MPa）": float(dertaPzt)  
+    }
 
     # **转换为 CSV 格式**
     output = io.StringIO()
@@ -56,10 +58,11 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
                     headers={"Content-Disposition": "attachment; filename=hydro_data.csv"})
 
 
-# 返回第二次，获得下面需要展示的四个参数
-# P Plg Pdm dertaPzt
 @router.post('/hydro/data')
-async def get_hydro_data_result():
+def get_extra_hydro_data():
+    if not hydro_cache:
+        return {"error": 'nothing in the cache'}
+    print(hydro_cache)
     return hydro_cache
     
 
