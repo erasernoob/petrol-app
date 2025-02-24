@@ -22,13 +22,20 @@ impl Drop for BackendProcess {
 // }
 
 fn main() {
-    let exe_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")); // 指向src-tauri目录
     // 添加判断逻辑
-    let backend_path = if cfg!(target_os = "windows") {
-        exe_dir.join("bin").join("backend.exe")
-    } else {
-        exe_dir.join("bin").join("backend")
-    };
+    let exe_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let backend_name = format!("backend{}", env::consts::EXE_SUFFIX); // 自动添加 .exe 或空
+    let backend_path = exe_dir.join("bin").join(backend_name);
+
+    println!("当前平台的可执行文件后缀: {}", env::consts::EXE_SUFFIX);
+    println!("后端路径: {:?}", backend_path);
+
+    
+     assert!(
+        backend_path.exists(),
+        "后端可执行文件未找到: {:?}，请确保构建流程正确生成并复制文件到 bin 目录",
+        backend_path
+    );
 
     let backend_process = Command::new(&backend_path)
         .stdout(Stdio::inherit())

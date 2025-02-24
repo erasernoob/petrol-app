@@ -38,5 +38,5 @@ if exist "..\..\src-tauri\bin\%EXECUTABLE%" (
     exit /b 1
 )
 
-deactivate
-REM rmdir /s /q venv build dist
+@REM deactivate
+@REM REM rmdir /s /q venv build dist
