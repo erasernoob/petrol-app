@@ -26,15 +26,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 安装 npm
+    # 安装 Node.js 和 pnpm
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
-        cache: 'npm'
+        cache: 'pnpm'  # 确保缓存 pnpm
 
-    - name: Install npm
-      run: corepack enable && corepack prepare npm@latest --activate
+    - name: Install pnpm
+      run: npm install -g pnpm  # 安装 pnpm
 
     # 安装 Python
     - name: Setup Python
@@ -59,15 +59,15 @@ jobs:
         chmod +x build-backend.sh
         ./build-backend.sh
 
-    # 前端依赖安装
+    # 安装前端依赖
     - name: Install Frontend Dependencies
       working-directory: ./src
-      run: npm install
+      run: pnpm install  # 使用 pnpm 安装前端依赖
 
-    # 前端构建
+    # 构建前端
     - name: Build Frontend
       working-directory: ./src
-      run: npm build
+      run: pnpm build  # 使用 pnpm 构建前端
 
     # Tauri 构建
     - name: Build Tauri
