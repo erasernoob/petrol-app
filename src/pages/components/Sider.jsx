@@ -39,7 +39,6 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
         >重新上传</Button>)}
         {/* {<span>{file.name} 上传成功</span> && file.name} */}
       </div>
-
       <div className='input-form'>
         {form}
       </div>

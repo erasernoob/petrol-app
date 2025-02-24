@@ -15,6 +15,10 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
   return (
     <div className="form-wrapper">
     <Form 
+        style={{
+          height: '100%',
+          
+        }}
           layout="horizontal"
           size="large"
           form={form}
@@ -27,7 +31,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
           datas.map((category, index) => {
             const [categoryKey, data] = Object.entries(category)[0]
             return (
-          <TabPane title={tabsName[index]} key={categoryKey} className='custom-tabsPane'>
+              <TabPane title={tabsName[index]} key={categoryKey} className='custom-tabsPane'>
             {Object.entries(data).map(([key, field]) => (
               field.name.length <= 1000 ? 
               <FormItem
@@ -42,7 +46,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
               </FormItem> : <></>
             ))}
           </TabPane>
-          )
+         )
         })
       }
       </Tabs>

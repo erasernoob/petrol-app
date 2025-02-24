@@ -29,7 +29,28 @@
 .custom-tabsPane {
     /* width: 800px;
     height: 500px; */
+    font-size: 1.5rem;
     padding-top: 20px;
+    padding-left: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    gap: 10px;
+}
+
+.arco-tabs-content-inner {
+    height: 100%;
+}
+
+.arco-tabs-pane {
+    height: 100%;
+}
+
+.custom-tabs {
+    height: 70%;
+
 }
 
 
@@ -55,6 +76,7 @@
 
 .form-wrapper {
     padding-top: 20px;
+    height: 100%;
 }
 
 .input-form {

@@ -64,6 +64,10 @@ export default function NavBar() {
     <StyledMenu
       mode="horizontal"
       selectedKeys={selectedKeys} // 受控模式，确保选中状态生效
+      style={{
+    '--color-menu-active-bg': '#f0f5ff',
+    '--color-menu-active-text': '#165dff'
+  }}     
     >
       {tabList}
     </StyledMenu>
