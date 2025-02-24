@@ -63,8 +63,8 @@ jobs:
     - name: Build Backend
       run: |
         cd scripts/
-        chmod +x build-backend.sh
-        ./build-backend.sh
+        chmod +x backend.sh
+        ./backend.sh
 
     # 安装前端依赖
     - name: Install Frontend Dependencies
