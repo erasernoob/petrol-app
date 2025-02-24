@@ -23,6 +23,8 @@ def  process_hydro_data(hydro_dto : HydroDTO):
         hydro_dto.yxmd, hydro_dto.H, hydro_dto.yx
     )
 
+    [p, plg, pdm, S] 
+
     df = pd.DataFrame({
         "井深 (m)": Sk.flatten(),  
         "钻柱压力 (Pgn, MPa)": Pgn.flatten(),

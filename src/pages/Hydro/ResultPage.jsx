@@ -1,7 +1,9 @@
-import { Card } from '@arco-design/web-react'
+import { Radio } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
+const RadioGroup = Radio.Group
 
 export default function ResultContent() {
   const { hydroData } = useSelector(state => state.data)
@@ -19,8 +21,54 @@ export default function ResultContent() {
       // 数据抽样（每5个点取1个）
   }, [hydroData])
 
+  const option2 = useMemo(() => ({
+    animation: true, // 禁用动画
+    large: true,      // 开启大数据模式
+    largeThreshold: 500, // 超过500点时启用优化
+    dataset: { source: chartData },
+    dataZoom: [{
+      type: 'inside', // 内置型数据缩放
+      start: 0,
+      end: 100
+    }],
+    yAxis: {
+      type: 'value',
+      name: '井深 (m)',
+      inverse: true
+    },
+    xAxis: [
+    //  {
+    //     name: '压力 (MPa)',
+    //     type: 'value'
+    //   },
+      {
+        name: 'ECD (g/cm³)',
+        type: 'value',
+        offset: 0,
+        alignTicks: true
+      }
+    ],
+    series: [
+      {
+        name: 'ECD',
+        type: 'line',
+        yAxisIndex: 0,
+        encode: { x: 'ecd', y: 'depth' },
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 1 },
+        showSymbol: false
+      }
+    ],
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'cross' }
+    }
+  }), [chartData])
+
+
   // ECharts 配置
-  const option = useMemo(() => ({
+  const option1 = useMemo(() => ({
     animation: true, // 禁用动画
     large: true,      // 开启大数据模式
     largeThreshold: 500, // 超过500点时启用优化
@@ -40,12 +88,6 @@ export default function ResultContent() {
         name: '压力 (MPa)',
         type: 'value'
       },
-      // {
-      //   name: 'ECD (g/cm³)',
-      //   type: 'value',
-      //   offset: 0,
-      //   alignTicks: true
-      // }
     ],
     series: [
       {
@@ -68,16 +110,6 @@ export default function ResultContent() {
         lineStyle: { width: 2 },
         showSymbol: false
       },
-      // {
-      //   name: 'ECD',
-      //   type: 'line',
-      //   yAxisIndex: 1,
-      //   encode: { x: 'depth', y: 'ecd' },
-      //   sampling: 'lttb',
-      //   smooth: false,
-      //   lineStyle: { width: 1 },
-      //   showSymbol: false
-      // }
     ],
     tooltip: {
       trigger: 'axis',
@@ -85,8 +117,25 @@ export default function ResultContent() {
     }
   }), [chartData])
 
+  const [option, setOption] = useState(option1)
+
+  useEffect(() => {
+    setOption({...option1})
+  }, [chartData])
+
   return (
     <>
+    <RadioGroup
+        type='button'
+        size='large'
+        name='chart'
+        defaultValue='循环压力'
+        onChange={(value) => {
+          setOption(() => option == option2 ? option1 : option2)
+        }}
+        options={['循环压力', 'ECD']}
+      >
+      </RadioGroup>
       {chartData.length > 0 ? (
         <ReactECharts
           option={option}
