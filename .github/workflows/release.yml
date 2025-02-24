@@ -26,15 +26,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # 安装 pnpm
+    # 安装 npm
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
-        cache: 'pnpm'
+        cache: 'npm'
 
-    - name: Install pnpm
-      run: corepack enable && corepack prepare pnpm@latest --activate
+    - name: Install npm
+      run: corepack enable && corepack prepare npm@latest --activate
 
     # 安装 Python
     - name: Setup Python
@@ -62,12 +62,12 @@ jobs:
     # 前端依赖安装
     - name: Install Frontend Dependencies
       working-directory: ./src
-      run: pnpm install
+      run: npm install
 
     # 前端构建
     - name: Build Frontend
       working-directory: ./src
-      run: pnpm build
+      run: npm build
 
     # Tauri 构建
     - name: Build Tauri
@@ -80,7 +80,7 @@ jobs:
         tagName: v__VERSION__
         releaseName: 'Release v__VERSION__'
         releaseBody: 'Auto-generated release'
-        distDir: ../src/dist
+        distDir: ../dist
         configPath: ./src-tauri/tauri.conf.json
 
     # 重命名输出文件
