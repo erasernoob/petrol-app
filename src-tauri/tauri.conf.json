@@ -22,7 +22,7 @@
     }
   },
   "bundle": {
-    "resources": ["bin/backend"], 
+    "resources": ["bin/*"], 
     "active": true,
     "targets": "all",
     "icon": [
