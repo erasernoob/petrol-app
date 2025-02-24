@@ -63,16 +63,18 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
-    # 6. 构建后端
-    - name: Build Backend
+    - name: Build Backend (Windows)
+      if: runner.os == 'Windows'
       run: |
         cd scripts
-        if [ "$RUNNER_OS" = "Windows" ]; then
-          cmd /c backend.bat
-        else
-          chmod +x backend.sh
-          ./backend.sh
-        fi
+        cmd /c backend.bat
+
+    - name: Build Backend (Linux/macOS)
+      if: runner.os != 'Windows'
+      run: |
+        cd scripts
+        chmod +x backend.sh
+        ./backend.sh
 
     # 7. 前端依赖安装
     - name: Install Frontend Dependencies
