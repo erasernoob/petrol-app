@@ -63,8 +63,7 @@ jobs:
     - name: Build Backend
       run: |
         if [ "$RUNNER_OS" = "Windows" ]; then
-          cd scripts
-          backend.bat
+          cmd /c scripts/backend.bat  # 确保在 Windows 运行
         else
           cd scripts
           chmod +x backend.sh
