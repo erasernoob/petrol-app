@@ -59,12 +59,35 @@ jobs:
         targets: |
           ${{ contains(matrix.os, 'windows') && 'x86_64-pc-windows-msvc' || '' }}
 
-    # 构建 Python 后端
+ 
     - name: Build Backend
       run: |
-        cd scripts/
-        chmod +x backend.sh
-        ./backend.sh
+        if [ "$RUNNER_OS" = "Windows" ]; then
+          cd scripts
+          backend.bat
+        else
+          cd scripts
+          chmod +x backend.sh
+          ./backend.sh
+        fi
+      shell: bash
+
+    - name: install Rust stable
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+        targets: ${{ matrix.os == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+    - name: install dependencies (ubuntu only)
+      if: ${{matrix.os == 'ubuntu-22.04'}} 
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          libwebkit2gtk-4.0-dev \
+          libappindicator3-dev \
+          librsvg2-dev \
+          patchelf \
+          libgobject-2.0-dev  # 🔥 解决 `gobject-2.0` 缺失的问题
 
     # 安装前端依赖
     - name: Install Frontend Dependencies
@@ -82,9 +105,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        target: ${{ matrix.tauri-target }}
-        packageName: petrol-app
-        tagName: v__VERSION__
+        tagName: petrol-app-v__VERSION__
         releaseName: 'Release v__VERSION__'
         releaseBody: 'Auto-generated release'
         distDir: ../dist
