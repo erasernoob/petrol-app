@@ -29,9 +29,8 @@ fn main() {
 
     println!("当前平台的可执行文件后缀: {}", env::consts::EXE_SUFFIX);
     println!("后端路径: {:?}", backend_path);
-
     
-     assert!(
+    eprintln!(
         backend_path.exists(),
         "后端可执行文件未找到: {:?}，请确保构建流程正确生成并复制文件到 bin 目录",
         backend_path
