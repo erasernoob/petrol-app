@@ -7,21 +7,21 @@ use tauri::Manager;
 
 struct BackendProcess(Child);
 
-impl Drop for BackendProcess {
-    fn drop(&mut self) {
-        if let Err(e) = self.0.kill() {
-            eprintln!("Failed to terminate backend process: {}", e);
-        } else {
-            println!("Backend process terminated successfully.");
-        }
-    }
-}
-
-// fn main() {
-//     petrol_app_lib.run()
+// impl Drop for BackendProcess {
+//     fn drop(&mut self) {
+//         if let Err(e) = self.0.kill() {
+//             eprintln!("Failed to terminate backend process: {}", e);
+//         } else {
+//             println!("Backend process terminated successfully.");
+//         }
+//     }
 // }
 
 fn main() {
+    petrol_app_lib::run()
+}
+
+fn main_build() {
     // 添加判断逻辑
     let exe_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
     let backend_name = format!("backend{}", env::consts::EXE_SUFFIX); // 自动添加 .exe 或空
