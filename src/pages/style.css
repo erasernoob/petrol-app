@@ -40,7 +40,7 @@
 
 
 .arco-tabs-pane {
-    border-bottom: 0px;
+    border-bottom: 0px !important;
     height: 100%;
 }
 
@@ -50,6 +50,12 @@
   writing-mode: vertical-rl;
   white-space: nowrap;
 }
+
+.arco-tabs-content-vertical {
+    border-bottom: 0px !important;
+}
+
+
 
 .custom-tabs {
     height: 100%;
