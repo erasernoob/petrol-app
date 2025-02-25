@@ -132,7 +132,7 @@ export default function ResultPage({ data, loading, waiting}) {
         </>
       ) : (
         <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {waiting == true ? '等待开始计算....' :  <Spin size="30" tip='正在计算中' /> }
+          {waiting == true ? '等待开始计算......' :  <Spin size="30" tip='正在计算中......' /> }
         </div>
       )}
 

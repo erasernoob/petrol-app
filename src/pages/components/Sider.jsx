@@ -36,7 +36,7 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
 
         {(file.name && <Button size="small" type="secondary" style={{marginLeft: '20px'}} 
             onClick={() => setFile(() => ({name: '', path: ''}))}
-        >重新上传</Button>)}
+        >重新导入</Button>)}
       </div>
       <div className='input-form'>
         {form}
