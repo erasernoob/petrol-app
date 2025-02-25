@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
 import Option from '../option'
+import { Spin } from '@arco-design/web-react'
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ data }) {
+export default function ResultPage({ data, loading, waiting}) {
   const { hydroData } = useSelector(state => state.data)
 
   // 数据处理（含性能优化）
@@ -89,11 +90,10 @@ export default function ResultPage({ data }) {
     setOption({ ...option1 })
   }, [chartData])
 
-  console.log(data)
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
       <>
-        <span>{key}</span><Tag size='large'>{value}</Tag>
+        <span>{key}</span><Tag size='large'>{value.toFixed(3)}</Tag>
       </>
     )
   }))
@@ -111,11 +111,11 @@ export default function ResultPage({ data }) {
         options={['循环压力', 'ECD']}
       >
       </RadioGroup>
-      {chartData.length > 0 ? (
+      {chartData.length > 0 && loading === false && waiting === false ? (
         <>
           <ReactECharts
             option={option}
-            style={{ height: '80%', width: '100%' }}
+            style={{ height: '78%', width: '100%' }}
             opts={{ renderer: 'canvas' }} // 强制使用Canvas
             notMerge={true}
           />
@@ -124,15 +124,15 @@ export default function ResultPage({ data }) {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '20px',
-            marginTop: '7px',
+            // marginTop: '7px',
             marginLeft: '0px'
           }}>
             {tagList}
           </div>
         </>
       ) : (
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          数据加载中...
+        <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
+          {waiting == true ? '等待开始计算......' :  <Spin size="30" tip='正在计算中......' /> }
         </div>
       )}
 
