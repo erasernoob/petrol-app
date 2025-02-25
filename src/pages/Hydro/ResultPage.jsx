@@ -93,7 +93,7 @@ export default function ResultPage({ data }) {
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
       <>
-        <span>{key}</span><Tag size='large'>{value}</Tag>
+        <span>{key}</span><Tag size='large'>{value.toFixed(3)}</Tag>
       </>
     )
   }))
@@ -115,7 +115,7 @@ export default function ResultPage({ data }) {
         <>
           <ReactECharts
             option={option}
-            style={{ height: '80%', width: '100%' }}
+            style={{ height: '78%', width: '100%' }}
             opts={{ renderer: 'canvas' }} // 强制使用Canvas
             notMerge={true}
           />
@@ -124,14 +124,14 @@ export default function ResultPage({ data }) {
             alignItems: 'center',
             justifyContent: 'center',
             gap: '20px',
-            marginTop: '7px',
+            // marginTop: '7px',
             marginLeft: '0px'
           }}>
             {tagList}
           </div>
         </>
       ) : (
-        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ height: '100%', display: 'flex',  justifyContent: 'center' }}>
           数据加载中...
         </div>
       )}
