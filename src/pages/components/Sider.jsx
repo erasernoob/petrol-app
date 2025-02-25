@@ -14,6 +14,7 @@ import { setHydro } from '../../store/dataSlice';
 export default function Sider({form, tabsName, handleSubmit, datas, file={name: ''}, setFile}) {
 
   const handleUpload = async () => {
+    console.log('hahhaah')
     const filePath = await open({ multiple: false })
     if (filePath) {
       const filename = await basename(filePath)
