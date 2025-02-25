@@ -14,7 +14,6 @@ import { setHydro } from '../../store/dataSlice';
 export default function Sider({form, tabsName, handleSubmit, datas, file={name: ''}, setFile}) {
 
   const handleUpload = async () => {
-    console.log('hahhaah')
     const filePath = await open({ multiple: false })
     if (filePath) {
       const filename = await basename(filePath)
@@ -35,10 +34,9 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
             disabled={file.name}
         >导入井眼轨迹</Button>
 
-        {(file.name && <Button size="small" type="secondary" className='' 
+        {(file.name && <Button size="small" type="secondary" style={{marginLeft: '20px'}} 
             onClick={() => setFile(() => ({name: '', path: ''}))}
         >重新上传</Button>)}
-        {/* {<span>{file.name} 上传成功</span> && file.name} */}
       </div>
       <div className='input-form'>
         {form}

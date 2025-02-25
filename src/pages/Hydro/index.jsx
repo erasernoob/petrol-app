@@ -13,23 +13,24 @@ import { Message } from "@arco-design/web-react";
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 export default function HydroPage() {
-    const { hydroData } = useSelector((state) => state.data)
     const dispatch = useDispatch()
 
     const [file, setFile] = useState({ name: '', path: '' })
+    const [loading, setLoading] = useState(false)
     const [extraData, setExtraData] = useState({})
 
     const handleSubmit = async (data) => {
-        // TODO: 
-        // if (!file.path) return
+        if (!file.path) return
         try {
             data.file_path = file.path ? file.path : ''
+            setLoading(true)
             const response = await post('/hydro', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true })
             dispatch(setHydro(res.data))
             // 第二次请求
             const values = await post('/hydro/data')
             setExtraData(values)
+            setLoading(false)
             Message.success('数据获取成功！')
         } catch (error) {
             Message.error('计算内部出现错误，请检查')
@@ -45,7 +46,7 @@ export default function HydroPage() {
                 }}
             >
                 <Sider handleSubmit={handleSubmit} setFile={setFile}
-                    file={file} form={<DynamicForm handleSubmit={handleSubmit}
+                    file={file} form={<DynamicForm file={file} handleSubmit={handleSubmit}
                         datas={hydro} tabs={tabsName}></DynamicForm>} />
             </Card>
             <Card
@@ -53,7 +54,7 @@ export default function HydroPage() {
                 style={{ flex: '1', marginLeft: '5px', height:'100%' }}
                 bodyStyle={{ padding: '10px', height: '100%', flex: 1 }}
             >
-                <ResultPage data={extraData} />
+                <ResultPage data={extraData} loading={loading} />
             </Card>
         </div>
     )

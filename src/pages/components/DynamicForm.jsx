@@ -2,12 +2,12 @@ import { Tabs } from "@arco-design/web-react";
 import { Form, Button, Input } from "@arco-design/web-react";
 import { useEffect, useRef, useState } from "react";
 
-const DynamicForm = ({ datas, handleSubmit, tabs }) => {
+const DynamicForm = ({ datas, handleSubmit, tabs, file}) => {
 
   const [tabTime, setTabTime] = useState(0) 
 
   const tabsName = tabs
-  const  TabPane  = Tabs.TabPane
+  const TabPane  = Tabs.TabPane
   const FormItem = Form.Item
 
   const [form] = Form.useForm()
@@ -33,7 +33,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
             return (
               <TabPane title={tabsName[index]} key={categoryKey} className='custom-tabsPane'>
             {Object.entries(data).map(([key, field]) => (
-              field.name.length <= 1000 ? 
+              field.name.length <= 21 ? 
               <FormItem
                 key={key}
                 label={field.name}
@@ -44,7 +44,18 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
                 rules={[{ required: true, message: `${field.name} 不能为空` }]}
               >
                 <Input className='input-component'/>
-              </FormItem> : <></>
+              </FormItem> : 
+              <FormItem
+                key={key}
+                label={field.name.split('(')[0]}
+                field={key}
+                // tooltip={}
+                // TODO: 测试用
+                initialValue={field.value}
+                rules={[{ required: true, message: `${field.name} 不能为空` }]}
+              >
+                <Input className='input-component'/>
+              </FormItem>
             ))}
           </TabPane>
          )
@@ -53,8 +64,8 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       </Tabs>
       
       <FormItem wrapperCol={{offset: 6}}>
-        <Button type="primary" className='button submit-button' disabled={tabTime < tabs.length - 1 && !form.validate()}  htmlType="submit" >计算</Button>
-        <Button type="primary" className='button reset-button' onClick={() => {form.resetFields()}}>重置</Button>
+        <Button type="primary" className='button submit-button' disabled={ file.name == '' || tabTime < tabs.length - 1 && !form.validate()}  htmlType="submit" >计算</Button>
+        <Button type="primary" className='button reset-button' disabled={!form.validate()} onClick={() => {form.resetFields()}}>重置</Button>
       </FormItem>
    </Form>
     </div>

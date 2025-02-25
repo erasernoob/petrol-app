@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
 import Option from '../option'
+import { Spin } from '@arco-design/web-react'
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ data }) {
+export default function ResultPage({ data, loading}) {
   const { hydroData } = useSelector(state => state.data)
 
   // 数据处理（含性能优化）
@@ -89,7 +90,6 @@ export default function ResultPage({ data }) {
     setOption({ ...option1 })
   }, [chartData])
 
-  console.log(data)
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
       <>
@@ -131,8 +131,8 @@ export default function ResultPage({ data }) {
           </div>
         </>
       ) : (
-        <div style={{ height: '100%', display: 'flex',  justifyContent: 'center' }}>
-          数据加载中...
+        <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
+          {loading == false ? '等待开始计算....' :  <Spin size="30" tip='正在计算中' loading={false}/> }
         </div>
       )}
 
