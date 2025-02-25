@@ -71,7 +71,7 @@ const hydro = [
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
 // omega=5*pi/3;            %转速，rad/s（仅用于工况1,5）
-const torque = [
+const torque = 
   {
     work_condition: {
       wc: {
@@ -95,8 +95,7 @@ const torque = [
       miua22: { name: "裸眼段摩阻系数", value: 0.2 },
       js: { name: "计算井深 (m)", value: 4200 },
     },
-  },
-];
+  };
 
 const limit_eye = [
   {
@@ -200,7 +199,7 @@ const limit_hydro = [
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
 // omega=5*pi/3;            %转速，rad/s（仅用于工况1,5）
-const limit_mechanism = [
+const limit_mechanism = 
   {
     work_condition: {
       wc: {
@@ -225,8 +224,7 @@ const limit_mechanism = [
     miua22: { name: "裸眼段摩阻系数", value: 0.2 },
     qfqd: { name: "钻柱屈服强度 (MPa)", value: 931 },
     jsjg: { name: "井深计算间隔 (m)", value: 500 },
-  },
-];
+};
 
 const limit_curve = {
   Holedia: { name: "井眼直径 (m)", value: 0.2159 },
@@ -275,4 +273,4 @@ const drill_vibration = [
   },
 ];
 
-export { hydro };
+export { hydro, torque, limit_curve, limit_eye, limit_mechanism, limit_hydro, drill_vibration, };

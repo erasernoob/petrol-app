@@ -1,7 +1,18 @@
 import { Card } from "@arco-design/web-react"
 import ResultPage from "./ResultPage"
-import Sider from "../components/Sider"
-export default function DrillPage() {
+import { useState } from 'react'
+import Sider from "./Sider"
+import MyForm from "./MyForm"
+import { torque  } from '../../data/Params'
+export default function TorquePage() {
+    const [fileList, setFileList] = useState([{ name: '', path: '' }])
+    const [loading, setLoading] = useState(false)
+
+    const datas = torque
+
+    const handleSubmit = async () => {
+    }
+
     return (
         <div className="main-content">
             <Card
@@ -11,7 +22,7 @@ export default function DrillPage() {
                     height: '100%',
                 }}
             >
-                <Sider />
+                <Sider datas={datas} fileList={fileList} setFileList={setFileList} form={<MyForm handleSubmit={handleSubmit} fileList={fileList} />} />
             </Card>
             <Card
                 title="计算结果"
