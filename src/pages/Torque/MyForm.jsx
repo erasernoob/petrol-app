@@ -8,11 +8,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList=[] }) => {
   const [form] = Form.useForm();
   const data = torque.work_condition;
 
-  Object.entries(data).map(([key, field]) => {
-    if (key === "wc") {
-      console.log(field.option);
-    }
-  });
 
   return (
     <div className="form-wrapper-custom">
