@@ -19,7 +19,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
           height: '100%',
           
         }}
-          layout="horizontal"
+          layout="vertical"
           size="large"
           form={form}
           onSubmit={async (data) => {
@@ -38,6 +38,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
                 key={key}
                 label={field.name}
                 field={key}
+                // tooltip={}
                 // TODO: 测试用
                 initialValue={field.value}
                 rules={[{ required: true, message: `${field.name} 不能为空` }]}
@@ -54,7 +55,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs }) => {
       <FormItem wrapperCol={{offset: 6}}>
         <Button type="primary" className='button submit-button' disabled={tabTime < tabs.length - 1 && !form.validate()}  htmlType="submit" >计算</Button>
         <Button type="primary" className='button reset-button' onClick={() => {form.resetFields()}}>重置</Button>
-       
       </FormItem>
    </Form>
     </div>

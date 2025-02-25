@@ -16,9 +16,9 @@ html, body, #root {
 }
 
 body {
-  background-color: var(--color-bg-1);
-  color: var(--color-text-1);
-  color-scheme: dark; 
+  /* background-color: var(--color-bg-1); */
+  /* color: var(--color-text-1); */
+  /* color-scheme: dark;  */
 }
 
 
