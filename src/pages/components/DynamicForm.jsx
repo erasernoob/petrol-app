@@ -56,7 +56,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                     {key === "lbmx" ? (
                       <Select
                         options={field.option}
-                        // placeholder=''
                         className="input-component"
                       />
                     ) : key != "yx" ? (
@@ -76,7 +75,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           })}
         </Tabs>
 
-        <FormItem wrapperCol={{ offset: 6 }}>
+        <FormItem wrapperCol={{ offset: 6 }} style={{borderTop: "1px solid #e8e8e8"}}>
           <Button
             type="primary"
             className="button submit-button"

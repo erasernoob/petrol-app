@@ -8,7 +8,6 @@ export default function TorquePage() {
     const [fileList, setFileList] = useState([{ name: '', path: '' }])
     const [loading, setLoading] = useState(false)
 
-    const datas = torque
 
     const handleSubmit = async () => {
     }
@@ -22,7 +21,7 @@ export default function TorquePage() {
                     height: '100%',
                 }}
             >
-                <Sider datas={datas} fileList={fileList} setFileList={setFileList} form={<MyForm handleSubmit={handleSubmit} fileList={fileList} />} />
+                <Sider datas={torque} fileList={fileList} setFileList={setFileList} form={<MyForm datas={torque} handleSubmit={handleSubmit} fileList={fileList} />} />
             </Card>
             <Card
                 title="计算结果"

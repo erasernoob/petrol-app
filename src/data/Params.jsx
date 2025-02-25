@@ -71,52 +71,35 @@ const hydro = [
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
 // omega=5*pi/3;            %转速，rad/s（仅用于工况1,5）
-const torque = 
-  {
-    work_condition: {
-      wc: {
-        name: "工况选择",
-        value: 1,
-        option: [
-          { label: "旋转钻进", value: 1 },
-          { label: "滑动钻进", value: 2 },
-          { label: "起钻", value: 3 },
-          { label: "下钻", value: 4 },
-          { label: "倒划眼", value: 5 },
-        ],
-      },
-      v: { name: "钻进速度 (m/s)", value: 0.00714 },
-      omega: { name: "转速 (rad/s)", value: (5 * Math.PI) / 3 },
-      T0: { name: "钻压 (N)", value: 58900 },
-      rhoi: { name: "钻井液密度 (kg/m³)", value: 1170 },
-      Dw: { name: "井眼直径 (m)", value: 0.2159 },
-      tgxs: { name: "套管下深 (m)", value: 3500 },
-      miua11: { name: "套管段摩阻系数", value: 0.15 },
-      miua22: { name: "裸眼段摩阻系数", value: 0.2 },
-      js: { name: "计算井深 (m)", value: 4200 },
+const torque = {
+  work_condition: {
+    wc: {
+      name: "工况选择",
+      value: 1,
+      option: [
+        { label: "旋转钻进", value: 1 },
+        { label: "滑动钻进", value: 2 },
+        { label: "起钻", value: 3 },
+        { label: "下钻", value: 4 },
+        { label: "倒划眼", value: 5 },
+      ],
     },
-  };
+    v: { name: "钻进速度 (m/s)", value: 0.00714 },
+    omega: { name: "转速 (rad/s)", value: (5 * Math.PI) / 3 },
+    T0: { name: "钻压 (N)", value: 58900 },
+    rhoi: { name: "钻井液密度 (kg/m³)", value: 1170 },
+    Dw: { name: "井眼直径 (m)", value: 0.2159 },
+    tgxs: { name: "套管下深 (m)", value: 3500 },
+    miua11: { name: "套管段摩阻系数", value: 0.15 },
+    miua22: { name: "裸眼段摩阻系数", value: 0.2 },
+    js: { name: "计算井深 (m)", value: 4200 },
+  },
+};
 
 const limit_eye = [
   {
-    fluid: {
-      lbmx: {
-        name: "流变模型",
-        value: 3,
-        option: [
-          { label: "宾汉流体", value: 1 },
-          { label: "幂律流体", value: 2 },
-          { label: "赫巴流体", value: 3 },
-        ],
-      },
-      pailiang: { name: "排量 (L/min)", value: 1500 },
-      fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
-      n: { name: "幂律指数", value: 0.48 },
-      K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },
-      miu: { name: "塑性粘度 (Pa·s)", value: 0.021 },
-      taof: { name: "屈服值 (Pa)", value: 14 },
-    },
     fundamental: {
+      pailiang: { name: "排量 (L/min)", value: 1500 },
       Dw: { name: "井眼直径 (m)", value: 0.2159 },
       Rzz: { name: "钻柱外径 (m)", value: 0.127 },
       rzz: { name: "钻柱内径 (m)", value: 0.1086 },
@@ -124,6 +107,25 @@ const limit_eye = [
       Rzt: { name: "钻铤外径 (m)", value: 0.15875 },
       rzt: { name: "钻铤内径 (m)", value: 0.07144 },
       Lzt: { name: "钻铤长度 (m)", value: 10 },
+    },
+  },
+  {
+    fluid: {
+      // (1=宾汉, 2=幂律, 3=赫巴)
+      lbmx: {
+        name: "流变模式",
+        value: 3,
+        option: [
+          { label: "宾汉流体", value: 1 },
+          { label: "幂律流体", value: 2 },
+          { label: "赫巴流体", value: 3 },
+        ],
+      },
+      fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
+      n: { name: "流性指数", value: 0.48 },
+      K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },
+      miu: { name: "塑性粘度 (Pa·s)", value: 0.021 },
+      taof: { name: "屈服值 (Pa)", value: 14 },
     },
   },
 ];
@@ -199,20 +201,18 @@ const limit_hydro = [
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
 // omega=5*pi/3;            %转速，rad/s（仅用于工况1,5）
-const limit_mechanism = 
-  {
-    work_condition: {
-      wc: {
-        name: "工况选择",
-        value: 1,
-        option: [
-          { label: "旋转钻进", value: 1 },
-          { label: "滑动钻进", value: 2 },
-          { label: "起钻", value: 3 },
-          { label: "下钻", value: 4 },
-          { label: "倒划眼", value: 5 },
-        ],
-      },
+const limit_mechanism = {
+  work_condition: {
+    wc: {
+      name: "工况选择",
+      value: 1,
+      option: [
+        { label: "旋转钻进", value: 1 },
+        { label: "滑动钻进", value: 2 },
+        { label: "起钻", value: 3 },
+        { label: "下钻", value: 4 },
+        { label: "倒划眼", value: 5 },
+      ],
     },
     v: { name: "钻进速度 (m/s)", value: 0.00714 },
     omega: { name: "转速 (rad/s)", value: (5 * Math.PI) / 3 },
@@ -224,6 +224,7 @@ const limit_mechanism =
     miua22: { name: "裸眼段摩阻系数", value: 0.2 },
     qfqd: { name: "钻柱屈服强度 (MPa)", value: 931 },
     jsjg: { name: "井深计算间隔 (m)", value: 500 },
+  },
 };
 
 const limit_curve = {
@@ -273,4 +274,12 @@ const drill_vibration = [
   },
 ];
 
-export { hydro, torque, limit_curve, limit_eye, limit_mechanism, limit_hydro, drill_vibration, };
+export {
+  hydro,
+  torque,
+  limit_curve,
+  limit_eye,
+  limit_mechanism,
+  limit_hydro,
+  drill_vibration,
+};
