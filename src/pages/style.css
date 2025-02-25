@@ -85,6 +85,22 @@
 .form-wrapper {
     padding-top: 20px;
     height: 100%;
+    width: 100%;
+    
+}
+
+.my-custom-form {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-wrapper-custom {
+    padding-top: 20px;
+    height: 100%;
+    width: 100%;
+    padding-left: 20px;
 }
 
 .input-form {

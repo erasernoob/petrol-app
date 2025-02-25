@@ -18,7 +18,7 @@ export default function TorquePage() {
             <Card
                 title='参数输入'
                 style={{
-                    width: '35%',
+                    width: '30%',
                     height: '100%',
                 }}
             >

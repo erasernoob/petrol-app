@@ -10,24 +10,29 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList }) => {
 
   Object.entries(data).map(([key, field]) => {
     if (key === 'wc') {
-      console.log(field.name)
+      console.log(field.option)
     }
   })
 
 
   return (
-    <div className="form-wrapper">
+    <div className="form-wrapper-custom">
       <Form
+        labelCol={{ flex: '160px' }}
+        wrapperCol={{ flex: '1' }}
+        className='my-custom-form'
         style={{
           height: "100%",
         }}
-        layout="vertical"
+        layout="horizontal"
         size="large"
         form={form}
+        // labelCol={{offset: '0'}}
         onSubmit={async (data) => {
           handleSubmit(data);
         }}
       >
+        <div className="my-custom-form">
         {
           Object.entries(data).map(([key, field]) => {
             return (
@@ -36,22 +41,22 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList }) => {
             field={key}
             key={key}
             label={field.name}
+            initialValue={1}
             >
-              <Select option={field.option}></Select>
+              <Select options={field.option} className='input-component'></Select>
             </FormItem>
               :
               <FormItem
-              field={key}
-              
-              
+                field={key}
+                key={key}
+                label={field.name}
               >
-
+                <Input  className='input-component'/>
               </FormItem>
             )
-           
           })
         }
-
+        </div>
         <FormItem wrapperCol={{ offset: 6 }}>
           <Button
             type="primary"
