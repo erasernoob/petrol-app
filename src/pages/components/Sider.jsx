@@ -13,12 +13,15 @@ import { setHydro } from '../../store/dataSlice';
 
 export default function Sider({form, tabsName, handleSubmit, datas, file={name: ''}, setFile}) {
 
+  const [orbit, setOrbit] = useState(false)
+
   const handleUpload = async () => {
     const filePath = await open({ multiple: false })
     if (filePath) {
       const filename = await basename(filePath)
       setFile(() => ({name: filename, path: filePath}))
       Message.success(`${filename}上传成功！`)
+      setOrbit((prev) => !prev)
     } else {
       Message.info('文件上传失败,请重新上传')
     }
@@ -28,16 +31,8 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
   return (
     <div className='input-page'>
       <div className='file-uploader'>
-        {/* <FileUpLoader /> */}
-        <Button type="primary" className='' 
-            onClick={() => handleUpload()}
-            disabled={file.name}
-        >导入井眼轨迹</Button>
-
-        {(file.name && <Button size="small" type="secondary" style={{marginLeft: '20px'}} 
-            onClick={() => setFile(() => ({name: '', path: ''}))}
-        >重新导入</Button>)}
-      </div>
+        <FileUpLoader orbit={orbit} setOrbit={orbit} handleUpload={handleUpload} />
+          </div>
       <div className='input-form'>
         {form}
       </div>

@@ -1,6 +1,6 @@
 import { Card } from "@arco-design/web-react"
 import ResultPage from "./ResultPage"
-import Sider from "../components/Sider"
+import Sider from "./Sider"
 export default function DrillPage() {
     return (
         <div className="main-content">
