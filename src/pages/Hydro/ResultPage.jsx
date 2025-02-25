@@ -8,7 +8,7 @@ import { Spin } from '@arco-design/web-react'
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ data, loading}) {
+export default function ResultPage({ data, loading, waiting}) {
   const { hydroData } = useSelector(state => state.data)
 
   // 数据处理（含性能优化）
@@ -111,7 +111,7 @@ export default function ResultPage({ data, loading}) {
         options={['循环压力', 'ECD']}
       >
       </RadioGroup>
-      {chartData.length > 0 ? (
+      {chartData.length > 0 && loading === false && waiting === false ? (
         <>
           <ReactECharts
             option={option}
@@ -132,7 +132,7 @@ export default function ResultPage({ data, loading}) {
         </>
       ) : (
         <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {loading == false ? '等待开始计算....' :  <Spin size="30" tip='正在计算中' loading={false}/> }
+          {waiting == true ? '等待开始计算....' :  <Spin size="30" tip='正在计算中' /> }
         </div>
       )}
 

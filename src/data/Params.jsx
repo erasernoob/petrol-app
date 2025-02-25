@@ -13,7 +13,12 @@ const hydro = [
   },
   {
     fluid: {
-      lbmx: { name: "流变模式 (1=宾汉, 2=幂律, 3=赫巴)", value: 3 },
+      // (1=宾汉, 2=幂律, 3=赫巴)
+      lbmx: { name: "流变模式", value: 3, option: [
+        { label: "宾汉流体", value: 1 },
+        { label: "幂律流体", value: 2 },
+        { label: "赫巴流体", value: 3 }
+      ]},
       fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
       n: { name: "流性指数", value: 0.48 },
       K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },
@@ -52,7 +57,8 @@ const hydro = [
   },
   {
     rock_cuttings: {
-      yx: { name: "是否考虑岩屑 (0=不考虑, 1=考虑)", value: 0 },
+      // (0=不考虑, 1=考虑)
+      yx: { name: "是否考虑岩屑 ", value: 0 },
       yxmd: { name: "岩屑密度 (kg/m³)", value: 2500 },
       H: { name: "岩屑床高度 (%)", value: 10 },
     }

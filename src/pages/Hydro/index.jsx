@@ -1,4 +1,4 @@
-import { Card } from "@arco-design/web-react"
+import { Card, Watermark } from "@arco-design/web-react"
 import { hydro } from '../../data/Params'
 import Sider from "../components/Sider"
 import ResultPage from "./ResultPage"
@@ -17,12 +17,15 @@ export default function HydroPage() {
 
     const [file, setFile] = useState({ name: '', path: '' })
     const [loading, setLoading] = useState(false)
+    // 等待开始计算
+    const [waiting, setWaiting] = useState(true)
     const [extraData, setExtraData] = useState({})
 
     const handleSubmit = async (data) => {
         if (!file.path) return
         try {
             data.file_path = file.path ? file.path : ''
+            setWaiting(false)
             setLoading(true)
             const response = await post('/hydro', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true })
@@ -33,6 +36,7 @@ export default function HydroPage() {
             setLoading(false)
             Message.success('数据获取成功！')
         } catch (error) {
+            setLoading(false)
             Message.error('计算内部出现错误，请检查')
         }
     }
@@ -54,7 +58,7 @@ export default function HydroPage() {
                 style={{ flex: '1', marginLeft: '5px', height:'100%' }}
                 bodyStyle={{ padding: '10px', height: '100%', flex: 1 }}
             >
-                <ResultPage data={extraData} loading={loading} />
+                <ResultPage waiting={waiting} data={extraData} loading={loading} />
             </Card>
         </div>
     )
