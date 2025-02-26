@@ -1,6 +1,6 @@
 import { Card, Watermark } from "@arco-design/web-react"
 import { hydro } from '../../data/Params'
-import Sider from "../components/Sider"
+import Sider from "./Sider"
 import ResultPage from "./ResultPage"
 import { post } from '../../components/axios';
 import '../style.css'

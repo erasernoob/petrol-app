@@ -1,7 +1,7 @@
 import { Form, Input, Button, Message } from '@arco-design/web-react';
 import { open } from '@tauri-apps/plugin-dialog';
-import FileUpLoader from './FileUpLoader';
-import DynamicForm from './DynamicForm';
+import FileUpLoader from '../components/FileUpLoader';
+import DynamicForm from '../components/DynamicForm';
 import { post } from '../../components/axios';
 import '../style.css'
 import { useSelector, useDispatch } from 'react-redux';
