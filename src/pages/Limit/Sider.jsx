@@ -1,10 +1,9 @@
-import { Radio, Form, Input, Button, Message } from "@arco-design/web-react";
+import { Radio,Button, Message } from "@arco-design/web-react";
 import { open } from "@tauri-apps/plugin-dialog";
 import "../style.css";
 import { basename } from "@tauri-apps/api/path";
 import { useState } from "react";
 import FileUploader from "../components/FileUpLoader";
-import { path } from "@tauri-apps/api";
 import MSEResult from "./MSEResult";
 
 const RadioGroup = Radio.Group;

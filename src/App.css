@@ -15,6 +15,31 @@ html, body, #root {
     
 }
 
+.arco-menu-item {
+  font-size: large;
+  border-left: 1.5px solid #e8e8e8; /* 可选：分隔线 */
+  border-right: 1.5px solid #e8e8e8; /* 可选：分隔线 */
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  margin-left: 0px !important;
+}
+.arco-menu-selected {
+  background-color: var(--color-fill-2) !important;
+}
+
+.arco-menu-overflow-wrap {
+  overflow: hidden;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+}
+
+
+
+.arco-menu-inner {
+  padding: 2px !important;
+}
+
 body {
   /* background-color: var(--color-bg-1); */
   /* color: var(--color-text-1); */
