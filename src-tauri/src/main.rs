@@ -4,7 +4,7 @@
 use std::env;
 use std::os::windows::process::CommandExt;
 use std::path::PathBuf;
-use std::process::{Child, Command, Stdio};
+use std::process::{Child, Command};
 use tauri::path::BaseDirectory;
 use tauri::Manager;
 
@@ -37,13 +37,7 @@ fn main() {
 
             println!("backend_path {}", backend_path.display());
 
-            let backend_process = if cfg!(target_os = "windows") {
-                // Command::new("cmd")
-                //     .args(&["/C", "start", "", "/B", &backend_path.to_string_lossy(), ">nul", "2>&1"])
-                //     .creation_flags(0x08000000)
-                //     .spawn()
-                //     .expect("Failed to start backend process")
-
+            let backend_process = if env::consts::EXE_SUFFIX == ".exe" {
                 Command::new(&backend_path)
                     .creation_flags(0x08000000)
                     .spawn()
