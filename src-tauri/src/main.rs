@@ -20,7 +20,6 @@ impl Drop for BackendProcess {
         }
     }
 }
-
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -35,22 +34,21 @@ fn main() {
             println!("backend_path {}", backend_path.display());
 
             // Spawn the backend process
-            let backend_process = Command::new(&backend_path)
-                .stdout(Stdio::inherit()) // Forward stdout to the parent process
-                .stderr(Stdio::inherit()) // Forward stderr to the parent process
+            let backend_process =  Command::new(&backend_path)
+                .stdout(Stdio::inherit()) // Forward stderr to the parent process
+                .stdin(Stdio::inherit()) // Forward stderr to the parent process
                 .spawn()
                 .unwrap_or_else(|e| {
                     eprintln!("Failed to start backend process: {}", e);
                     std::process::exit(1);
                 });
-
-            // Manage the backend process in the Tauri app state
-            let backend = BackendProcess(backend_process);
-            app.manage(backend);
-
+            app.manage(BackendProcess(backend_process));
             println!("Tauri application started, backend is running.");
-            Ok(())
+                Ok(())
+
         })
+        .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .run(tauri::generate_context!())
         .expect("Error while running Tauri application");
 }
