@@ -16,7 +16,7 @@ const StyledMenu = styled(Menu)`
 
 export default function NavBar() {
   const [selectedKeys, setSelectedKeys] = useState(["/"]);
-
+  
   const tabList = routeList.map((route, idx) => {
     return idx !== 0 ? (
       <MenuItem
@@ -43,13 +43,17 @@ export default function NavBar() {
   });
 
   return (
+    <>
     <StyledMenu
       mode="horizontal"
       selectedKeys={selectedKeys} // 受控模式，确保选中状态生效
       style={{
-  }}     
+        
+        }}     
     >
       {tabList}
     </StyledMenu>
-  );
+
+    </>
+      );
 }
