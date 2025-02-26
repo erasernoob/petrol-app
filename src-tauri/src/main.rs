@@ -37,7 +37,7 @@ fn main() {
 
             println!("backend_path {}", backend_path.display());
 
-            let backend_process = if env::consts::EXE_SUFFIX == ".exe" {
+            let backend_process = if cfg!(windows) {
                 Command::new(&backend_path)
                     .creation_flags(0x08000000)
                     .spawn()
