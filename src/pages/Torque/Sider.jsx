@@ -3,6 +3,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import '../style.css'
 import { basename } from '@tauri-apps/api/path';
 import { useState } from 'react'
+import FileUploader from '../components/FileUpLoader';
 
 
 export default function Sider({form, tabsName, handleSubmit, datas, fileList, setFileList}) {
@@ -27,23 +28,8 @@ export default function Sider({form, tabsName, handleSubmit, datas, fileList, se
   return (
     <div className='input-page'>
       <div className='file-uploader'>
-        {
-          !orbit ?  <Button type="primary" 
-            onClick={() => handleUpload(1)}
-        >导入井眼轨迹</Button> :
-          <Button type="secondary"  
-            onClick={() => setOrbit(false)}
-        >重新导入</Button>
-        }
-        {
-          !drillState ?  <Button type="primary" 
-            onClick={() => handleUpload(2)}
-        >导入钻具状态</Button> :
-          <Button type="secondary"  
-            onClick={() => setDrillState(false)}
-        >重新导入</Button>
-        }
-      </div>
+        <FileUploader orbit={orbit} drillState={drillState} handleUpload={handleUpload} />
+     </div>
       <div className='input-form'>
         {form}
       </div>

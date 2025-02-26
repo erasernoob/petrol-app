@@ -1,6 +1,6 @@
 import { Card, Watermark } from "@arco-design/web-react"
 import { hydro } from '../../data/Params'
-import Sider from "../components/Sider"
+import Sider from "./Sider"
 import ResultPage from "./ResultPage"
 import { post } from '../../components/axios';
 import '../style.css'
@@ -37,6 +37,8 @@ export default function HydroPage() {
             Message.success('数据获取成功！')
         } catch (error) {
             setLoading(false)
+            setFile({name: '', path: ''})
+            setWaiting(true)
             Message.error('计算内部出现错误，请检查')
         }
     }

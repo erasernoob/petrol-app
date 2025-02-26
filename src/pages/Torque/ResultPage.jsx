@@ -1,4 +1,4 @@
 export default function ResultPage() {
-    return (<></>)
+    return (<>ahhaah</>)
 
 }

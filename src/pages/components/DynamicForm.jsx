@@ -17,7 +17,9 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
         style={{
           height: "100%",
         }}
-        layout="vertical"
+        layout="horizontal"
+        labelCol={{flex: '200px'}}
+        wrapperCol={{flex: '1',}}
         size="large"
         form={form}
         onSubmit={async (data) => {
@@ -54,7 +56,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                     {key === "lbmx" ? (
                       <Select
                         options={field.option}
-                        // placeholder=''
                         className="input-component"
                       />
                     ) : key != "yx" ? (
@@ -74,7 +75,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           })}
         </Tabs>
 
-        <FormItem wrapperCol={{ offset: 6 }}>
+        <FormItem wrapperCol={{ offset: 6 }} style={{borderTop: "1px solid #e8e8e8"}}>
           <Button
             type="primary"
             className="button submit-button"
