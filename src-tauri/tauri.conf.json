@@ -13,7 +13,7 @@
     "windows": [
       {
         "title": "petrol-app",
-        "minWidth": 1592,
+        "minWidth": 1400,
         "minHeight": 900
       }
     ],
