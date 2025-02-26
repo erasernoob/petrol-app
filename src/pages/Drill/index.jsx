@@ -1,5 +1,9 @@
 import { Card } from "@arco-design/web-react";
+import MyForm  from '../Torque/MyForm'
+import DynamicForm from '../components/DynamicForm'
 import ResultPage from "./ResultPage";
+import { drill_vibration } from "../../data/Params";
+
 import Sider from "../Limit/Sider";
 import { useState } from "react";
 import { Message } from "@arco-design/web-react";
@@ -8,12 +12,20 @@ const subRoutesOptions = [
   { label: "MSE", value: 1 },
   { label: "黏滑振动", value: 2 },
 ];
+const tabs = [
+    '基本钻具参数',
+    '钻井液',
+    '计算参数',
+]
 
 export default function DrillPage() {
     const [activeRoute, setActiveRoute] = useState(1);
     const [fileList, setFileList] = useState([{ name: '', path: '' }])
     const handleCalculate =  async () => {
         Message.success('计算成功')
+    }
+
+    const handleSubmit = async () => {
     }
 
   return (
@@ -30,6 +42,7 @@ export default function DrillPage() {
           setActiveRoute={setActiveRoute}
           activeRoute={activeRoute}
           fileList={fileList}
+          form={activeRoute === 2 && <DynamicForm datas={drill_vibration} handleSubmit={handleSubmit} tabs={tabs} file={{name: '', path: ''}} />}
           setFileList={setFileList}
         />
       </Card>

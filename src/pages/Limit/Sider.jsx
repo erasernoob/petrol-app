@@ -5,9 +5,9 @@ import { basename } from "@tauri-apps/api/path";
 import { useState } from "react";
 import FileUploader from "../components/FileUpLoader";
 import { path } from "@tauri-apps/api";
+import MSEResult from "./MSEResult";
 
 const RadioGroup = Radio.Group;
-
 
 export default function Sider({
   form = "default",
@@ -25,7 +25,6 @@ export default function Sider({
   const uploaderStyle = {
     width: activeRoute === 1 ? '15%' : '100%',
     marginTop: activeRoute === 1 ? '0' : '100%',
-
   }
 
 
@@ -87,6 +86,9 @@ export default function Sider({
             计算
           </Button>
           </div>
+          <div className="mse-result-page">
+            <MSEResult />
+          </div>
         </>
       ) : (
         <>
@@ -99,7 +101,9 @@ export default function Sider({
               handleUpload={handleUpload}
             />
           </div>
-          <div className="input-form">{form}</div>
+          <div className="input-form">
+            {form}
+          </div>
         </>
       )}
     </div>

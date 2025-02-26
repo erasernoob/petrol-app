@@ -30,7 +30,11 @@
     /* width: 800px;
     height: 500px; */
     /* font-size: 1.5rem; */
+    overflow-y: auto;
+    /* overflow: ; */
+    height: 100%;
     padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .arco-tabs-content-inner {
@@ -120,8 +124,6 @@
   /* box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); */
 }
 
-
-
 .input-form {
     height: calc(100vh - 300px);
     border: 1px solid var(--color-neutral-3);
@@ -134,4 +136,9 @@
     border-right: 0px;
     border-bottom: 0px;
     /* 适用于小组件 */
+}
+
+/* drill -> MSE RESULT DIV */
+.mse-result-page {
+    height: 100%;
 }

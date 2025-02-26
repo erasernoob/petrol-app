@@ -18,7 +18,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           height: "100%",
         }}
         layout="horizontal"
-        labelCol={{flex: '160px'}}
+        labelCol={{flex: '200px'}}
         wrapperCol={{flex: '1',}}
         size="large"
         form={form}
