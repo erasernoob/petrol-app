@@ -15,7 +15,9 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
 
   const [orbit, setOrbit] = useState(false)
 
-  const handleUpload = async () => {
+  console.log(orbit)
+
+  const handleUpload = async (id) => {
     const filePath = await open({ multiple: false })
     if (filePath) {
       const filename = await basename(filePath)
@@ -25,13 +27,13 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
     } else {
       Message.info('文件上传失败,请重新上传')
     }
-  }
 
+  }
 
   return (
     <div className='input-page'>
       <div className='file-uploader'>
-        <FileUpLoader orbit={orbit} setOrbit={orbit} handleUpload={handleUpload} />
+        <FileUpLoader orbit={orbit} setOrbit={setOrbit} handleUpload={handleUpload} />
           </div>
       <div className='input-form'>
         {form}

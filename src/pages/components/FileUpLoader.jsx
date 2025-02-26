@@ -21,7 +21,7 @@ export default function FileUploader({
           导入井眼轨迹
         </Button>
       ) : (
-        <Button type="secondary" onClick={() => setOrbit(1)}>
+        <Button type="secondary" onClick={() => setOrbit(false)}>
           重新导入
         </Button>
       ))}
