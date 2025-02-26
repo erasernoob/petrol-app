@@ -70,7 +70,7 @@ export default function Sider({
       {Tabs}
       {form === "default" ? (
         <>
-          <div className="file-uploader" style={{width: activeRoute === 1 ? '15%' : '100%', paddingTop: activeRoute}}>
+          <div className="file-uploader" style={uploaderStyle}>
             <FileUploader
               params={params}
               setParams={setParams}
@@ -91,8 +91,9 @@ export default function Sider({
           </div>
         </>
       ) : (
+        // to distinct the vibration and the limit page
         <>
-          <div className="file-uploader">
+          { subRouteOptions.length >= 3 && <div className="file-uploader">
             <FileUploader
               orbit={orbit}
               setOrbit={setOrbit}
@@ -100,7 +101,7 @@ export default function Sider({
               drillState={activeRoute >= 3 ? drillState : "default"}
               handleUpload={handleUpload}
             />
-          </div>
+          </div>}
           <div className="input-form">
             {form}
           </div>

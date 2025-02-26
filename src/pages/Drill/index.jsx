@@ -42,7 +42,7 @@ export default function DrillPage() {
           setActiveRoute={setActiveRoute}
           activeRoute={activeRoute}
           fileList={fileList}
-          form={activeRoute === 2 && <DynamicForm datas={drill_vibration} handleSubmit={handleSubmit} tabs={tabs} file={{name: '', path: ''}} />}
+          form={activeRoute === 2 ? <DynamicForm datas={drill_vibration} handleSubmit={handleSubmit} tabs={tabs} file={{name: '', path: ''}}/> : 'default'}
           setFileList={setFileList}
         />
       </Card>
