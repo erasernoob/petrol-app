@@ -21,7 +21,7 @@ export default function DrillPage() {
       <Card
         title="参数输入"
         style={{
-          width: "30%",
+          width: activeRoute === 1 ? '100%' : '30%',
           height: "100%",
         }}
       >

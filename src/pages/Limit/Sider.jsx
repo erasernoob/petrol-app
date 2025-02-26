@@ -8,6 +8,7 @@ import { path } from "@tauri-apps/api";
 
 const RadioGroup = Radio.Group;
 
+
 export default function Sider({
   form = "default",
   activeRoute,
@@ -21,6 +22,14 @@ export default function Sider({
   const [drillState, setDrillState] = useState(false);
   // FOR MSE
   const [params, setParams] = useState(false);
+  const uploaderStyle = {
+    width: activeRoute === 1 ? '15%' : '100%',
+    marginTop: activeRoute === 1 ? '0' : '100%',
+
+  }
+
+
+
   const Tabs = (
     <RadioGroup
       type="button"
@@ -62,7 +71,7 @@ export default function Sider({
       {Tabs}
       {form === "default" ? (
         <>
-          <div className="file-uploader">
+          <div className="file-uploader" style={{width: activeRoute === 1 ? '15%' : '100%', paddingTop: activeRoute}}>
             <FileUploader
               params={params}
               setParams={setParams}
