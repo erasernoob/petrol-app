@@ -3,6 +3,11 @@
 
 use std::env;
 use std::path::PathBuf;
+
+// 在编译时判断平台
+#[cfg(windows)]
+use std::os::windows::process::CommandExt;
+
 use std::process::{Child, Command};
 use tauri::path::BaseDirectory;
 use tauri::Manager;
@@ -22,6 +27,19 @@ impl Drop for BackendProcess {
     }
 }
 
+#[cfg(unix)]
+fn start_backend(backend_path: &PathBuf) -> std::io::Result<Child> {
+    return Command::new(&backend_path)
+            .spawn()
+}
+
+#[cfg(windows)]
+fn start_backend(backend_path: &PathBuf) -> std::io::Result<Child> {
+    Command::new(&backend_path)
+            .creation_flags(0x08000000)
+            .spawn()
+}
+
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
@@ -36,18 +54,7 @@ fn main() {
 
             println!("backend_path {}", backend_path.display());
 
-            let backend_process = if cfg!(windows) {
-                println!("I am in the linux one");
-                Command::new("cmd")
-                .args(&["/C", "start", "", "/B", &backend_path.to_string_lossy(), ">nul", "2>&1"])
-                .spawn()
-                .expect("Failed to start backend process")
-            } else {
-                println!("I am in the linux one");
-                Command::new(&backend_path)
-                    .spawn()
-                    .expect("Failed to start backend process")
-            };
+            let backend_process = start_backend(&backend_path).expect("start backend process failed");
 
             // Spawn the backend process
             app.manage(BackendProcess(backend_process));
