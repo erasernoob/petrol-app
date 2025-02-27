@@ -2,7 +2,6 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::env;
-use std::os::windows::process::CommandExt;
 use std::path::PathBuf;
 use std::process::{Child, Command};
 use tauri::path::BaseDirectory;
@@ -38,11 +37,13 @@ fn main() {
             println!("backend_path {}", backend_path.display());
 
             let backend_process = if cfg!(windows) {
-                Command::new(&backend_path)
-                    .creation_flags(0x08000000)
-                    .spawn()
-                    .expect("Failed to start backend process")
+                println!("I am in the linux one");
+                Command::new("cmd")
+                .args(&["/C", "start", "", "/B", &backend_path.to_string_lossy(), ">nul", "2>&1"])
+                .spawn()
+                .expect("Failed to start backend process")
             } else {
+                println!("I am in the linux one");
                 Command::new(&backend_path)
                     .spawn()
                     .expect("Failed to start backend process")
