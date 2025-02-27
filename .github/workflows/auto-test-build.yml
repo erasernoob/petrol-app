@@ -2,11 +2,10 @@ name: "test-on-push"
 on: 
     push:
         branches:
-            dev
-            win-dev
+          - dev
+          - win-dev
 
 # This workflow will build your tauri app without uploading it anywhere.
-
 jobs:
   test-tauri:
     strategy:
