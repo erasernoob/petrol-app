@@ -32,11 +32,11 @@ export const routeList = [
         path: '/drill',
         element: <DrillPage />
     },
-    {
-        name: '风险预警',
-        path: '/risk',
-        element: <RiskPage />
-    },
+    // {
+    //     name: '风险预警',
+    //     path: '/risk',
+    //     element: <RiskPage />
+    // },
 ]
 
 const routerList = createHashRouter(routeList)
