@@ -75,7 +75,7 @@
 }
 
 /* 按钮样式 */
-.arco-btn-primary {
+.login-button {
   background-color: #1677ff !important;
   border-radius: 20px !important;
   height: 48px !important;
