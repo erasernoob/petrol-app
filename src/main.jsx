@@ -11,8 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
     <ConfigProvider theme='dark'>
-      
-          <App />
+                <App />
     </ConfigProvider>
     </Provider>
   </React.StrictMode>,

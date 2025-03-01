@@ -1,0 +1,110 @@
+.login-container {
+  position: relative;
+  height: 100vh;
+  background: url('../../assets/pexels-fatinmark-18419622.jpg') no-repeat center right/cover;
+  display: flex;
+  align-items: center;
+  padding-left: 80px;
+}
+
+.system-title {
+  position: absolute;
+  top: 80px;
+  left: 80px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  z-index: 2;
+}
+
+.system-title h1 {
+  font-size: 32px;
+  margin-bottom: 0px;
+  font-weight: 600;
+}
+
+.system-title p {
+  font-size: 16px;
+  opacity: 0.9;
+}
+
+.form-container {
+  position: relative;
+  z-index: 1;
+  width: 420px;
+  min-width: 420px;
+  margin-left: 20px;
+}
+
+
+
+.form-box {
+  background: rgba(255, 255, 255, 0.80);
+  padding: 40px 32px;
+  /* padding-right: 20px; */
+  padding-top: 2px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.form-title {
+  color: #1677ff;
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+/* 输入框样式 */
+.arco-input-wrapper {
+  background-color: #f8fafb !important;
+  border-radius: 4px !important;
+  border: 1px solid #e6e8eb !important;
+  transition: all 0.2s ease !important;
+}
+
+.arco-input-wrapper:hover {
+  border-color: #1677ff !important;
+  background-color: #ffffff !important;
+}
+
+/* 复选框样式 */
+.arco-checkbox-checked .arco-checkbox-icon {
+  background-color: #1677ff !important;
+  border-color: #1677ff !important;
+}
+
+/* 按钮样式 */
+.arco-btn-primary {
+  background-color: #1677ff !important;
+  border-radius: 20px !important;
+  height: 48px !important;
+  font-size: 16px !important;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 20px;
+    background-position: 65%;
+    justify-content: center;
+  }
+  
+  .system-title {
+    left: 20px;
+    top: 20px;
+  }
+  
+  .system-title h1 {
+    font-size: 24px;
+  }
+  
+  .form-container {
+    width: 100%;
+    min-width: 300px;
+    max-width: 400px;
+  }
+  
+  .form-box {
+    padding: 32px 24px;
+  }
+}

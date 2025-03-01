@@ -15,9 +15,9 @@ const StyledMenu = styled(Menu)`
 `;
 
 export default function NavBar() {
-  const [selectedKeys, setSelectedKeys] = useState(["/"]);
-  
+  const [selectedKeys, setSelectedKeys] = useState(["/hydro"]);
   const tabList = routeList.map((route, idx) => {
+    if (idx === 1) {return <></>}
     return idx !== 0 ? (
       <MenuItem
         key={route.path}

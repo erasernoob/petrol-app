@@ -4,6 +4,7 @@ import DrillPage from "../pages/Drill"
 import TorquePage from "../pages/Torque"
 import RiskPage from "../pages/Risk"
 import LimitPage from "../pages/Limit"
+import LoginPage from "../pages/Login/LoginPage"
 
 export const routeList = [
     {
@@ -13,8 +14,13 @@ export const routeList = [
         element: <></>
     },
     {
-        name: '水力学',
+        name: 'login',
         path: '/',
+        element: <LoginPage />
+    },
+    {
+        name: '水力学',
+        path: '/hydro',
         element: <HydroPage />
     },
     {
