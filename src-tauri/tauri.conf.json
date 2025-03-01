@@ -1,7 +1,4 @@
 {
-  "$schema": "https://schema.tauri.app/config/2",
-  "productName": "petrol-app",
-  "version": "0.2.0",
   "identifier": "com.petrol-app.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
@@ -13,8 +10,8 @@
     "windows": [
       {
         "title": "petrol-app",
-        "minWidth": 1400,
-        "minHeight": 900
+        "minWidth": 1546,
+        "minHeight": 920
       }
     ],
     "security": {
