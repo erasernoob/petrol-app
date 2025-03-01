@@ -85,10 +85,15 @@ export default function ResultPage({ data, loading, waiting}) {
   )
 
   const [option, setOption] = useState(option1)
+  const [curValue, setCurValue] = useState('循环压力')
 
   useEffect(() => {
-    setOption({ ...option1 })
-  }, [chartData])
+    if (curValue === '循环压力') {
+      setOption(option1)
+    } else {
+      setOption(option2)
+    }
+  }, [chartData, curValue])
 
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
@@ -104,9 +109,9 @@ export default function ResultPage({ data, loading, waiting}) {
         type='button'
         size='large'
         name='chart'
-        defaultValue='循环压力'
+        defaultValue={curValue}
         onChange={(value) => {
-          setOption(() => option == option2 ? option1 : option2)
+          setCurValue(value)
         }}
         options={['循环压力', 'ECD']}
       >
