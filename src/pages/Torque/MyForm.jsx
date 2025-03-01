@@ -102,7 +102,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList = [] }) => {
               })}
         </div>
 
-        <div className='fixed-form-item'>
+        <div className=''>
         <FormItem wrapperCol={{ offset: 5 }} >
           <Button
             type="primary"
