@@ -58,7 +58,13 @@ export default function ResultPage({ data, loading, waiting}) {
     }, [
     {
       name: '压力 (MPa)',
-      type: 'value'
+      type: 'value',
+      position: 'top',
+      axisLabel: {
+        formatter: function(value) {
+          return value == 0 ? '' : value
+        }
+      }
     },
   ], [
     {
