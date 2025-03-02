@@ -1,16 +1,37 @@
-import { Radio } from '@arco-design/web-react'
+import { Radio, Button, Message } from '@arco-design/web-react'
+import * as XLSX from "xlsx";
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
+import { open } from '@tauri-apps/plugin-shell';
 import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
+import { writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import Option from '../option'
 import { Spin } from '@arco-design/web-react'
+import * as path from '@tauri-apps/api/path';
 
 const RadioGroup = Radio.Group
 
+const saveData = async (data=[], name) => {
+  data = data.map((value, index) => ({value}))
+  const worksheet = XLSX.utils.json_to_sheet(data, {skipHeader: true});
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "sheet1");
+  const res = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+  if (res) {
+      await writeFile(name, res, {
+          baseDir: BaseDirectory.Download,
+      });
+      Message.success(`${name}数据导出成功！`)
+    // 获取用户的下载文件夹路径
+    const downloadPath = await path.downloadDir()
+    // 打开下载文件夹
+    await open(await path.join(downloadPath, ''));
+  }
+}
+
 export default function ResultPage({ data, loading, waiting}) {
   const { hydroData } = useSelector(state => state.data)
-
   // 数据处理（含性能优化）
   const chartData = useMemo(() => {
     return hydroData
@@ -23,6 +44,19 @@ export default function ResultPage({ data, loading, waiting}) {
       }))
     // 数据抽样（每5个点取1个）
   }, [hydroData])
+  // 导出数据函数
+  const handleExport = async () => {
+    const drillData = chartData.map((value) => {
+      return value.drillPressure
+    })
+    const annularData = chartData.map(value => {
+      return value.annularPressure
+    })
+    await saveData(drillData, '钻柱循环压力表.xlsx')
+    saveData(annularData, '环空循环压力表.xlsx')
+  }
+  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+
 
   const option2 = Option(chartData,
     {
@@ -58,7 +92,13 @@ export default function ResultPage({ data, loading, waiting}) {
     }, [
     {
       name: '压力 (MPa)',
-      type: 'value'
+      type: 'value',
+      position: 'top',
+      axisLabel: {
+        formatter: function(value) {
+          return value == 0 ? '' : value
+        }
+      }
     },
   ], [
     {
@@ -98,7 +138,8 @@ export default function ResultPage({ data, loading, waiting}) {
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
       <>
-        <span>{key}</span><Tag size='large'>{value.toFixed(3)}</Tag>
+        <span>{key}</span>
+        <Tag size='large'>{value.toFixed(3)}</Tag>
       </>
     )
   }))
@@ -132,12 +173,13 @@ export default function ResultPage({ data, loading, waiting}) {
             // marginTop: '7px',
             marginLeft: '0px'
           }}>
-            {tagList}
+            {tagList} 
+            {exportButton}
           </div>
         </>
       ) : (
         <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {waiting == true ? '等待开始计算......' :  <Spin size="30" tip='正在计算中......' /> }
+          {waiting == true ? '输入参数开始计算' :  <Spin size="30" tip='正在计算中......' /> }
         </div>
       )}
 
