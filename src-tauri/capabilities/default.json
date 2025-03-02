@@ -6,8 +6,19 @@
     "main"
   ],
   "permissions": [
+    {
+      "identifier": "fs:write-files",
+      "allow": [
+        {
+          "path": "$DOWNLOAD/*"
+        }
+      ]
+    },
+
     "core:default",
     "opener:default",
-    "dialog:default"
+    "dialog:default",
+    "fs:default",
+    "shell:default"
   ]
 }
