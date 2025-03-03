@@ -15,8 +15,6 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
 
   const [orbit, setOrbit] = useState(false)
 
-  console.log(orbit)
-
   const handleUpload = async (id) => {
     const filePath = await open({ multiple: false })
     if (filePath) {

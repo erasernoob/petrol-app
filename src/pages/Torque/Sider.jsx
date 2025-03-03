@@ -28,7 +28,7 @@ export default function Sider({form, tabsName, handleSubmit, datas, fileList, se
   return (
     <div className='input-page'>
       <div className='file-uploader'>
-        <FileUploader orbit={orbit} drillState={drillState} handleUpload={handleUpload} />
+        <FileUploader orbit={orbit} setDrillState={setDrillState} setOrbit={setOrbit} drillState={drillState} handleUpload={handleUpload} />
      </div>
       <div className='input-form'>
         {form}
