@@ -12,7 +12,7 @@ router = APIRouter()
 # FAST API的全局缓存
 torque_cache = {}
 
-@router.post("/torque")
+@router.get("/torque")
 def get_torque_data(torque_dto: TorqueDTO):
     global torque_cache
 
@@ -24,7 +24,7 @@ def get_torque_data(torque_dto: TorqueDTO):
     N, E, TCS, T, M, Sk = main_func(
         orbit, drill, torque_dto.wc, torque_dto.T0, torque_dto.rhoi, 
         torque_dto.Dw, torque_dto.tgxs, torque_dto.miua11, torque_dto.miua22, 
-        torque_dto.js, torque_dto.v, torque_dto.omega
+        torque_dto.js, torque_dto.v, torque_dto.omega)
 
 
 
