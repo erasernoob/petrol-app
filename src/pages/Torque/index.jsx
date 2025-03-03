@@ -12,16 +12,16 @@ import { post } from "../../components/axios"
 const options = ['轴向力', '扭矩']
 
 export default function TorquePage() {
-    const [fileList, setFileList] = useState([{ name: '', path: '' }])
+    const [fileList, setFileList] = useState([{name: '', path: ''}])
     const [loading, setLoading] = useState(false)
     const [waiting, setWaiting] = useState(true)
     const [chartData, setChartData] = useState([])
 
     const handleSubmit = async (data) => {
         try {
-            data.file_path1 = fileList[0].path
-            data.file_path2 = fileList[1].path
-            console.log(fileList)
+            data.file_path1 = fileList[1].path
+            data.file_path2 = fileList[2].path
+            // console.log(fileList)
             setWaiting(false)
             setLoading(true)
             const response = await post('/torque', JSON.stringify(data))
@@ -31,7 +31,7 @@ export default function TorquePage() {
             Message.success('数据获取成功！')
         } catch (error) {
             setLoading(false)
-            setFileList([{ name: '', path: '' }])
+            // setFileList([{ name: '', path: '' }])
             setWaiting(true)
             Message.error('计算内部出现错误，请检查')
         }
@@ -102,8 +102,6 @@ export default function TorquePage() {
     ],
     )
     const chartOptions = [option1, option2]
-
-
 
 
 

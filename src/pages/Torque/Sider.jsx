@@ -7,7 +7,6 @@ import FileUploader from '../components/FileUpLoader';
 
 
 export default function Sider({form, tabsName, handleSubmit, datas, fileList, setFileList}) {
-
   const [orbit, setOrbit] = useState(false)
   const [drillState, setDrillState] = useState(false)
 
@@ -16,6 +15,7 @@ export default function Sider({form, tabsName, handleSubmit, datas, fileList, se
     if (filePath) {
       const filename = await basename(filePath)
       setFileList((prev) => ([ ...prev ,{name: filename, path: filePath}]))
+      console.log(fileList)
       Message.success(`${filename}导入成功！`)
       if (id === 1) {
         setOrbit(true)
