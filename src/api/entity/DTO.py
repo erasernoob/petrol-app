@@ -36,5 +36,19 @@ class HydroDTO(BaseModel):
     yxmd: float      # 岩屑密度 (kg/m³)
     H: float         # 岩屑床高度 (%)
     yx: int
+class TorqueDTO:
+    file_path1: str
+    file_path2: str
+    wc: int  # 工况选择
+    v: float  # 钻进速度 (m/s)
+    omega: float  # 转速 (rad/s)
+    T0: float  # 钻压 (N)
+    rhoi: float  # 钻井液密度 (kg/m³)
+    Dw: float  # 井眼直径 (m)
+    tgxs: float  # 套管下深 (m)
+    miua11: float  # 套管段摩阻系数
+    miua22: float  # 裸眼段摩阻系数
+    js: float  # 计算井深 (m)
+
 
 
