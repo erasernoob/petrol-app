@@ -12,8 +12,8 @@ router = APIRouter()
 # FAST API的全局缓存
 torque_cache = {}
 
-@router.get("/torque")
-def get_torque_data(torque_dto: TorqueDTO):
+@router.post("/torque")
+async def get_torque_data(torque_dto: TorqueDTO):
     global torque_cache
 
     # 轨迹和钻具组合
