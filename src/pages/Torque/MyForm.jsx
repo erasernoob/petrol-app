@@ -118,7 +118,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList = [] }) => {
             disabled={!form.validate()}
             onClick={() => {
               form.resetFields();
-              location.reload()
             }}
           >
             重置

@@ -80,7 +80,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
             type="primary"
             className="button submit-button"
             disabled={
-              file.name == "" || (tabTime < tabs.length - 1 && !form.validate())
+              file.name == "" 
             }
             htmlType="submit"
           >
