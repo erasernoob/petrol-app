@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Checkbox, Message } from '@arco-design/web-react';
 import { IconUser, IconLock } from '@arco-design/web-react/icon';
 import './style.css';
@@ -6,6 +6,13 @@ import userInfo from './data'
 
 const FormItem = Form.Item;
 const LoginPage = ({status, setStatus}) => {
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+        if (isLoggedIn) {
+            location.replace("/#/hydro")
+            setStatus(true)
+        }
+    }, []);
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
@@ -16,6 +23,8 @@ const LoginPage = ({status, setStatus}) => {
         && userInfo[0].password === values.password) {
           setTimeout(() => {
             setStatus(true)
+            localStorage.setItem('isLoggedIn', true); // 保存登录状态
+            localStorage.setItem('username', values.username); // 保存用户名
             Message.success('登录成功！欢迎进入系统!')
             location.replace("/#/hydro")
             setLoading(false);

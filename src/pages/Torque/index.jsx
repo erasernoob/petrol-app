@@ -17,6 +17,7 @@ export default function TorquePage() {
     const [waiting, setWaiting] = useState(true)
     const [chartData, setChartData] = useState([])
 
+
     const handleSubmit = async (data) => {
         try {
             data.file_path1 = fileList[1].path
