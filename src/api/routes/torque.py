@@ -29,13 +29,13 @@ def get_torque_data(torque_dto: TorqueDTO):
 
 
     df = pd.DataFrame({
-    "N": N.flatten(),   # 南北位移 (Y 轴)
-    "E": E.flatten(),   # 东西位移 (X 轴)
-    "TCS": TCS.flatten(), # 垂向深度 (Z 轴)
-    "T": T.flatten(),   # 轴向力（用于颜色映射）
-    "M": M.flatten(),   # 扭矩（用于颜色映射）
-    "Sk": Sk.flatten()  # 井深 (用于 2D 曲线)
-
+        "N": N.flatten(),   # 南北位移 (Y 轴)
+        "E": E.flatten(),   # 东西位移 (X 轴)
+        "TCS": TCS.flatten(), # 垂向深度 (Z 轴)
+        "T": T.flatten(),   # 轴向力（用于颜色映射）
+        "M": M.flatten(),   # 扭矩（用于颜色映射）
+        "Sk": Sk.flatten()  # 井深 (用于 2D 曲线)
+    })
     # **转换为 CSV 格式**
     output = io.StringIO()
     df.to_csv(output, index=False, encoding="utf-8")
@@ -43,7 +43,6 @@ def get_torque_data(torque_dto: TorqueDTO):
     
     return Response(content=csv_data, media_type="text/csv",
                     headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
-})
 
 def main_func():
     return N, E, TCS, T, M, Sk
