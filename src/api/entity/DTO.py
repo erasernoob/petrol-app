@@ -167,6 +167,6 @@ class DrillVibrationDTO(BaseModel):
     TIME: float  # 计算时长 (s)
     Dt: float  # 时间步长 (s)
 
-class MSE(BaseModel):
+class MSEDTO(BaseModel):
     file_path: str
 

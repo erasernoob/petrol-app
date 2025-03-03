@@ -3,7 +3,7 @@ from fastapi import Response
 import io
 from fastapi import APIRouter
 import pandas as pd
-from entity.DTO import DrillVibrationDTO, MSE
+from entity.DTO import DrillVibrationDTO, MSEDTO
 
 # 创建 APIRouter 实例
 router = APIRouter()
@@ -44,9 +44,9 @@ def mse_func():
 
 
 @router.get('/drill/mse')
-def get_mse(mse_DTO : MSE):
+def get_mse(mse_DTO : MSEDTO):
     canshu = pd.read_excel(mse_DTO.file_path).values  
-    mse_func(canshu)
+    MSE, wob, rpm, rop, Depth = mse_func(canshu)
     df = pd.DataFrame({
         "MSE": MSE.flatten(),  # 总循环压耗
         "wob": wob.flatten(),  # 钻压
@@ -54,6 +54,15 @@ def get_mse(mse_DTO : MSE):
         "rop": rop.flatten(),  # 机械钻速
         "Depth": Depth.flatten()  # 井深
     })
+    # **转换为 CSV 格式**
+    output = io.StringIO()
+    df.to_csv(output, index=False, encoding="utf-8")
+    csv_data = output.getvalue()
+
+    return Response(content=csv_data, media_type="text/csv",
+                    headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
+
+
     
     
 
