@@ -35,6 +35,7 @@ export default function ResultPage({ data, loading, waiting}) {
     saveData(annularData, '环空循环压力表.xlsx')
   }
   const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+  console.log(hydroData)
 
 
   const option2 = Option(chartData,
@@ -47,7 +48,8 @@ export default function ResultPage({ data, loading, waiting}) {
       name: 'ECD (g/cm³)',
       type: 'value',
       offset: 0,
-      alignTicks: true
+      alignTicks: true,
+      position: 'top'
     }
   ], [
     {

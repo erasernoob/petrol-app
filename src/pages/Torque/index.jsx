@@ -1,33 +1,50 @@
 import { Card, Message } from "@arco-design/web-react"
 import ResultPage from '../components/ResultPage'
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Sider from "./Sider"
 import MyForm from "./MyForm"
 import Option from "../option"
 import { torque } from '../../data/Params'
 import { post } from "../../components/axios"
 
-
-
 const options = ['轴向力', '扭矩']
 
 export default function TorquePage() {
-    const [fileList, setFileList] = useState([{name: '', path: ''}])
+    const [fileList, setFileList] = useState({orbit: {name: '', path: ''}, drill: {name: '', path: ''}})
     const [loading, setLoading] = useState(false)
     const [waiting, setWaiting] = useState(true)
-    const [chartData, setChartData] = useState([])
+    const [torqueData, setTorqueData]  = useState([])
+
+    const chartData = useMemo(() => {
+        return torqueData.map((item) => ({
+            Sk: item['Sk'],
+            T: item['T'],
+            M: item['M'],
+        }))
+    }, [torqueData])
+    const heatData = useMemo(() => {
+        return torqueData.map((item) => ({
+            M: item['M'],
+            T: item['T'],
+            N: item['N'],
+            E: item['E'],
+            TCS: item['TCS'],
+        }))
+    }, [torqueData])
 
 
     const handleSubmit = async (data) => {
         try {
-            data.file_path1 = fileList[1].path
-            data.file_path2 = fileList[2].path
+            data.file_path1 = fileList.orbit.path
+            data.file_path2 = fileList.drill.path
             // console.log(fileList)
             setWaiting(false)
             setLoading(true)
+            console.log(data)
             const response = await post('/torque', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true })
-            setChartData(res.data)
+            // TODO: DEV FIX CHARTDATA
+            setTorqueData(res.data)
             setLoading(false)
             Message.success('数据获取成功！')
         } catch (error) {
@@ -45,17 +62,18 @@ export default function TorquePage() {
             inverse: true
         }, [
         {
-            name: 'ECD (g/cm³)',
+            name: '轴向力 (kN)',
             type: 'value',
             offset: 0,
-            alignTicks: true
+            alignTicks: true,
+            position: 'top',
         }
     ], [
         {
-            name: 'ECD',
+            name: '轴向力 (kN)',
             type: 'line',
             yAxisIndex: 0,
-            encode: { x: 'ecd', y: 'depth' },
+            encode: { x: 'T', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1 },
@@ -70,40 +88,24 @@ export default function TorquePage() {
             inverse: true
         }, [
         {
-            name: '压力 (MPa)',
+            name: '扭矩 (kN·m） ',
             type: 'value',
             position: 'top',
-            axisLabel: {
-                formatter: function (value) {
-                    return value == 0 ? '' : value
-                }
-            }
         },
     ], [
         {
-            name: '钻柱压力',
+            name: '扭矩 (kN·m）',
             type: 'line',
             yAxisIndex: 0,
-            encode: { x: 'drillPressure', y: 'depth' },
+            encode: { x: 'M', y: 'Sk' },
             sampling: 'lttb', // 采用最佳采样算法
             smooth: true,     // 禁用平滑
-            lineStyle: { width: 2 },
-            showSymbol: false
-        },
-        {
-            name: '环空压力',
-            type: 'line',
-            yAxisIndex: 0,
-            encode: { x: 'annularPressure', y: 'depth' },
-            sampling: 'lttb',
-            smooth: false,
             lineStyle: { width: 2 },
             showSymbol: false
         },
     ],
     )
     const chartOptions = [option1, option2]
-
 
 
     return (

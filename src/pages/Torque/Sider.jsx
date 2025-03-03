@@ -10,17 +10,36 @@ export default function Sider({form, tabsName, handleSubmit, datas, fileList, se
   const [orbit, setOrbit] = useState(false)
   const [drillState, setDrillState] = useState(false)
 
+  const handleCancel = (id) => {
+    if (id === 1) {
+      setOrbit(false)
+      setFileList(prev => ({...prev, orbit: {name: '', path: ''}}))
+    } else if(id === 2) {
+      setDrillState(false)
+      setFileList(prev => ({...prev, drill: {name: '', path: ''}}))
+    } else {
+
+    }
+  }
+
   const handleUpload = async (id) => {
+    console.log(id)
     const filePath = await open({ multiple: false })
     if (filePath) {
       const filename = await basename(filePath)
-      setFileList((prev) => ([ ...prev ,{name: filename, path: filePath}]))
-      console.log(fileList)
+      if (id === 1) {
+        setFileList(prev => ({...prev, orbit: {name: filename, path: filePath}}))
+      } else if (id == 2) {
+        setFileList((prev) => ({...prev, drill: {name: filename, path: filePath}}))
+      } else {
+        // 上传参数
+      }
       Message.success(`${filename}导入成功！`)
       if (id === 1) {
         setOrbit(true)
       } else if (id === 2) (setDrillState(true))
     } else {
+      setFileList({orbit: {name: '', path: ''}, drill: {name: '', path: ''}})
       Message.info('文件上传失败,请重新导入')
     }
   }
@@ -28,7 +47,7 @@ export default function Sider({form, tabsName, handleSubmit, datas, fileList, se
   return (
     <div className='input-page'>
       <div className='file-uploader'>
-        <FileUploader orbit={orbit} setDrillState={setDrillState} setOrbit={setOrbit} drillState={drillState} handleUpload={handleUpload} />
+        <FileUploader orbit={orbit} handleCancel={handleCancel} setDrillState={setDrillState} setOrbit={setOrbit} drillState={drillState} handleUpload={handleUpload} />
      </div>
       <div className='input-form'>
         {form}
@@ -36,3 +55,4 @@ export default function Sider({form, tabsName, handleSubmit, datas, fileList, se
     </div>
   );
 }
+
