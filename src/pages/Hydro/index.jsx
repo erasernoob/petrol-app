@@ -14,13 +14,11 @@ import { Message } from "@arco-design/web-react";
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 export default function HydroPage() {
     const dispatch = useDispatch()
-
     const [file, setFile] = useState({ name: '', path: '' })
     const [loading, setLoading] = useState(false)
     // 等待开始计算
     const [waiting, setWaiting] = useState(true)
     const [extraData, setExtraData] = useState({})
-
     const handleSubmit = async (data) => {
         if (!file.path) return
         try {
@@ -37,7 +35,6 @@ export default function HydroPage() {
             Message.success('数据获取成功！')
         } catch (error) {
             setLoading(false)
-            setFile({name: '', path: ''})
             setWaiting(true)
             Message.error('计算内部出现错误，请检查')
         }

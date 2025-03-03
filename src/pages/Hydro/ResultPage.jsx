@@ -1,34 +1,13 @@
 import { Radio, Button, Message } from '@arco-design/web-react'
-import * as XLSX from "xlsx";
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
-import { open } from '@tauri-apps/plugin-shell';
 import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
-import { writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 import Option from '../option'
 import { Spin } from '@arco-design/web-react'
-import * as path from '@tauri-apps/api/path';
+import { saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
-
-const saveData = async (data=[], name) => {
-  data = data.map((value, index) => ({value}))
-  const worksheet = XLSX.utils.json_to_sheet(data, {skipHeader: true});
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "sheet1");
-  const res = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-  if (res) {
-      await writeFile(name, res, {
-          baseDir: BaseDirectory.Download,
-      });
-      Message.success(`${name}数据导出成功！`)
-    // 获取用户的下载文件夹路径
-    const downloadPath = await path.downloadDir()
-    // 打开下载文件夹
-    await open(await path.join(downloadPath, ''));
-  }
-}
 
 export default function ResultPage({ data, loading, waiting}) {
   const { hydroData } = useSelector(state => state.data)

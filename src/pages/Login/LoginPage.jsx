@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, Button, Checkbox, Message } from '@arco-design/web-react';
 import { IconUser, IconLock } from '@arco-design/web-react/icon';
 import './style.css';
@@ -19,7 +19,9 @@ const LoginPage = ({status, setStatus}) => {
             Message.success('登录成功！欢迎进入系统!')
             location.replace("/#/hydro")
             setLoading(false);
-          }, 800)
+            // TODO: FOR TEST
+          // }, 800)
+          }, 0)
         } else if (userInfo[1].username === values.username 
           && userInfo[1].password === values.password) {
           setTimeout(() => {
