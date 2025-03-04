@@ -3,6 +3,7 @@ from fastapi import Response
 import io
 from fastapi import APIRouter
 import pandas as pd
+from pathlib import Path
 from entity.DTO import HydroDTO
 from service.Hydro import Hydro
 
@@ -35,11 +36,37 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
         hydro_dto.d4, hydro_dto.Lp, hydro_dto.Li, hydro_dto.rzzjt, 
         hydro_dto.yxmd, hydro_dto.H, hydro_dto.yx
     )
+
+
+    base_path = Path("D:/petrol-app/mock/hydro")
+        # 读取 Excel 文件
+    ECD = pd.read_excel(base_path / "ECD.xlsx").values
+    # df_Plg = pd.read_excel(base_path / "立管压力.xlsx")
+
+    # Sk = df_P.iloc[:,0]
+    # P = df_P.iloc[:,1]
+    # Plg = df_Plg.iloc[:,1]
+
+    # 创建 DataFrame
+    # df = pd.DataFrame({
+        # "P": P, # 总循环压耗
+        # "Plg": Plg, # 立管压力
+        # "Sk": Sk,
+    # })
+
+    # df = pd.DataFrame({
+    #     "井深 (m)": Sk.flatten(),  
+    #     "钻柱压力 (Pgn, MPa)": Pgn.flatten(),
+    #     "环空压力 (Phk, MPa)": Phk.flatten(),
+    #     "ECD (g/cm³)": ECD.flatten(),
+    # })
+
+
     df = pd.DataFrame({
-        "井深 (m)": Sk.flatten(),  
-        "钻柱压力 (Pgn, MPa)": Pgn.flatten(),
-        "环空压力 (Phk, MPa)": Phk.flatten(),
-        "ECD (g/cm³)": ECD.flatten()
+        "井深 (m)": pd.Series(Sk.flatten()),  
+        "钻柱压力 (Pgn, MPa)": pd.Series(Pgn.flatten()),
+        "环空压力 (Phk, MPa)": pd.Series(Phk.flatten()),
+        "ECD (g/cm³)": pd.Series(ECD.flatten()),
     })
 
     hydro_cache = {

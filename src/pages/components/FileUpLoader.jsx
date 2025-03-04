@@ -9,10 +9,10 @@ export default function FileUploader({
   drillState = "default",
   params = "default",
   handleUpload,
-  setOrbit,
-  setDrillState,
+  handleCancel,
   setParams,
 }) {
+
   return (
     <>
     {orbit !== "default" &&
@@ -21,7 +21,7 @@ export default function FileUploader({
           导入井眼轨迹
         </Button>
       ) : (
-        <Button type="secondary" onClick={() => setOrbit(false)}>
+        <Button type="secondary" onClick={() => handleCancel(1)}>
           重新导入
         </Button>
       ))}
@@ -31,7 +31,7 @@ export default function FileUploader({
             导入钻具状态
           </Button>
         ) : (
-          <Button type="secondary" onClick={() => setDrillState(false)}>
+          <Button type="secondary" onClick={() => handleCancel(2)}>
             重新导入
           </Button>
         ))}
@@ -41,7 +41,7 @@ export default function FileUploader({
           导入计算参数
         </Button>
       ) : (
-        <Button type="secondary" onClick={() => setParams(false)}>
+        <Button type="secondary" onClick={() => handleCancel(3)}>
           重新导入
         </Button>
       ))}

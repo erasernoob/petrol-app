@@ -1,11 +1,13 @@
 import { Form, Button, Input, Select, Message } from "@arco-design/web-react";
 import { useEffect, useRef, useState } from "react";
 
-const MyForm = ({ datas, handleSubmit, tabs, fileList = [] }) => {
+const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
   const FormItem = Form.Item;
   const [form] = Form.useForm();
   const data = datas.work_condition;
-
+  const handleDisabled = () => {
+    return fileList.orbit.path === "" || fileList.drill.path === ""
+  }
   return (
     <div className="form-wrapper-custom">
       <Form
@@ -107,7 +109,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList = [] }) => {
           <Button
             type="primary"
             className="button submit-button"
-            disabled={fileList.length <= 2}
+            disabled={handleDisabled()}
             htmlType="submit"
           >
             计算
