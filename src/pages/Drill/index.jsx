@@ -1,11 +1,12 @@
 import { Card } from "@arco-design/web-react";
 import MyForm  from '../Torque/MyForm'
 import DynamicForm from '../components/DynamicForm'
+import Papa from 'papaparse';
 import ResultPage from "./ResultPage";
 import { drill_vibration } from "../../data/Params";
-
 import Sider from "../Limit/Sider";
 import { useState } from "react";
+import { post } from "../../components/axios"
 import { Message } from "@arco-design/web-react";
 
 const subRoutesOptions = [
@@ -20,9 +21,32 @@ const tabs = [
 
 export default function DrillPage() {
     const [activeRoute, setActiveRoute] = useState(1);
+    const [loading, setLoading] = useState(false)
+    const [waiting, setWaiting] = useState(true)
+    const [chartData, setChartData] = useState([])
     const [fileList, setFileList] = useState([{ name: '', path: '' }])
+    const [file, setFile] = useState({ name: '', path: '' })
+
     const handleCalculate =  async () => {
-        Message.success('计算成功')
+        if (!file.path) return
+        try {
+            setWaiting(false)
+            setLoading(true)
+            const response = await post('/drill/mse', JSON.stringify({file_path: file.path}))
+            const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
+            setChartData(res)
+            setLoading(false)
+            Message.success('数据获取成功！')
+        } catch (error) {
+          console.log(error)
+            setLoading(false)
+            setWaiting(true)
+            Message.error('计算内部出现错误，请检查')
+        }
+    }
+
+    const handleExport = () => {
+
     }
 
     const handleSubmit = async () => {
@@ -39,8 +63,15 @@ export default function DrillPage() {
       >
         <Sider
           subRouteOptions={subRoutesOptions}
+          loading={loading}
+          waiting={waiting}
+          handleExport={handleExport}
+          chartData={chartData}
           setActiveRoute={setActiveRoute}
           activeRoute={activeRoute}
+          handleCalculate={handleCalculate}
+          file={file}
+          setFile={setFile}
           fileList={fileList}
           form={activeRoute === 2 ? <DynamicForm datas={drill_vibration} handleSubmit={handleSubmit} tabs={tabs} file={{name: '', path: ''}}/> : 'default'}
           setFileList={setFileList}
@@ -52,7 +83,7 @@ export default function DrillPage() {
           style={{ flex: "1", marginLeft: "5px" }}
           bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
         >
-          <ResultPage />
+          <ResultPage loading={loading} chartData={chartData} waiting={waiting} />
         </Card>
       ) : (
         <></>
