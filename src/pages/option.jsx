@@ -55,8 +55,8 @@ export const getOptionT = (dataSet) => {
                 boxDepth: 50,   //  轴可视长度，可根据垂深范围自行调整
                 viewControl: { alpha: 10, beta: 10 }
         },
-        xAxis3D: { name: '东/西 位置 (m)' },
-        yAxis3D: { name: '南/北 位置 (m)' },
+        xAxis3D: { name: '东/西  (m)' },
+        yAxis3D: { name: '南/北  (m)' },
         zAxis3D: { name: '垂深 (m)', inverse: false },
         dataset: {
             dimensions: ['E', 'N', 'TCS', 'T'],
@@ -107,8 +107,8 @@ const getOptionM = (dataSet) => {
                 boxDepth: 50,   //  轴可视长度，可根据垂深范围自行调整
                 viewControl: { alpha: 10, beta: 10 }
         },
-        xAxis3D: { name: '东/西 位置 (m)' },
-        yAxis3D: { name: '南/北 位置 (m)' },
+        xAxis3D: { name: '东/西 (m)' },
+        yAxis3D: { name: '南/北 (m)' },
         zAxis3D: { name: '垂深 (m)', inverse: false },
         dataset: {
             dimensions: ['E', 'N', 'TCS', 'M'],
@@ -130,58 +130,6 @@ const getOptionM = (dataSet) => {
         }
     };
 
-
-
-
-// // 扭矩云图 
-// const generateOptionForM = (data) =>  {
-//     console.log(data[0])
-//     return  {
-//     // backgroundColor: '#fff',
-//     tooltip: {},
-//     visualMap: {
-//         show: true,
-//         dimension: 3,  // 颜色映射到 M 值 [E, N, Tcs, M]
-//         min: 0,
-//         max: 15,  // 需要调整 max 以适应你的数据
-//         inRange: {
-//             color: ['blue', 'green', 'yellow', 'red']
-//         }
-//     },
-//     grid3D: {
-//         boxWidth: 100,  // 调整 3D 画布大小
-//         boxDepth: 100,
-//         viewControl: { alpha: 45, beta: 30 }
-//     },
-//     xAxis3D: { name: 'E (m)' },
-//     yAxis3D: { name: 'N (m)' },
-//     zAxis3D: { name: '-Depth (m)' },
-//     series: [
-//         {
-//             name: '扭矩分布',
-//             type: 'scatter3D',
-//             symbolSize: 8,  // 点的大小
-//             data: data
-//         },
-//         {
-//             name: '轨迹线',
-//             type: 'line3D',
-//             lineStyle: { width: 3, color: 'black' },
-//             // data: [
-//             //     [10, 20, -50],  // [E, N, -Tcs]
-//             //     [15, 25, -55],
-//             //     [20, 30, -60],
-//             //     // ... (这里填充你的轨迹数据)
-//             // ]
-//             data: data.map((item) => ({
-//                 E: item['E'],
-//                 N: item['N'],
-//                 TCS: item['TCS'],
-//             }))
-//         }
-//     ]
-// };
-// }
 
 export { getOptionM }
 

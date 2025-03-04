@@ -146,7 +146,7 @@ export default function ResultPage({handleExport, typeOptions=[], chartData=[], 
             // marginTop: '7px',
             marginLeft: '0px'
           }}>
-            {exportButton}
+            {(curChart !== chartOptions[1] && exportButton)}
           </div>
         </>
       ) : (

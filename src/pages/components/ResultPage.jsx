@@ -3,25 +3,14 @@ import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
-import Option from '../option'
+import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
 import { saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 
 export default function ResultPage({handleExport, chartOptions=[] ,options=[], chartData=[] ,extraData={}, loading, waiting}) {
-  // 数据处理（含性能优化）
-  // const chartData = useMemo(() => {
-  //   return hydroData
-  //     .map(item => ({
-  //       depth: item["井深 (m)"],
-  //       // TODO: for test 
-  //       drillPressure: item["钻柱压力 (Pgn, MPa)"] < 0 ? 0 : item['钻柱压力 (Pgn, MPa)'],
-  //       annularPressure: item["环空压力 (Phk, MPa)"] < 0 ? 0 : item["环空压力 (Phk, MPa)"],
-  //       ecd: item["ECD (g/cm³)"]
-  //     }))
-  //   // 数据抽样（每5个点取1个）
-  // }, [hydroData])
+
   // 导出数据函数
   // const handleExport = async () => {
   //   const drillData = chartData.map((value) => {
@@ -38,15 +27,16 @@ export default function ResultPage({handleExport, chartOptions=[] ,options=[], c
  
 
   const [option, setOption] = useState(chartOptions[0])
+  // setOption(chartOptions[2])
   const [curValue, setCurValue] = useState(options[0])
 
-  useEffect(() => {
-    if (curValue === options[0]) {
-      setOption(chartOptions[0])
-    } else {
-      setOption(chartOptions[1])
-    }
-  }, [chartData, curValue])
+  // useEffect(() => {
+  //   if (curValue === options[0]) {
+  //     setOption(chartOptions[0])
+  //   } else {
+  //     setOption(chartOptions[1])
+  //   }
+  // }, [chartData, curValue])
 
   const tagList = extraData == {} ? "" :   (Object.entries(extraData).map(([key, value]) => {
     return (
