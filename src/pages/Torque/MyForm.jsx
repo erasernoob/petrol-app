@@ -6,7 +6,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
   const [form] = Form.useForm();
   const data = datas.work_condition;
   const handleDisabled = () => {
-    console.log(`Mechanism: ${fileList.orbit.path === "" || fileList.drill.path === ""}`)
     return fileList.orbit.path === "" || fileList.drill.path === ""
   }
   return (

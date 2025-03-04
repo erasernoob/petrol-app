@@ -87,7 +87,8 @@ export default function Sider({
       setDrillState(false)
       setFileList(prev => ({...prev, drill: {name: '', path: ''}}))
     } else {
-
+      setParams(false)
+      setFile({name: '', path: ''})
     }
   }
 

@@ -5,6 +5,7 @@ import Sider from "./Sider"
 import MyForm from "./MyForm"
 import Option from "../option"
 import { torque } from '../../data/Params'
+import Papa from 'papaparse';
 import { post } from "../../components/axios"
 
 const options = ['轴向力', '扭矩']
@@ -22,6 +23,7 @@ export default function TorquePage() {
             M: item['M'],
         }))
     }, [torqueData])
+    console.log(chartData)
     const heatData = useMemo(() => {
         return torqueData.map((item) => ({
             M: item['M'],
@@ -31,8 +33,7 @@ export default function TorquePage() {
             TCS: item['TCS'],
         }))
     }, [torqueData])
-
-
+    console.log(heatData)
     const handleSubmit = async (data) => {
         try {
             data.file_path1 = fileList.orbit.path
@@ -48,6 +49,7 @@ export default function TorquePage() {
             setLoading(false)
             Message.success('数据获取成功！')
         } catch (error) {
+            console.log(error)
             setLoading(false)
             // setFileList([{ name: '', path: '' }])
             setWaiting(true)
