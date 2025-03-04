@@ -32,6 +32,7 @@ async def get_torque_data(torque_dto: TorqueDTO):
         # 读取 Excel 文件
     N = pd.read_excel(base_path / "N.xlsx").values.flatten()
     E = pd.read_excel(base_path / "E.xlsx").values.flatten()
+
     T = pd.read_excel(base_path / "T.xlsx").values.flatten()
     M = pd.read_excel(base_path / "M.xlsx").values.flatten()
     TCS = pd.read_excel(base_path / "TCS.xlsx").values.flatten()
@@ -42,9 +43,9 @@ async def get_torque_data(torque_dto: TorqueDTO):
     data = {
         "N": pd.Series(N),
         "E": pd.Series(E),
-        "TCS": pd.Series(TCS),
-        "T": pd.Series(T),
-        "M": pd.Series(M),
+        "TCS": pd.Series(TCS), # 垂深
+        "T": pd.Series(T), # 轴向力
+        "M": pd.Series(M), # 扭矩
         "Sk": pd.Series(Sk)
     }
 

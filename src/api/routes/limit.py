@@ -1,5 +1,6 @@
 # api/routes/torque.py
 from fastapi import Response
+from pathlib import Path
 import io
 from fastapi import APIRouter
 import pandas as pd
@@ -11,7 +12,7 @@ router = APIRouter()
 # FAST API的全局缓存
 torque_cache = {}
 
-@router.get('/limit/eye')
+@router.post('/limit/eye')
 def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     # 从 DTO 获取参数
     guiji = pd.read_excel(limit_eye_dto.file_path1).values  
@@ -34,11 +35,17 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     # 调用 hydro 函数计算结果
     ECD, Sk, Pgn, Phk = limit_eye_function(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt)
 
+
+    base_path = Path("D:/petrol-app/mock/limit")
+        # 读取 Excel 文件
+    ECO = pd.read_excel(base_path / "ECD.xlsx").values.flatten()
+    Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
+
     # 将数据保存为 CSV 文件
     df = pd.DataFrame({
         "Sk": Sk.flatten(),
-        "Pgn": Pgn.flatten(),
-        "Phk": Phk.flatten(),
+        # "Pgn": Pgn.flatten(),
+        # "Phk": Phk.flatten(),
         "ECD": ECD.flatten()
     })
 
@@ -58,9 +65,19 @@ def limit_hydro_function():
     
 
 
-@router.get('/limit/hydro')
+@router.post('/limit/hydro')
 def get_limit_hydro(limit_hydro_dto: LimitHydroDTO):
     Sk, P, Plg = limit_hydro_function(limit_hydro_dto)
+
+    base_path = Path("D:/petrol-app/mock/limit")
+        # 读取 Excel 文件
+    df_P = pd.read_excel(base_path / "总循环压耗.xlsx")
+    df_Plg = pd.read_excel(base_path / "立管压力.xlsx")
+
+    Sk = df_P.iloc[:,0]
+    P = df_P.iloc[:,1]
+    Plg = df_Plg.iloc[:,1]
+
 
     # 创建 DataFrame
     df = pd.DataFrame({
@@ -100,13 +117,34 @@ async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
         limit_mechanism_dto.v, 
         limit_mechanism_dto.omega
     )
+    
+    base_path = Path("D:/petrol-app/mock/drill")
+
+    df_M = pd.read_excel(base_path / "旋转钻进_井口扭矩.xlsx")
+    df_T = pd.read_excel(base_path / "旋转钻进_井口轴向力.xlsx")
+    df_aq = pd.read_excel(base_path / "旋转钻进_安全系数.xlsx")
+
+    Sk = df_M.iloc[:, 0]
+
+    T = df_T.iloc[:, 1]
+    M = df_M.iloc[:, 1]
+    aq = df_aq.iloc[:, 1]
 
     df = pd.DataFrame({
-        "Sk": x_coords.flatten(),   
-        "T": T_result.flatten(), # 井口轴向力
-        "M": M_reuslt.flatten(), # 井口扭矩
-        "aq": aq_result.flatten() # 安全系数
+        'Sk': Sk,
+        'T': T,
+        'M': M,
+        'aq': aq
     })
+
+
+
+    # df = pd.DataFrame({
+    #     "Sk": x_coords.flatten(),   
+    #     "T": T_result.flatten(), # 井口轴向力
+    #     "M": M_reuslt.flatten(), # 井口扭矩
+    #     "aq": aq_result.flatten() # 安全系数
+    # })
 
     # **转换为 CSV 格式**
     output = io.StringIO()
@@ -129,6 +167,8 @@ async def get_limit_curve_result(limit_curve_dto: LimitCurveDTO ):
         zuanju, 
         limit_curve_dto.js
     )
+
+    
 
     df = pd.DataFrame({
         "Sk": Sk.flatten(),   
