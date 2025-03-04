@@ -46,12 +46,15 @@ export default function ResultPage({ data, loading, waiting}) {
         onZero: false
       },
       position: 'left',
+      max: 4000,
       inverse: true
     }, [
     {
       name: 'ECD (g/cm³)',
       type: 'value',
       offset: 0,
+      min: 1.2,
+      max: 1.3,
       alignTicks: true,
       position: 'top'
     }

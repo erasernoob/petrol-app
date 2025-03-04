@@ -53,6 +53,8 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
+            min: 120,
+            max: 190,
             position: 'left',
             inverse: false
         }, [
@@ -61,6 +63,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             type: 'value',
             offset: 0,
             alignTicks: true,
+            axisLine: {
+                onZero: false
+            },
             position: 'top',
         }
     ], [
@@ -89,6 +94,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             name: '井深（m）',
             type: 'value',
             offset: 0,
+            axisLine: {
+                onZero: false
+            },
             alignTicks: true,
             position: 'top',
         }
@@ -112,11 +120,16 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
                 onZero: false
             },
             position: 'left',
-            inverse: false
+            inverse: false,
+            min: 16,
+            max: 26,
         }, [
         {
             name: '井深（m）',
             type: 'value',
+            axisLine: {
+                onZero: false
+            },
             offset: 0,
             alignTicks: true,
             position: 'top',
@@ -207,6 +220,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             type: 'value',
             offset: 0,
             alignTicks: true,
+            axisLine: {
+                onZero: false
+            },
             position: 'top',
         }
     ], [
@@ -229,8 +245,6 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
-            min: 1,
-            max: 11,
             position: 'left',
             inverse: false
         }, [
@@ -239,6 +253,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             type: 'value',
             offset: 0,
             alignTicks: true,
+            axisLine: {
+                onZero: false
+            },
             position: 'top',
         }
     ], [

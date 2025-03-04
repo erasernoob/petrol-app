@@ -53,7 +53,12 @@ export default function LimitPage() {
 
   const handleSubmit = async (data) => {
     try {
-      data.file_path = file.path
+      if (activeRoute <= 2) {
+        data.file_path = file.path
+      } else {
+        data.file_path1 = fileList.orbit.path
+        data.file_path2 = fileList.drill.path
+      }
       setWaiting(false)
       setLoading(true)
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))

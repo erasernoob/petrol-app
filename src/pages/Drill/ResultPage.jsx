@@ -32,11 +32,13 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
             type: 'value',
+            axisLine: {
+              onZero: false
+            },
             offset: 0,
             alignTicks: true,
             position: 'top',
@@ -202,17 +204,20 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         console.error("当前类型没有对应的 option");
         }
     }, [chartData, curType])
-    const tagList = (Object.entries({}).map(([key, value]) => {
-    return (
+    const tagList = (
       <>
-       <span>{key}</span>
-         <Tag size='large'>{value.toFixed(3)}</Tag>
+       <span style={{marginLeft: '100px'}}>粘滑振动等级（SSI）</span>
+         <Tag size='large'>1.3526</Tag>
+       <span style={{marginLeft: '100px', marginRight: '20px'}}>风险等级</span>
+         <Tag size='large' style={{color: 'orange'}}>中风险</Tag>
+
+
        </>
     )
-   }))
 
   return (
     <>
+      <div style={{display: 'flex', justifyContent: '', alignItems: 'center' , gap: '0px'}}>
       <RadioGroup
         type='button'
         size='large'
@@ -224,6 +229,8 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         options={typeOptions}
       >
       </RadioGroup>
+      {tagList}
+      </div>
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>
           <ReactECharts
@@ -240,7 +247,6 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
             // marginTop: '7px',
             marginLeft: '0px'
           }}>
-            {tagList} 
             {exportButton}
           </div>
         </>
