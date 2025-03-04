@@ -42,6 +42,10 @@ export default function ResultPage({ data, loading, waiting}) {
     {
       type: 'value',
       name: '井深 (m)',
+      axisLine: {
+        onZero: false
+      },
+      position: 'left',
       inverse: true
     }, [
     {

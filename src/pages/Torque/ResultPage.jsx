@@ -32,6 +32,10 @@ export default function ResultPage({handleExport, typeOptions=[], chartData=[], 
         {
             type: 'value',
             name: '井深 (m)',
+            axisLine: {
+              onZero: false
+            },
+            position: 'left',
             inverse: true
         }, [
             {
@@ -49,7 +53,7 @@ export default function ResultPage({handleExport, typeOptions=[], chartData=[], 
             encode: { x: 'T', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 1 },
+            lineStyle: { width: 2 },
             showSymbol: false
         }
     ],)
@@ -57,6 +61,7 @@ export default function ResultPage({handleExport, typeOptions=[], chartData=[], 
         chartData,
         {
             type: 'value',
+            position: 'left',
             name: '井深 (m)',
             inverse: true
         }, [

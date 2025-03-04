@@ -29,16 +29,15 @@ export default function Option(chartData, yAxis, xAxis, series)  {
   }), [chartData])
 }
 
-const getOptionT = (dataSet) => {
-    const minValue = 4;
-    const maxValue = 14;
-    console.log(dataSet)
+export const getOptionT = (dataSet) => {
+    const minValue = -50;
+    const maxValue = 150;
 
     return {
         title: { text: '轴向力分布云图' },
+        animation: true,
         // 自定义 tooltip
         tooltip: {
-
         },
         visualMap: {
             show: true,
@@ -65,6 +64,7 @@ const getOptionT = (dataSet) => {
         },
         series: [
             {
+                name: '轴向力分布',
                 type: 'scatter3D',
                 symbolSize: 6,
                 encode: {
@@ -84,10 +84,9 @@ const getOptionM = (dataSet) => {
     // 设置 visualMap 的 M 值范围（这里使用硬编码的 0 到 14）
     const minValue = 4;
     const maxValue = 14;
-    console.log(dataSet)
-
     return {
         title: { text: '扭矩分布云图' },
+        animation: true,
         // 自定义 tooltip
         tooltip: {
 
@@ -117,6 +116,7 @@ const getOptionM = (dataSet) => {
         },
         series: [
             {
+                name: '扭矩分布',
                 type: 'scatter3D',
                 symbolSize: 6,
                 encode: {
