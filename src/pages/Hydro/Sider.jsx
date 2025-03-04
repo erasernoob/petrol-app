@@ -25,13 +25,19 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
     } else {
       Message.info('文件上传失败,请重新上传')
     }
+  }
 
+  const handleCancel = (id) => {
+    if (id === 1) {
+      setOrbit(false)
+      setFile({name: '', path: ''})
+    }
   }
 
   return (
     <div className='input-page'>
       <div className='file-uploader'>
-        <FileUpLoader orbit={orbit} setOrbit={setOrbit} handleUpload={handleUpload} />
+        <FileUpLoader handleCancel={handleCancel} orbit={orbit} setOrbit={setOrbit} handleUpload={handleUpload} />
           </div>
       <div className='input-form'>
         {form}

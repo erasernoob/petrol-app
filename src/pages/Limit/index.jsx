@@ -22,17 +22,22 @@ const subRoutesOptions = [
   { label: "屈曲临界载荷", value: 4 },
 ];
 
-const formList = [
-  <DynamicForm datas={limit_eye} tabs={tabs[0]} file={""}></DynamicForm>,
-  <DynamicForm datas={limit_hydro} tabs={tabs[1]} file={""}></DynamicForm>,
-  <MyForm datas={limit_mechanism} fileList={[]} />,
-  <MyForm datas={limit_curve} fileList={[]} />,
+export const defaultFileList = {orbit: {name: '', path: ''}, drill: {name: '', path: ''}}
+
+
+
+export default function LimitPage() {
+  const [activeRoute, setActiveRoute] = useState(1);
+  const [fileList, setFileList] = useState(defaultFileList);
+  const [file, setFile] = useState({name: '', path: ''})
+  const formList = [
+  <DynamicForm datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
+  <DynamicForm datas={limit_hydro} tabs={tabs[1]} file={file}></DynamicForm>,
+  <MyForm datas={limit_mechanism} fileList={fileList} />,
+  <MyForm datas={limit_curve} fileList={fileList} />,
 ];
 
-export default function DrillPage() {
-  const [activeRoute, setActiveRoute] = useState(1);
-  const [fileList, setFileList] = useState([{ name: "", path: "" }]);
-  const form = formList[activeRoute - 1];
+
   return (
     <div className="main-content">
       <Card
@@ -44,11 +49,12 @@ export default function DrillPage() {
       >
         <Sider
           fileList={fileList}
+          setFile={setFile}
           setFileList={setFileList}
           subRouteOptions={subRoutesOptions}
           activeRoute={activeRoute}
           setActiveRoute={setActiveRoute}
-          form={form}
+          form={formList[activeRoute - 1]}
         />
       </Card>
       <Card

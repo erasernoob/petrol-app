@@ -5,6 +5,7 @@ import { basename } from "@tauri-apps/api/path";
 import { useState } from "react";
 import FileUploader from "../components/FileUpLoader";
 import MSEResult from "./MSEResult";
+import { defaultFileList } from ".";
 
 const RadioGroup = Radio.Group;
 
@@ -14,6 +15,7 @@ export default function Sider({
   subRouteOptions,
   setActiveRoute,
   fileList,
+  setFile,
   setFileList,
   handleCalculate,
 }) {
@@ -26,8 +28,6 @@ export default function Sider({
     marginTop: activeRoute === 1 ? '0' : '100%',
   }
 
-
-
   const Tabs = (
     <RadioGroup
       type="button"
@@ -37,7 +37,9 @@ export default function Sider({
       onChange={(value) => {
         setActiveRoute(value);
         // 将filelist重置
-        setFileList([])
+        // file重置
+        setFile({name: '', path: ''})
+        setFileList(defaultFileList)
         setOrbit(false)
         setDrillState(false)
         setParams(false)
@@ -46,23 +48,50 @@ export default function Sider({
     ></RadioGroup>
   );
 
-  const handleUpload = async (id) => {
-    const filePath = await open({ multiple: false });
+    const handleUpload = async (id) => {
+    console.log(id)
+    const filePath = await open({ multiple: false })
     if (filePath) {
-      const filename = await basename(filePath);
-      setFileList((prev) => [...prev, { name: filename, path: filePath }]);
-      Message.success(`${filename}导入成功！`);
+      const filename = await basename(filePath)
       if (id === 1) {
-        setOrbit(true);
-      } else if (id === 2) {
-        setDrillState(true);
-      } else if (id === 3) {
-        setParams(true);
+        setFile({name: filename, path: filePath})
+        setFileList(prev => ({...prev, orbit: {name: filename, path: filePath}}))
+      } else if (id == 2) {
+        setFileList((prev) => ({...prev, drill: {name: filename, path: filePath}}))
+      } else if (id == 3) {
+        // 上传参数
+        // 计算参数
+        setFile({name: filename, path: filePath})
       }
-    } else {
-      Message.info("文件上传失败,请重新导入");
+      Message.success(`${filename}导入成功！`)
+      if (id === 1) {
+        setOrbit(true)
+      } else if (id === 2) {
+        (setDrillState(true))
+      } else if (id == 3) {
+        setParams(true)
+      } else {
+        // 重置所有的状态
+      setFileList({orbit: {name: '', path: ''}, drill: {name: '', path: ''}})
+      setFile({name: '', path: ''})
+      Message.info('文件上传失败,请重新导入')
     }
-  };
+  }
+}
+  const handleCancel = (id) => {
+    if (id === 1) {
+      setOrbit(false)
+      setFile({name: '', path: ''})
+      setFileList(prev => ({...prev, orbit: {name: '', path: ''}}))
+    } else if(id === 2) {
+      setDrillState(false)
+      setFileList(prev => ({...prev, drill: {name: '', path: ''}}))
+    } else {
+
+    }
+  }
+
+
 
   return (
     <div className="input-page" style={{ paddingTop: "5px" }}>
@@ -96,6 +125,7 @@ export default function Sider({
             <FileUploader
               orbit={orbit}
               setOrbit={setOrbit}
+              handleCancel={handleCancel}
               setDrillState={setDrillState}
               drillState={activeRoute >= 3 ? drillState : "default"}
               handleUpload={handleUpload}

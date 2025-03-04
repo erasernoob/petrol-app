@@ -5,7 +5,10 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
   const FormItem = Form.Item;
   const [form] = Form.useForm();
   const data = datas.work_condition;
-  console.log(fileList)
+  const handleDisabled = () => {
+    console.log(`Mechanism: ${fileList.orbit.path === "" || fileList.drill.path === ""}`)
+    return fileList.orbit.path === "" || fileList.drill.path === ""
+  }
   return (
     <div className="form-wrapper-custom">
       <Form
@@ -107,7 +110,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
           <Button
             type="primary"
             className="button submit-button"
-            disabled={fileList.orbit.path === "" || fileList.drill.path === ""}
+            disabled={handleDisabled()}
             htmlType="submit"
           >
             计算
