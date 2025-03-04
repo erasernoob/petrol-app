@@ -43,6 +43,7 @@ def get_limit_hydro(drillViration: DrillVibrationDTO):
     # 构造最终的 DataFrame：时间 + 6 列数据
     df = pd.DataFrame({
         'time': time,
+        'SSI': 1.35262176582197,
         'angle_a': angle_a_data,
         'angle_x': angle_x_data,
         'angle_v': angle_v_data,
@@ -50,6 +51,10 @@ def get_limit_hydro(drillViration: DrillVibrationDTO):
         'relativex': relativex,
         'relativey': relativey
     })
+
+    
+
+
 
     
  

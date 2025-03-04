@@ -15,7 +15,7 @@ torque_cache = {}
 @router.post('/limit/eye')
 def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     # 从 DTO 获取参数
-    guiji = pd.read_excel(limit_eye_dto.file_path1).values  
+    guiji = pd.read_excel(limit_eye_dto.file_path).values  
 
     lbmx = limit_eye_dto.lbmx
     pailiang = limit_eye_dto.pailiang
@@ -33,20 +33,21 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     Lzt = limit_eye_dto.Lzt
 
     # 调用 hydro 函数计算结果
-    ECD, Sk, Pgn, Phk = limit_eye_function(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt)
+    # ECD, Sk, Pgn, Phk = limit_eye_function(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt)
 
 
-    base_path = Path("D:/petrol-app/mock/limit")
+    base_path = Path("D:/petrol-app/mock/limit/eye")
         # 读取 Excel 文件
-    ECO = pd.read_excel(base_path / "ECD.xlsx").values.flatten()
+    ECD = pd.read_excel(base_path / "ECD.xlsx").values.flatten()
     Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
 
     # 将数据保存为 CSV 文件
     df = pd.DataFrame({
-        "Sk": Sk.flatten(),
+        "Sk": pd.Series(Sk),
+        "ECD": pd.Series(ECD),
         # "Pgn": Pgn.flatten(),
         # "Phk": Phk.flatten(),
-        "ECD": ECD.flatten()
+        # "ECD": ECD.flatten()
     })
 
     # **转换为 CSV 格式**
@@ -67,9 +68,9 @@ def limit_hydro_function():
 
 @router.post('/limit/hydro')
 def get_limit_hydro(limit_hydro_dto: LimitHydroDTO):
-    Sk, P, Plg = limit_hydro_function(limit_hydro_dto)
+    # Sk, P, Plg = limit_hydro_function(limit_hydro_dto)
 
-    base_path = Path("D:/petrol-app/mock/limit")
+    base_path = Path("D:/petrol-app/mock/limit/hydro")
         # 读取 Excel 文件
     df_P = pd.read_excel(base_path / "总循环压耗.xlsx")
     df_Plg = pd.read_excel(base_path / "立管压力.xlsx")
@@ -78,13 +79,21 @@ def get_limit_hydro(limit_hydro_dto: LimitHydroDTO):
     P = df_P.iloc[:,1]
     Plg = df_Plg.iloc[:,1]
 
-
     # 创建 DataFrame
     df = pd.DataFrame({
-        "P": Sk.flatten(), # 总循环压耗
-        "Plg": Plg.flatten(), # 立管压力
-        "Sk": P.flatten(),
+        "P": P, # 总循环压耗
+        "Plg": Plg, # 立管压力
+        "Sk": Sk,
     })
+
+
+
+    # # 创建 DataFrame
+    # df = pd.DataFrame({
+    #     "P": Sk.flatten(), # 总循环压耗
+    #     "Plg": Plg.flatten(), # 立管压力
+    #     "Sk": P.flatten(),
+    # })
 
     # **转换为 CSV 格式**
     output = io.StringIO()
@@ -103,22 +112,22 @@ async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
     guiji = pd.read_excel(limit_mechanism_dto.file_path1).values  
     zuanju = pd.read_excel(limit_mechanism_dto.file_path2).values  
 
-    x_coords, T_result, M_reuslt, aq_result = limit_mechanism(
-        guiji, zuanju, 
-        limit_mechanism_dto.wc, 
-        limit_mechanism_dto.T0, 
-        limit_mechanism_dto.rhoi, 
-        limit_mechanism_dto.Dw, 
-        limit_mechanism_dto.tgxs, 
-        limit_mechanism_dto.miua11, 
-        limit_mechanism_dto.miua22, 
-        limit_mechanism_dto.qfqd, 
-        limit_mechanism_dto.jsjg, 
-        limit_mechanism_dto.v, 
-        limit_mechanism_dto.omega
-    )
+    # x_coords, T_result, M_reuslt, aq_result = limit_mechanism(
+    #     guiji, zuanju, 
+    #     limit_mechanism_dto.wc, 
+    #     limit_mechanism_dto.T0, 
+    #     limit_mechanism_dto.rhoi, 
+    #     limit_mechanism_dto.Dw, 
+    #     limit_mechanism_dto.tgxs, 
+    #     limit_mechanism_dto.miua11, 
+    #     limit_mechanism_dto.miua22, 
+    #     limit_mechanism_dto.qfqd, 
+    #     limit_mechanism_dto.jsjg, 
+    #     limit_mechanism_dto.v, 
+    #     limit_mechanism_dto.omega
+    # )
     
-    base_path = Path("D:/petrol-app/mock/drill")
+    base_path = Path("D:/petrol-app/mock/limit/mecha")
 
     df_M = pd.read_excel(base_path / "旋转钻进_井口扭矩.xlsx")
     df_T = pd.read_excel(base_path / "旋转钻进_井口轴向力.xlsx")
@@ -158,22 +167,26 @@ async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
 @router.post("/limit/curve")
 async def get_limit_curve_result(limit_curve_dto: LimitCurveDTO ):
     # 读取上传的 Excel 文件
-    guiji = pd.read_excel(limit_curve_dto.file_path1).values  
-    zuanju = pd.read_excel(limit_curve_dto.file_path1).values  
-    Sk, fs, fh = limit_curve_function(
-        guiji, 
-        limit_curve_dto.Holedia, 
-        limit_curve_dto.ml, 
-        zuanju, 
-        limit_curve_dto.js
-    )
+    # guiji = pd.read_excel(limit_curve_dto.file_path1).values  
+    # zuanju = pd.read_excel(limit_curve_dto.file_path1).values  
+    # Sk, fs, fh = limit_curve_function(
+    #     guiji, 
+    #     limit_curve_dto.Holedia, 
+    #     limit_curve_dto.ml, 
+    #     zuanju, 
+    #     limit_curve_dto.js
+    # )
 
-    
+    base_path = Path("D:/petrol-app/mock/limit/curve")
+
+    Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
+    fs = pd.read_excel(base_path / "正弦屈曲临界载荷.xlsx").values.flatten()
+    fh = pd.read_excel(base_path / "螺旋屈曲临界载荷.xlsx").values.flatten()
 
     df = pd.DataFrame({
-        "Sk": Sk.flatten(),   
-        "fs": fs.flatten(), # 正弦
-        "fh (kN)": fh.flatten() # 螺旋
+        "Sk": pd.Series(range(1, 6001)),
+        "fs": pd.Series(fs),
+        "fh": pd.Series(fh),
     })
 
       # **转换为 CSV 格式**
