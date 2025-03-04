@@ -19,9 +19,12 @@ const tabs = [
     '计算参数',
 ]
 
+const typeOptions = ['角位移', '角速度', '角加速度', '钻头扭矩', '粘滑振动相轨迹']
+
 export default function DrillPage() {
     const [activeRoute, setActiveRoute] = useState(1);
     const [loading, setLoading] = useState(false)
+    const [extraData, setExtraData] = useState({})
     const [waiting, setWaiting] = useState(true)
     const [chartData, setChartData] = useState([])
     const [fileList, setFileList] = useState([{ name: '', path: '' }])
@@ -47,10 +50,26 @@ export default function DrillPage() {
 
     const handleExport = () => {
 
+
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (data) => {
+        try {
+            setWaiting(false)
+            setLoading(true)
+            const response = await post('/drill/vibration', JSON.stringify(data))
+            const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
+            setChartData(res)
+            setLoading(false)
+            Message.success('数据获取成功！')
+        } catch (error) {
+          console.log(error)
+            setLoading(false)
+            setWaiting(true)
+            Message.error('计算内部出现错误，请检查')
+        }
     }
+
 
   return (
     <div className="main-content">
@@ -73,7 +92,8 @@ export default function DrillPage() {
           file={file}
           setFile={setFile}
           fileList={fileList}
-          form={activeRoute === 2 ? <DynamicForm datas={drill_vibration} handleSubmit={handleSubmit} tabs={tabs} file={{name: '', path: ''}}/> : 'default'}
+          // 不需要上传文件
+          form={activeRoute === 2 ? <DynamicForm datas={drill_vibration} handleSubmit={handleSubmit} tabs={tabs} file={{name: 'for-vibration', path: ''}}/> : 'default'}
           setFileList={setFileList}
         />
       </Card>
@@ -83,7 +103,7 @@ export default function DrillPage() {
           style={{ flex: "1", marginLeft: "5px" }}
           bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
         >
-          <ResultPage loading={loading} chartData={chartData} waiting={waiting} />
+          <ResultPage typeOptions={typeOptions} loading={loading} chartData={chartData} waiting={waiting} />
         </Card>
       ) : (
         <></>

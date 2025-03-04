@@ -12,9 +12,9 @@ router = APIRouter()
 # FAST API的全局缓存
 hydro_cache = {}
 
-@router.get('/drill/vibration')
+@router.post('/drill/vibration')
 def get_limit_hydro(drillViration: DrillVibrationDTO):
-    SSI, t, AngleDisplacements_bit, AngleVelocities_bit, AngleAcceleration_bit, Tb, relativeAngleDisplacements, relativeAngleVelocities = drillVibration_func()
+    # SSI, t, AngleDisplacements_bit, AngleVelocities_bit, AngleAcceleration_bit, Tb, relativeAngleDisplacements, relativeAngleVelocities = drillVibration_func()
 
     base_path = Path("D:/petrol-app/mock/drill")
 
@@ -89,7 +89,7 @@ def mse_func():
 @router.post('/drill/mse')
 def get_mse(mse_DTO : MSEDTO):
     canshu = pd.read_excel(mse_DTO.file_path).values  
-    MSE, wob, rpm, rop, Depth = mse_func(canshu)
+    # MSE, wob, rpm, rop, Depth = mse_func(canshu)
 
     base_path = Path("D:/petrol-app/mock/drill")
     
