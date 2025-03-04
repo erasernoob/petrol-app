@@ -14,6 +14,9 @@ export default function Sider({
   activeRoute,
   subRouteOptions,
   setActiveRoute,
+  setWaiting,
+  setLoading,
+  setChartData,
   loading,
   waiting,
   handleCalculate,
@@ -41,10 +44,14 @@ export default function Sider({
         setActiveRoute(value);
         // 将filelist重置
         // file重置
-        setFile({name: '', path: ''})
-        setFileList(defaultFileList)
         setOrbit(false)
         setDrillState(false)
+        setWaiting(true)
+        setLoading(false)
+        setChartData([])
+        setFile({name: '', path: ''})
+        setFileList(defaultFileList)
+
         setParams(false)
       }}
       options={subRouteOptions}

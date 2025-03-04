@@ -42,58 +42,6 @@ export default function TorquePage() {
         }
         
     }
-    const optionM  = getOptionM(heatData.map(({E, N, TCS, M}) => ({E, N, TCS: -TCS, M})))
-    const option2 = Option(chartData,
-        {
-            type: 'value',
-            name: '井深 (m)',
-            inverse: true
-        }, [
-            {
-            name: '轴向力 (kN)',
-            type: 'value',
-            offset: 0,
-            alignTicks: true,
-            position: 'top',
-        }
-    ], [
-        {
-            name: '轴向力 (kN)',
-            type: 'line',
-            yAxisIndex: 0,
-            encode: { x: 'T', y: 'Sk' },
-            sampling: 'lttb',
-            smooth: false,
-            lineStyle: { width: 1 },
-            showSymbol: false
-        }
-    ],)
-    const option1 = Option(
-        chartData,
-        {
-            type: 'value',
-            name: '井深 (m)',
-            inverse: true
-        }, [
-        {
-            name: '扭矩 (kN·m） ',
-            type: 'value',
-            position: 'top',
-        },
-    ], [
-        {
-            name: '扭矩 (kN·m）',
-            type: 'line',
-            yAxisIndex: 0,
-            encode: { x: 'M', y: 'Sk' },
-            sampling: 'lttb', // 采用最佳采样算法
-            smooth: true,     // 禁用平滑
-            lineStyle: { width: 2 },
-            showSymbol: false
-        },
-    ],
-    )
-    // setChartOptions([option1, option2, optionM])
 
     return (
         <div className="main-content">
