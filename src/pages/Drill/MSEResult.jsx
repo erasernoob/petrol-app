@@ -156,6 +156,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         <>
 
             {chartData.length > 0 && loading === false && waiting === false ? (
+                <>
                 <div style={{ height: '700px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {
                         chartOptions.map((option) => {
@@ -175,14 +176,19 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
                                         // marginTop: '7px',
                                         marginLeft: '0px'
                                     }}>
-                                        {/* {exportButton} */}
                                     </div>
 
                                 </>)
 
                         })
                     }
-                </div>)
+                </div>
+                <div style={{ display: 'flex', marginBottom: '10px' , alignItems: 'center', justifyContent: 'center' }}>
+                    {exportButton}
+                </div>
+
+                </>
+                )
                  :
                 <div style={{ height: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {waiting == true ? '输入参数开始计算' : <Spin size="30" tip='正在计算中......' />}

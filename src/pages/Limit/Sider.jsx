@@ -4,7 +4,7 @@ import "../style.css";
 import { basename } from "@tauri-apps/api/path";
 import { useState } from "react";
 import FileUploader from "../components/FileUpLoader";
-import MSEResult from "./MSEResult";
+import MSEResult from "../Drill/MSEResult";
 import { defaultFileList } from ".";
 
 const RadioGroup = Radio.Group;
@@ -14,10 +14,13 @@ export default function Sider({
   activeRoute,
   subRouteOptions,
   setActiveRoute,
-  fileList,
+  loading,
+  waiting,
+  handleCalculate,
+  handleExport,
+  chartData,
   setFile,
   setFileList,
-  handleCalculate,
 }) {
   const [orbit, setOrbit] = useState(false);
   const [drillState, setDrillState] = useState(false);
@@ -116,7 +119,7 @@ export default function Sider({
           </Button>
           </div>
           <div className="mse-result-page">
-            <MSEResult />
+            <MSEResult loading={loading} waiting={waiting} handleExport={handleExport} chartData={chartData} />
           </div>
         </>
       ) : (
