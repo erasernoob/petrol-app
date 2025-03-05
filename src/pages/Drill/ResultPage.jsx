@@ -229,7 +229,7 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         options={typeOptions}
       >
       </RadioGroup>
-      {tagList}
+      { chartData.length > 0 && loading === false && waiting === false &&  tagList}
       </div>
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>
