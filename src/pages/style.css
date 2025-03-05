@@ -127,6 +127,11 @@
     height: 100%;
 }
 
+.mse-waiting-page {
+    border: 1px solid var(--color-neutral-3);
+    border-radius: 5px;
+}
+
 /* .button-wrapper {
   position: fixed;
   bottom: calc(2vh);
