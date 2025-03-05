@@ -210,8 +210,6 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
          <Tag size='large'>1.3526</Tag>
        <span style={{marginLeft: '100px', marginRight: '20px'}}>风险等级</span>
          <Tag size='large' style={{color: 'orange'}}>中风险</Tag>
-
-
        </>
     )
 
