@@ -30,7 +30,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
     const option1 = Option(chartData,
         {
             type: 'value',
-            min: 3000,
+            min: 'dataMin',
             name: '井深 (m)',
             axisLine: {
               onZero: false
@@ -63,7 +63,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         {
             type: 'value',
             name: '井深 (m)',
-            min: 3000,
+            min: 'dataMin',
             axisLine: {
               onZero: false
             },
@@ -93,7 +93,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         {
             type: 'value',
             name: '井深 (m)',
-            min: 3000,
+            min: 'dataMin',
             axisLine: {
               onZero: false
             },
@@ -119,12 +119,11 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             showSymbol: false
         }
     ],)
-
     const option4 = Option(chartData,
         {
             type: 'value',
             name: '井深 (m)',
-            min: 3000,
+            min: 'dataMin',
             axisLine: {
               onZero: false
             },
@@ -190,7 +189,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
                 </>
                 )
                  :
-                <div style={{ height: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="mse-waiting-page" style={{ height: '700px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {waiting == true ? '输入参数开始计算' : <Spin size="30" tip='正在计算中......' />}
                 </div>
             })

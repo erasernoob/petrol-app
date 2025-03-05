@@ -5,7 +5,7 @@ import Papa from 'papaparse';
 import ResultPage from "./ResultPage";
 import { drill_vibration } from "../../data/Params";
 import Sider from "../Limit/Sider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { post } from "../../components/axios"
 import { Message } from "@arco-design/web-react";
 
@@ -70,6 +70,11 @@ export default function DrillPage() {
         }
     }
 
+    useEffect(() => {
+      setLoading(false)
+      setWaiting(true)
+      setChartData([])
+    }, [activeRoute])
 
   return (
     <div className="main-content">

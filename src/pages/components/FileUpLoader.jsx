@@ -28,7 +28,7 @@ export default function FileUploader({
       {drillState != "default" &&
         (!drillState ? (
           <Button type="primary" onClick={() => handleUpload(2)}>
-            导入钻具状态
+            导入钻具组合
           </Button>
         ) : (
           <Button type="secondary" onClick={() => handleCancel(2)}>

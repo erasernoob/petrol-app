@@ -97,6 +97,8 @@ export default function LimitPage() {
         <Sider
           fileList={fileList}
           setFile={setFile}
+          setWaiting={setWaiting}
+          setLoading={setLoading}
           setFileList={setFileList}
           subRouteOptions={subRoutesOptions}
           activeRoute={activeRoute}

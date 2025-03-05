@@ -20,16 +20,14 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
-            min: 500,
-            max: 4000,
             position: 'left',
             inverse: true
         }, [
         {
             name: 'ECD（g/cm3）',
             type: 'value',
-            min: 1.21,
-            max: 1.3,
+            min: 'dataMin',
+            // max: 1.35,
             offset: 0,
             alignTicks: true,
             position: 'top',
@@ -53,8 +51,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
-            min: 120,
-            max: 190,
+            min: 'dataMin',
             position: 'left',
             inverse: false
         }, [
@@ -121,7 +118,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             },
             position: 'left',
             inverse: false,
-            min: 16,
+            min: 'dataMin',
             max: 26,
         }, [
         {
@@ -146,7 +143,6 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             showSymbol: false
         }
     ],)
-
     const option7 = Option(chartData,
         {
             type: 'value',
@@ -237,7 +233,6 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             showSymbol: false
         }
     ],)
-
     const option2 = Option(chartData,
         {
             type: 'value',
@@ -275,6 +270,10 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
     const [curType, setCurType] = useState(typeOptions[0])
 
     useEffect(() => {
+        setCurType(typeOptions[0]) 
+    }, [activeRoute])
+
+    useEffect(() => {
         const index = typeOptions.findIndex((item) => curType === item)
         if (activeRoute === 2) {
             if (index === 0) {
@@ -298,8 +297,8 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             }
         }
         if (typeOptions.length === 0) setOption(option1)
-
     }, [chartData, curType, activeRoute])
+
     const tagList = (Object.entries({}).map(([key, value]) => {
         return (
             <>
@@ -308,7 +307,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             </>
         )
     }))
-
+    console.log(curType)
     return (
         <>
             <RadioGroup
@@ -316,6 +315,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
                 size='large'
                 name='chart'
                 value={curType}
+                defaultValue={curType}
                 onChange={(value) => {
                     setCurType(value)
                 }}

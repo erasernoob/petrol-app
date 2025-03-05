@@ -1,8 +1,11 @@
 body {
     margin: 0px;
-}
-
-html, body, #root {
+  }
+  .arco-menu-inner {
+    padding: 2px !important;
+  }
+  
+  html, body, #root {
     /* padding: 20px; */
     margin: 0px;
     padding: 0px;
@@ -18,8 +21,8 @@ html, body, #root {
   font-size: large;
   border-left: 1.5px solid #e8e8e8; /* 可选：分隔线 */
   border-right: 1.5px solid #e8e8e8; /* 可选：分隔线 */
-  padding-left: 10px !important;
-  padding-right: 10px !important;
+  /* padding-left: 10px !important; */
+  /* padding-right: 10px !important; */
   margin-left: 0px !important;
 }
 .arco-menu-selected {
@@ -29,20 +32,176 @@ html, body, #root {
 .arco-menu-overflow-wrap {
   overflow: hidden;
   margin-top: 5px;
-  margin-bottom: 5px;
-
 }
 
 
-
-.arco-menu-inner {
-  padding: 2px !important;
+/* 主题色定义 */
+:root {
+  --primary-blue: #1A3C6E !important; /* 深石油蓝 */
+  --secondary-gray: #F5F5F5 !important; /* 浅灰背景 */
+  --accent-orange: #FFA726 !important; /* 警示点缀色 */
+  --font-color: #333 !important; /* 默认字体颜色 */
+  --font-weight-bold: 500 !important;
 }
 
+/* 基础按钮样式 */
+.arco-btn {
+  border-radius: 4px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  font-weight: var(--font-weight-bold) !important;
+}
+
+/* 主按钮 */
+.arco-btn-primary {
+  background: var(--primary-blue) !important;
+  border-color: var(--primary-blue) !important;
+  box-shadow: 0 2px 8px rgba(26, 60, 110, 0.2) !important;
+}
+
+.arco-btn-primary:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(26, 60, 110, 0.3) !important;
+}
+
+.arco-btn-primary:active {
+  transform: translateY(1px) !important;
+  background: #143258 !important;
+}
+
+/* 输入框样式 */
+.arco-input {
+  border-radius: 3px !important;
+  border: 1.4px solid #E0E0E0 !important;
+  background: var(--secondary-gray) !important;
+  padding: 8px 12px !important;
+  transition: all 0.3s ease !important;
+  font-size: 14px !important;
+  color: var(--font-color) !important;
+}
+
+.arco-input:hover {
+  border-color: var(--primary-blue) !important;
+}
+
+.arco-input:focus {
+  border-color: var(--primary-blue) !important;
+  box-shadow: 0 0 0 2px rgba(26, 60, 110, 0.2) !important;
+}
+
+/* 下拉选择框 */
+.arco-select-view {
+  border-radius: 6px !important;
+  border: 2px solid #E0E0E0 !important;
+  background: var(--secondary-gray) !important;
+}
+
+/* 滑块组件 */
+.arco-slider-bar {
+  background-color: var(--primary-blue) !important;
+}
+
+.arco-slider-button {
+  border: 2px solid var(--primary-blue) !important;
+}
+
+/* Tabs 选项卡 */
+.arco-tabs-nav {
+  border-bottom: 2px solid var(--primary-blue) !important;
+}
+
+.arco-tabs-tab {
+  color: var(--font-color) !important;
+  font-weight: var(--font-weight-bold) !important;
+  padding: 10px 16px !important;
+}
+
+.arco-tabs-tab-active {
+  color: var(--primary-blue) !important;
+  border-bottom: 2px solid var(--primary-blue) !important;
+}
+
+/* 单选按钮组 */
+.arco-radio-group {
+  border-radius: 8px !important;
+  border: 0.5px solid #E0E0E0 !important;
+  background: var(--secondary-gray) !important;
+  /* padding: 6px !important; */
+}
+
+.arco-radio {
+  font-weight: var(--font-weight-bold) !important;
+  color: var(--font-color) !important;
+}
+
+.arco-radio-checked {
+  color: var(--primary-blue) !important;
+}
+
+.arco-radio-checked .arco-radio-icon {
+  border-color: var(--primary-blue) !important;
+  background: var(--primary-blue) !important;
+}
+
+/* 菜单（Menu） */
+.arco-menu {
+  background: var(--secondary-gray) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+.arco-menu-item {
+  color: var(--font-color) !important;
+  font-weight: var(--font-weight-bold) !important;
+  padding: 5px 10px !important;
+  transition: all 0.3s ease !important;
+  border-radius: 6px !important;
+}
+
+.arco-menu-item:hover {
+  background: rgba(26, 60, 110, 0.1) !important;
+}
+
+.arco-menu-item-active {
+  background: var(--primary-blue) !important;
+  color: #fff !important;
+}
+
+.arco-menu-item-active:hover {
+  background: #143258 !important;
+}
+
+.arco-menu-submenu-title:hover {
+  color: var(--primary-blue) !important;
+}
+
+/* 工业风格分割线 */
+.arco-divider {
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+/* 卡片容器 */
+.arco-card {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  border: 1px solid #E0E0E0 !important;
+}
+
+/* 统一字体样式 */
 body {
-  /* background-color: var(--color-bg-1); */
-  /* color: var(--color-text-1); */
-  /* color-scheme: dark;  */
+  font-family: "Arial", sans-serif !important;
+  font-size: 14px !important;
+  color: var(--font-color) !important;
+}
+
+/* 状态提示色 */
+.success-state {
+  color: #4CAF50 !important;
+}
+.warning-state {
+  color: var(--accent-orange) !important;
+}
+.error-state {
+  color: #D32F2F !important;
 }
 
 

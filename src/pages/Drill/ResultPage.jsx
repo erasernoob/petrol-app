@@ -183,11 +183,36 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         }
     ],)
 
-
-
     const [option, setOption] = useState(option1)
     const [curType, setCurType] = useState(typeOptions[0])
-
+    const [SSI, setSSI] = useState(0)
+    const [riskLevel, setRiskLevel] = useState({level: '', color: ''})
+    const handleRiskLevel = () => {
+      let res = {level: '', color: ''}
+      switch (true) {
+        case SSI < 0.5:
+          res = {level: '安全', color: 'green'}
+          break;
+        case SSI < 1.0:
+          res = {level: '低风险', color: 'yellow'}
+          break;
+        case SSI < 1.5:
+          res = {level: '中风险', color: 'orange'}
+          break;
+        case SSI >= 1.5:
+          res = {level: '高风险', color: 'red'}
+          break;
+        default:
+          res = {level: '', color: ''}
+          break;
+      }
+      console.log(res)
+      setRiskLevel(res)
+    }
+    useEffect(() => {
+      handleRiskLevel()
+    }, [SSI]) 
+    
     useEffect(() => {
         const index = typeOptions.findIndex((item) => curType === item)
         if (index === 0) {
@@ -203,15 +228,17 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         } else {
         console.error("当前类型没有对应的 option");
         }
+        if (chartData.length !== 0) {
+          setSSI((chartData[0].SSI).toFixed(3))
+        }
     }, [chartData, curType])
+    console.log(riskLevel)
     const tagList = (
       <>
        <span style={{marginLeft: '100px'}}>粘滑振动等级（SSI）</span>
-         <Tag size='large'>1.3526</Tag>
+         <Tag size='large'>{SSI}</Tag>
        <span style={{marginLeft: '100px', marginRight: '20px'}}>风险等级</span>
-         <Tag size='large' style={{color: 'orange'}}>中风险</Tag>
-
-
+         <Tag size='large' style={{color: riskLevel.color }}>{riskLevel.level}</Tag>
        </>
     )
 
@@ -229,7 +256,7 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         options={typeOptions}
       >
       </RadioGroup>
-      {tagList}
+      { chartData.length > 0 && loading === false && waiting === false &&  tagList}
       </div>
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>
