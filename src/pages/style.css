@@ -27,35 +27,48 @@
 }
 
 .custom-tabsPane {
-    overflow-y: auto;
     height: 100%;
     padding-top: 20px;
+    color: var(--font-color) !important;
 }
 
 .arco-tabs-content-inner {
     height: 100%;
+    color: var(--font-color) !important;
 }
 
 .arco-tabs-pane {
     border-bottom: 0px !important;
+    color: var(--font-color) !important;
 }
 
+/* 选项卡标题 */
 .arco-tabs-header-title {
-  padding-left: 4px !important;
-  padding-right: 4px !important;
-  writing-mode: vertical-rl;
-  white-space: nowrap;
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+    writing-mode: vertical-rl;
+    white-space: nowrap;
+    color: var(--font-color) !important;
+    font-weight: var(--font-weight-bold) !important;
 }
 
+/* 选项卡内容区域 */
 .arco-tabs-content-vertical {
     border-bottom: 0px !important;
+    color: var(--font-color) !important;
 }
 
-
-
+/* 选项卡整体 */
 .custom-tabs {
     height: 100%;
+    color: var(--font-color) !important;
 }
+
+.arco-tabs-header-title-active {
+    background-color: rgb(229,230,235) !important;
+
+}
+
 
 
 .reset-button {
