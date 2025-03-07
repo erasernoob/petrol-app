@@ -172,7 +172,7 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         }
     ], [
         {
-            name: '粘滑振动相轨迹',
+            name: '相轨迹',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'relativex', y: 'relativey' },
