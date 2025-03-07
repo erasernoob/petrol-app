@@ -25,7 +25,18 @@ export default function Option(chartData, yAxis, xAxis, series)  {
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'cross' }
-    }
+    },
+    legend: {
+      show: true, // 显示图例
+      orient: 'vertical', // 图例方向（可选 'vertical'）
+      left: 'left', // 图例位置
+      top: 'bottom',
+      textStyle: {
+        fontSize: 12,
+        color: '#333' // 图例文本颜色
+      }
+  }
+
   }), [chartData])
 }
 
