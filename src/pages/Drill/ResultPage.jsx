@@ -228,7 +228,7 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         } else {
         console.error("当前类型没有对应的 option");
         }
-        if (chartData.length !== 0) {
+        if (chartData.length !== 0 && chartData[0].SSI) {
           setSSI((chartData[0].SSI).toFixed(3))
         }
     }, [chartData, curType])

@@ -40,7 +40,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         }, [
             {
             name: 'MSE (MPa)',
-            min: 0,
+            nameLocation: 'center',
+            nameGap: 25, // 轴名称与坐标轴的距离
+            min: 'dataMin',
             max: 300,
             type: 'value',
             offset: 0,
@@ -72,6 +74,8 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         }, [
             {
             name: '钻压 (kN)',
+            nameLocation: 'center',
+            nameGap: 25, // 轴名称与坐标轴的距离
             type: 'value',
             offset: 0,
             alignTicks: true,
@@ -101,7 +105,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             inverse: true
         }, [
             {
-            name: '钻速 (RPM)',
+            name: '转速 (RPM)',
+            nameLocation: 'center',
+            nameGap: 25, // 轴名称与坐标轴的距离
             type: 'value',
             offset: 0,
             alignTicks: true,
@@ -109,7 +115,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         }
     ], [
         {
-            name: '钻速 (RPM)',
+            name: '转速 (RPM)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rpm', y: 'Sk' },
@@ -131,7 +137,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             inverse: true
         }, [
             {
-            name: '机械钻速 (m/h)',
+            name: '机械转速 (m/h)',
+            nameLocation: 'center',
+            nameGap: 25, // 轴名称与坐标轴的距离
             type: 'value',
             offset: 0,
             alignTicks: true,
@@ -139,7 +147,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
         }
     ], [
         {
-            name: '机械钻速 (m/h)',
+            name: '机械转速 (m/h)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rop', y: 'Sk' },
@@ -156,7 +164,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
 
             {chartData.length > 0 && loading === false && waiting === false ? (
                 <>
-                <div style={{ height: '700px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ height: '72vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
                     {
                         chartOptions.map((option) => {
                             return (
@@ -178,21 +186,20 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
                                     </div>
 
                                 </>)
-
                         })
                     }
                 </div>
-                <div style={{ display: 'flex', marginBottom: '10px' , alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', marginTop: '10px' , alignItems: 'center', justifyContent: 'center' }}>
                     {exportButton}
                 </div>
 
                 </>
                 )
                  :
-                <div className="mse-waiting-page" style={{ height: '700px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="mse-waiting-page" style={{ height: '900px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {waiting == true ? '输入参数开始计算' : <Spin size="30" tip='正在计算中......' />}
                 </div>
-            })
+            }
 
         </>
     )
