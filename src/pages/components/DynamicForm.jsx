@@ -16,16 +16,15 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
       <Form
         style={{
           height: "100%",
+          textAlign: 'left'
         }}
         layout="horizontal"
-        labelCol={{flex: '160px'}}
-        wrapperCol={{flex: '1',}}
         size="large"
         form={form}
         onSubmit={async (data) => {
           handleSubmit(data);
         }}
-      >
+        >
         <Tabs
           type="card"
           tabPosition="left"
@@ -33,25 +32,28 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           size="large"
           lazyload={false}
           onChange={() => setTabTime(() => tabTime + 1)}
-        >
+          >
           {datas.map((category, index) => {
             const [categoryKey, data] = Object.entries(category)[0];
             return (
               <TabPane
-                title={tabsName[index]}
-                key={categoryKey}
-                className="custom-tabsPane"
+              title={tabsName[index]}
+              key={categoryKey}
+              className="custom-tabsPane"
               >
                 {Object.entries(data).map(([key, field]) => (
                   <FormItem
-                    key={key}
-                    label={field.name}
-                    field={key}
-                    // TODO: 测试用
-                    initialValue={field.value}
-                    rules={[
-                      { required: true, message: `${field.name} 不能为空` },
-                    ]}
+                  key={key}
+                  label={field.name}
+                  labelCol={ tabsName[index] === '钻井液' || tabsName[index] === '地面管汇' ? {span: '11', offset: ''} : {span: '8'}}
+                  wrapperCol={{span: '10',}}
+                  field={key}
+                  // TODO: 测试用
+                  // labelCol={{flex: "1" ,offset: ""}}
+                  initialValue={field.value}
+                  rules={[
+                    { required: true, message: `${field.name} 不能为空` },
+                  ]}
                   >
                     {key === "lbmx" ? (
                       <Select

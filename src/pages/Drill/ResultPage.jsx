@@ -172,7 +172,7 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         }
     ], [
         {
-            name: '粘滑振动相轨迹',
+            name: '相轨迹',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'relativex', y: 'relativey' },
@@ -228,7 +228,7 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
         } else {
         console.error("当前类型没有对应的 option");
         }
-        if (chartData.length !== 0) {
+        if (chartData.length !== 0 && chartData[0].SSI) {
           setSSI((chartData[0].SSI).toFixed(3))
         }
     }, [chartData, curType])

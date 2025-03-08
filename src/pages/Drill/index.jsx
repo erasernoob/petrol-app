@@ -11,7 +11,7 @@ import { Message } from "@arco-design/web-react";
 
 const subRoutesOptions = [
   { label: "MSE", value: 1 },
-  { label: "黏滑振动", value: 2 },
+  { label: "粘滑振动", value: 2 },
 ];
 const tabs = [
     '基本钻具参数',
@@ -19,7 +19,7 @@ const tabs = [
     '计算参数',
 ]
 
-const typeOptions = ['角位移', '角速度', '角加速度', '钻头扭矩', '粘滑振动相轨迹']
+const typeOptions = ['角位移', '角速度', '角加速度', '钻头扭矩', '相轨迹']
 
 export default function DrillPage() {
     const [activeRoute, setActiveRoute] = useState(1);

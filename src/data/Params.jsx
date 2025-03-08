@@ -128,6 +128,14 @@ const limit_eye = [
       taof: { name: "屈服值 (Pa)", value: 14 },
     },
   },
+  {
+    rock_cuttings: {
+      // (0=不考虑, 1=考虑)
+      yx: { name: "是否考虑岩屑 ", value: 0 },
+      yxmd: { name: "岩屑密度 (kg/m³)", value: 2500 },
+      H: { name: "岩屑床高度 (%)", value: 10 },
+    },
+  },
 ];
 
 const limit_hydro = [
@@ -193,6 +201,7 @@ const limit_hydro = [
   },
   {
     rock_cuttings: {
+      yx: { name: "是否考虑岩屑 ", value: 0 },
       yxmd: { name: "岩屑密度 (kg/m³)", value: 2500 },
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
