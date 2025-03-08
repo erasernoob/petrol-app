@@ -14,7 +14,7 @@ import {
 import MyForm from "../Torque/MyForm";
 
 const tabs = [
-  ["基本参数", "钻井液"],
+  ["基本参数", "钻井液", "岩屑床"],
   ["基本参数", "钻井液", "钻头", "钻杆接头", "地面管汇", "岩屑床"],
 ];
 const subRoutesOptions = [
