@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 import pandas as pd
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
@@ -308,6 +309,7 @@ class StickSlipModel:
         print(f'v: {self.v:.4f}, WOB: {self.WOB:.1f}, SSI: {SSI:.4f}, 风险等级: {riskLevel}')
         
         # 返回处理后的结果
+        # 修改了参数名称对应为前端的参数名称     
         results = {
             'time': t * 0.1,  # 转换时间单位为秒
             'angel_x': AngleDisplacements_bit,
@@ -321,35 +323,49 @@ class StickSlipModel:
         
         return results
 
+    def get_download_folder(self):
+        """ 获取当前操作系统的下载文件夹路径 """
+        if os.name == 'nt':  # Windows
+            return Path(os.environ['USERPROFILE']) / 'Downloads'
+        elif os.name == 'posix':  # macOS/Linux
+            return Path.home() / 'Downloads'
+        else:
+            raise Exception("Unsupported OS")
+
     def save_results(self, results):
+
+        download_folder = self.get_download_folder()
         # 创建输出目录
-        if not os.path.exists('output'):
-            os.makedirs('output')
-            
+        output_folder = download_folder / 'output'
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+    
         # 输出角位移数据
-        data3 = np.column_stack((results['t'], results['AngleDisplacements_bit']))
-        pd.DataFrame(data3).to_excel('output/角位移.xlsx', header=False, index=False)
-        
+        data3 = np.column_stack((results['time'], results['angel_x']))
+        pd.DataFrame(data3).to_excel(output_folder / '角位移.xlsx', header=False, index=False)
+
         # 输出角速度数据
-        data2 = np.column_stack((results['t'], results['AngleVelocities_bit']))
-        pd.DataFrame(data2).to_excel('output/角速度.xlsx', header=False, index=False)
-        
+        data2 = np.column_stack((results['time'], results['angle_v']))
+        pd.DataFrame(data2).to_excel(output_folder / '角速度.xlsx', header=False, index=False)
+
         # 输出角加速度数据
-        data1 = np.column_stack((results['t'], results['AngleAcceleration_bit']))
-        pd.DataFrame(data1).to_excel('output/角加速度.xlsx', header=False, index=False)
-        
+        data1 = np.column_stack((results['time'], results['angle_a']))
+        pd.DataFrame(data1).to_excel(output_folder / '角加速度.xlsx', header=False, index=False)
+
         # 输出钻头扭矩数据
-        data4 = np.column_stack((results['t'], results['Tb']))
-        pd.DataFrame(data4).to_excel('output/钻头扭矩.xlsx', header=False, index=False)
-        
+        data4 = np.column_stack((results['time'], results['drill_m']))
+        pd.DataFrame(data4).to_excel(output_folder / '钻头扭矩.xlsx', header=False, index=False)
+
         # 输出钻头粘滑振动相轨迹数据
-        data5 = np.column_stack((results['relativeAngleDisplacements'], results['relativeAngleVelocities']))
-        pd.DataFrame(data5).to_excel('output/钻头粘滑振动相轨迹.xlsx', header=False, index=False)
+        data5 = np.column_stack((results['relativex'], results['relativey']))
+        pd.DataFrame(data5).to_excel(output_folder / '钻头粘滑振动相轨迹.xlsx', header=False, index=False)
+    
+
         
-        # 保存SSI值和风险等级
-        with open('output/SSI分析结果.txt', 'w') as f:
-            f.write(f'SSI: {results["SSI"]:.4f}\n')
-            f.write(f'风险等级: {results["riskLevel"]}\n')
+        # # 保存SSI值和风险等级
+        # with open(output_folder / 'SSI分析结果.txt', 'w') as f:
+        #     f.write(f'SSI: {results["SSI"]:.4f}\n')
+        #     f.write(f'风险等级: {results["riskLevel"]}\n')
 
     def plot_results(self, results):
         # 输出角位移图

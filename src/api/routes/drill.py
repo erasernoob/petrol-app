@@ -25,6 +25,9 @@ def get_limit_hydro(drillVirationDto: DrillVibrationDTO):
         v = pd.Series(v)
     df = pd.DataFrame(results)
 
+    # 保存excel文件
+    model.save_results(results)
+
     # **转换为 CSV 格式**
     output = io.StringIO()
     df.to_csv(output, index=False, encoding="utf-8")
