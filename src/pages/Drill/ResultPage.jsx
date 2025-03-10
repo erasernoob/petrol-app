@@ -52,7 +52,6 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
@@ -84,7 +83,6 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
@@ -116,7 +114,6 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
