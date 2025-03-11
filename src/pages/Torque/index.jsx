@@ -24,6 +24,11 @@ export default function TorquePage() {
             // console.log(fileList)
             setWaiting(false)
             setLoading(true)
+            // Get rid of the 422 Unprocessable Entity in backend
+            if (data.wc != 1 && data.wc != 5) {
+                data.v = 0
+                data.omega = 0
+            }
             const response = await post('/torque', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
             // TODO: DEV FIX CHARTDATA
