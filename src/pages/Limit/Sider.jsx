@@ -113,6 +113,7 @@ export default function Sider({
             <FileUploader
               params={params}
               setParams={setParams}
+              handleCancel={handleCancel}
               handleUpload={handleUpload}
             ></FileUploader>
           <Button
