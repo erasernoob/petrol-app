@@ -43,12 +43,12 @@ class TorqueDTO(BaseModel):
     v: float  # 钻进速度 (m/s)
     omega: float  # 转速 (rad/s)
     T0: float  # 钻压 (N)
-    rhoi: float  # 钻井液密度 (kg/m³)
+    rhoi: int  # 钻井液密度 (kg/m³)
     Dw: float  # 井眼直径 (m)
-    tgxs: float  # 套管下深 (m)
+    tgxs: int  # 套管下深 (m)
     miua11: float  # 套管段摩阻系数
     miua22: float  # 裸眼段摩阻系数
-    js: float  # 计算井深 (m)
+    js: int  # 计算井深 (m)
 
 class LimitEyeDTO(BaseModel):
     file_path: str
