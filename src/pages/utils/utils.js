@@ -22,4 +22,15 @@ const saveData = async (data=[], name) => {
   }
 }
 
-export { saveData }
+// 直接打开下载文件夹
+const save2Data = async (data=[], name) => {
+  if (true) {
+    setTimeout(async () => {
+      Message.success(`数据导出成功！`)
+      const downloadPath = await path.downloadDir()
+      // 打开下载文件夹
+      await open(await path.join(downloadPath, ''));
+    }, 200)
+  }
+}
+export { saveData, save2Data }

@@ -6,23 +6,12 @@ import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
 import Option from '../option'
-import { saveData } from '../utils/utils'
+import { save2Data, saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ handleExport, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
+export default function ResultPage({ handleExport = save2Data, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    // 导出数据函数
-    // const handleExport = async () => {
-    //   const drillData = chartData.map((value) => {
-    //     return value.drillPressure
-    //   })
-    //   const annularData = chartData.map(value => {
-    //     return value.annularPressure
-    //   })
-    //   await saveData(drillData, '钻柱循环压力表.xlsx')
-    //   saveData(annularData, '环空循环压力表.xlsx')
-    // }
     const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
     const option1 = Option(chartData,
         {
@@ -63,7 +52,6 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
@@ -95,7 +83,6 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
@@ -127,7 +114,6 @@ export default function ResultPage({ handleExport, typeOptions = [], chartOption
               onZero: false
             },
             position: 'left',
-            inverse: true
         }, [
             {
             name: '时间 (s)',
