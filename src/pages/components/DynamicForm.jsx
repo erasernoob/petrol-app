@@ -45,7 +45,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                   <FormItem
                   key={key}
                   label={field.name}
-                  labelCol={ tabsName[index] === '钻井液' || tabsName[index] === '地面管汇' ? {span: '11', offset: ''} : {span: '8'}}
+                  labelCol={ tabsName[index] === '钻井液' || tabsName[index] === '地面管汇' ? {span: '11', offset: ''} : {span: '9'}}
                   wrapperCol={{span: '10',}}
                   field={key}
                   // TODO: 测试用

@@ -31,6 +31,7 @@
     height: 100%;
     padding-top: 20px;
     color: var(--font-color) !important;
+    overflow-y: auto;
 }
 
 .arco-tabs-content-inner {
