@@ -218,7 +218,7 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
           setSSI((chartData[0].SSI).toFixed(3))
         }
     }, [chartData, curType])
-    console.log(riskLevel)
+
     const tagList = (
       <>
        <span style={{marginLeft: '100px'}}>粘滑振动等级（SSI）</span>
