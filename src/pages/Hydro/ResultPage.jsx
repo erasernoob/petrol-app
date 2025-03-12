@@ -5,120 +5,107 @@ import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
 import Option from '../option'
 import { Spin } from '@arco-design/web-react'
-import { saveData } from '../utils/utils'
+import { save2Data, saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ data, loading, waiting}) {
-  const { hydroData } = useSelector(state => state.data)
-  // 数据处理（含性能优化）
-  const chartData = useMemo(() => {
-    return hydroData
-      .map(item => ({
-        depth: item["井深 (m)"],
-        // TODO: for test 
-        drillPressure: item["钻柱压力 (Pgn, MPa)"] < 0 ? 0 : item['钻柱压力 (Pgn, MPa)'],
-        annularPressure: item["环空压力 (Phk, MPa)"] < 0 ? 0 : item["环空压力 (Phk, MPa)"],
-        ecd: item["ECD (g/cm³)"]
-      }))
-    // 数据抽样（每5个点取1个）
-  }, [hydroData])
-  // 导出数据函数
-  const handleExport = async () => {
-    const drillData = chartData.map((value) => {
-      return value.drillPressure
-    })
-    const annularData = chartData.map(value => {
-      return value.annularPressure
-    })
-    await saveData(drillData, '钻柱循环压力表.xlsx')
-    saveData(annularData, '环空循环压力表.xlsx')
-  }
+export default function ResultPage({chartData=[], data, loading, waiting}) {
+
+  const handleExport = save2Data
+
   const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
-  console.log(hydroData)
 
-
-  const option2 = Option(chartData,
-    {
-      type: 'value',
-      name: '井深 (m)',
-      axisLine: {
-        onZero: false
-      },
+    // 使用 useMemo 让 option1 和 option2 在 chartData 变化时重新计算
+  const option1 = useMemo(() => Option(
+    chartData,
+    { type: 'value', name: '井深 (m)', inverse: true, 
+      axisLine: { onZero: false },
       position: 'left',
-      inverse: true
-    }, [
-    {
-      name: 'ECD (g/cm³)',
-      type: 'value',
-      offset: 0,
-      min: 'dataMin',
-      alignTicks: true,
-      position: 'top'
-    }
-  ], [
-    {
-      name: 'ECD',
-      type: 'line',
-      yAxisIndex: 0,
-      encode: { x: 'ecd', y: 'depth' },
-      sampling: 'lttb',
-      smooth: false,
-      lineStyle: { width: 1 },
-      showSymbol: false
-    }
-  ],)
+    },
+    [
+      {
+        name: '压力 (MPa)',
+        type: 'value',
+        position: 'top',
+        axisLabel: {
+          formatter: (value) => (value === 0 ? '' : value)
+        }
+      },
+    ],
+    [
+      {
+        name: '钻柱压力',
+        type: 'line',
+        yAxisIndex: 0,
+        encode: { x: 'drillPressure', y: 'depth' },
+        sampling: 'lttb',
+        smooth: true,
+        lineStyle: { width: 2 },
+        showSymbol: false
+      },
+      {
+        name: '环空压力',
+        type: 'line',
+        yAxisIndex: 0,
+        encode: { x: 'annularPressure', y: 'depth' },
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 2 },
+        showSymbol: false
+      },
+    ]
+  ), [chartData]); // 依赖于 chartData
 
-  const option1 = Option(
+  const option2 = useMemo(() => Option(
     chartData,
     {
       type: 'value',
       name: '井深 (m)',
+      axisLine: { onZero: false },
+      position: 'left',
       inverse: true
-    }, [
-    {
-      name: '压力 (MPa)',
-      type: 'value',
-      position: 'top',
-      axisLabel: {
-        formatter: function(value) {
-          return value == 0 ? '' : value
-        }
+    },
+    [
+      {
+        name: 'ECD (g/cm³)',
+        type: 'value',
+        offset: 0,
+        axisLine: {
+          onZero: false
+        },
+        min: 'dataMin',
+        offset: 0,
+        alignTicks: true,
+        position: 'top'
       }
-    },
-  ], [
-    {
-      name: '钻柱压力',
-      type: 'line',
-      yAxisIndex: 0,
-      encode: { x: 'drillPressure', y: 'depth' },
-      sampling: 'lttb', // 采用最佳采样算法
-      smooth: true,     // 禁用平滑
-      lineStyle: { width: 2 },
-      showSymbol: false
-    },
-    {
-      name: '环空压力',
-      type: 'line',
-      yAxisIndex: 0,
-      encode: { x: 'annularPressure', y: 'depth' },
-      sampling: 'lttb',
-      smooth: false,
-      lineStyle: { width: 2 },
-      showSymbol: false
-    },
-  ],
-  )
+    ],
+    [
+      {
+        name: 'ECD',
+        type: 'line',
+        yAxisIndex: 0,
+        encode: { x: 'ecd', y: 'depth' },
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 1 },
+        showSymbol: false
+      }
+    ]
+  ), [chartData]); // 依赖于 chartData
+  console.log(chartData)
 
-  const [option, setOption] = useState(option1)
+
+
+  const [option, setOption] = useState({})
   const [curValue, setCurValue] = useState('循环压力')
 
   useEffect(() => {
-    if (curValue === '循环压力') {
-      setOption(option1)
-    } else {
-      setOption(option2)
-    }
+  const newOption = curValue === '循环压力' ? option1 : option2
+  // 只有 option 真正发生变化时才更新
+  if (JSON.stringify(option) !== JSON.stringify(newOption)) {
+    setOption(newOption)
+  }
+
   }, [chartData, curValue])
 
   const tagList = (Object.entries(data).map(([key, value]) => {

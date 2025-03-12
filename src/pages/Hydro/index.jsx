@@ -13,11 +13,11 @@ import { Message } from "@arco-design/web-react";
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 export default function HydroPage() {
-    const dispatch = useDispatch()
     const [file, setFile] = useState({ name: '', path: '' })
     const [loading, setLoading] = useState(false)
     // 等待开始计算
     const [waiting, setWaiting] = useState(true)
+    const [chartData, setChartData] = useState([])
     const [extraData, setExtraData] = useState({})
     const handleSubmit = async (data) => {
         if (!file.path) return
@@ -27,7 +27,15 @@ export default function HydroPage() {
             setLoading(true)
             const response = await post('/hydro', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true })
-            dispatch(setHydro(res.data))
+
+            setChartData(res.data.map(item => ({
+                depth: item["井深 (m)"],
+                // TODO: for test 
+                drillPressure: item['钻柱压力 (Pgn, MPa)'],
+                annularPressure: item["环空压力 (Phk, MPa)"],
+                ecd: item["ECD (g/cm³)"]
+            })))
+
             // 第二次请求
             const values = await post('/hydro/data')
             setExtraData(values)
@@ -36,6 +44,7 @@ export default function HydroPage() {
         } catch (error) {
             setLoading(false)
             setWaiting(true)
+            console.log(error)
             Message.error('计算内部出现错误，请检查')
         }
     }
@@ -54,10 +63,10 @@ export default function HydroPage() {
             </Card>
             <Card
                 title="计算结果"
-                style={{ flex: '1', marginLeft: '5px', height:'100%' }}
+                style={{ flex: '1', marginLeft: '5px', height: '100%' }}
                 bodyStyle={{ padding: '10px', height: '100%', flex: 1 }}
             >
-                <ResultPage waiting={waiting} data={extraData} loading={loading} />
+                <ResultPage waiting={waiting} data={extraData} loading={loading} chartData={chartData} />
             </Card>
         </div>
     )
