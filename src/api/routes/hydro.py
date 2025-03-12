@@ -2,6 +2,7 @@
 from fastapi import Response
 import io
 from fastapi import APIRouter
+from service import hydra
 import pandas as pd
 from pathlib import Path
 from entity.DTO import HydroDTO
@@ -21,11 +22,10 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
 
     # 读取 Excel 文件
     # TODO: change this to upload the file
-    guiji = pd.read_excel(hydro_dto.file_path).values  
-    # guiji = pd.read_excel('/home/erasernoob/petrol-app/app_v16/水力学/KL16-1-A25井眼轨迹.xlsx').values
+    guiji = pd.read_excel(hydro_dto.file_path, header=None).values  
 
     # 计算结果
-    P, Plg, Pdm, Pgn, Phk, ECD, Pgnyx, Phkyx, ECDyx, Sk, dertaPzt = Hydro.Hydro(
+    Sk, Pgn, Phk, ECD, P, Plg, Pdm, dertaPzt = hydra.main(
         guiji, hydro_dto.lbmx, hydro_dto.pailiang, hydro_dto.fluidden, 
         hydro_dto.n, hydro_dto.K, hydro_dto.miu, hydro_dto.taof, 
         hydro_dto.Dw, hydro_dto.A1, hydro_dto.C1, hydro_dto.A2, 
@@ -36,30 +36,6 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
         hydro_dto.d4, hydro_dto.Lp, hydro_dto.Li, hydro_dto.rzzjt, 
         hydro_dto.yxmd, hydro_dto.H, hydro_dto.yx
     )
-
-
-    base_path = Path("D:/petrol-app/mock/hydro")
-        # 读取 Excel 文件
-    ECD = pd.read_excel(base_path / "ECD.xlsx").values
-    # df_Plg = pd.read_excel(base_path / "立管压力.xlsx")
-
-    # Sk = df_P.iloc[:,0]
-    # P = df_P.iloc[:,1]
-    # Plg = df_Plg.iloc[:,1]
-
-    # 创建 DataFrame
-    # df = pd.DataFrame({
-        # "P": P, # 总循环压耗
-        # "Plg": Plg, # 立管压力
-        # "Sk": Sk,
-    # })
-
-    # df = pd.DataFrame({
-    #     "井深 (m)": Sk.flatten(),  
-    #     "钻柱压力 (Pgn, MPa)": Pgn.flatten(),
-    #     "环空压力 (Phk, MPa)": Phk.flatten(),
-    #     "ECD (g/cm³)": ECD.flatten(),
-    # })
 
 
     df = pd.DataFrame({
