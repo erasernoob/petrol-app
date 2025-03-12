@@ -55,7 +55,7 @@ const hydro = [
       d2: { name: "立管内径 (m)", value: 0.1086 },
       L3: { name: "水龙带长度 (m)", value: 30 },
       d3: { name: "水龙带内径 (m)", value: 0.1086 },
-      L4: { name: "方钻杆长度 (m)", value: 11.4 },
+      L4: { name: "方钻杆长度 (m)", value: 11.4},
       d4: { name: "方钻杆内径 (m)", value: 0.0826 },
     },
   },
@@ -131,7 +131,7 @@ const limit_eye = [
   {
     rock_cuttings: {
       // (0=不考虑, 1=考虑)
-      yx: { name: "是否考虑岩屑 ", value: 0 },
+      y: { name: "是否考虑岩屑 ", value: 0 },
       yxmd: { name: "岩屑密度 (kg/m³)", value: 2500 },
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
