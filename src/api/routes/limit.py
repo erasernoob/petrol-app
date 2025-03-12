@@ -1,6 +1,7 @@
 # api/routes/torque.py
 from fastapi import Response
 from pathlib import Path
+from service import limit_eye
 import io
 from fastapi import APIRouter
 import pandas as pd
@@ -15,7 +16,7 @@ torque_cache = {}
 @router.post('/limit/eye')
 def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     # 从 DTO 获取参数
-    guiji = pd.read_excel(limit_eye_dto.file_path).values  
+    guiji = pd.read_excel(limit_eye_dto.file_path, header=None).values  
 
     lbmx = limit_eye_dto.lbmx
     pailiang = limit_eye_dto.pailiang
@@ -31,23 +32,17 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     Rzt = limit_eye_dto.Rzt
     rzt = limit_eye_dto.rzt
     Lzt = limit_eye_dto.Lzt
+    y = limit_eye_dto.y
+    yxmd = limit_eye_dto.yxmd
+    H = limit_eye_dto.H
 
-    # 调用 hydro 函数计算结果
-    # ECD, Sk, Pgn, Phk = limit_eye_function(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt)
+    ECD, Sk = limit_eye.main(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt, y, yxmd, H)
 
-
-    base_path = Path("D:/petrol-app/mock/limit/eye")
-        # 读取 Excel 文件
-    ECD = pd.read_excel(base_path / "ECD.xlsx").values.flatten()
-    Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
 
     # 将数据保存为 CSV 文件
     df = pd.DataFrame({
         "Sk": pd.Series(Sk),
         "ECD": pd.Series(ECD),
-        # "Pgn": Pgn.flatten(),
-        # "Phk": Phk.flatten(),
-        # "ECD": ECD.flatten()
     })
 
     # **转换为 CSV 格式**
@@ -58,12 +53,6 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     return Response(content=csv_data, media_type="text/csv",
                     headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
 
-def limit_eye_function():
-    return Sk, P, Plg
-
-def limit_hydro_function():
-    return 
-    
 
 
 @router.post('/limit/hydro')

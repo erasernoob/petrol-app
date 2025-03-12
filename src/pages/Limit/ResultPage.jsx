@@ -6,13 +6,13 @@ import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
 import Option from '../option'
-import { saveData } from '../utils/utils'
+import { save2Data, saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 
 export default function ResultPage({ handleExport, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+    const exportButton = <Button type='primary' onClick={save2Data} style={{ marginLeft: '22px' }}>导出数据</Button>
     const option1 = Option(chartData,
         {
             type: 'value',

@@ -201,7 +201,7 @@ const limit_hydro = [
   },
   {
     rock_cuttings: {
-      yx: { name: "是否考虑岩屑 ", value: 0 },
+      y: { name: "是否考虑岩屑 ", value: 0 },
       yxmd: { name: "岩屑密度 (kg/m³)", value: 2500 },
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
