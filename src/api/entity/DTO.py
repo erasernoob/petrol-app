@@ -66,6 +66,9 @@ class LimitEyeDTO(BaseModel):
     K: float  # 稠度系数 (Pa·s^n)
     miu: float  # 塑性粘度 (Pa·s)
     taof: float  # 屈服值 (Pa)
+    y: int
+    yxmd: float
+    H: float
 
 class LimitHydroDTO(BaseModel):
     # 基础参数
@@ -111,6 +114,7 @@ class LimitHydroDTO(BaseModel):
     d4: float  # 方钻杆内径 (m)
 
     # 岩屑参数
+    y: int
     yxmd: float  # 岩屑密度 (kg/m³)
     H: float  # 岩屑床高度 (%)
 class LimitMechanismDTO(BaseModel):
