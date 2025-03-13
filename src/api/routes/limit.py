@@ -1,7 +1,8 @@
 # api/routes/torque.py
 from fastapi import Response
 from pathlib import Path
-from service import limit_eye
+from service import limit_eye, limit_mecha
+from service import limit_hydra, limit_curve
 import io
 from fastapi import APIRouter
 import pandas as pd
@@ -57,24 +58,15 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
 
 @router.post('/limit/hydro')
 def get_limit_hydro(limit_hydro_dto: LimitHydroDTO):
-    # Sk, P, Plg = limit_hydro_function(limit_hydro_dto)
+    Sk, P, Plg = limit_hydra.main(limit_hydro_dto)
 
-    base_path = Path("D:/petrol-app/mock/limit/hydro")
-        # 读取 Excel 文件
-    df_P = pd.read_excel(base_path / "总循环压耗.xlsx")
-    df_Plg = pd.read_excel(base_path / "立管压力.xlsx")
-
-    Sk = df_P.iloc[:,0]
-    P = df_P.iloc[:,1]
-    Plg = df_Plg.iloc[:,1]
 
     # 创建 DataFrame
     df = pd.DataFrame({
-        "P": P, # 总循环压耗
-        "Plg": Plg, # 立管压力
-        "Sk": Sk,
+        "P": pd.Series(P), # 总循环压耗
+        "Plg": pd.Series(Plg), # 立管压力
+        "Sk": pd.Series(Sk),
     })
-
 
 
     # # 创建 DataFrame
@@ -97,52 +89,15 @@ def limit_mechanism(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd,
 
 @router.post("/limit/mechanism")
 async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
-    # 读取上传的 Excel 文件
-    guiji = pd.read_excel(limit_mechanism_dto.file_path1).values  
-    zuanju = pd.read_excel(limit_mechanism_dto.file_path2).values  
 
-    # x_coords, T_result, M_reuslt, aq_result = limit_mechanism(
-    #     guiji, zuanju, 
-    #     limit_mechanism_dto.wc, 
-    #     limit_mechanism_dto.T0, 
-    #     limit_mechanism_dto.rhoi, 
-    #     limit_mechanism_dto.Dw, 
-    #     limit_mechanism_dto.tgxs, 
-    #     limit_mechanism_dto.miua11, 
-    #     limit_mechanism_dto.miua22, 
-    #     limit_mechanism_dto.qfqd, 
-    #     limit_mechanism_dto.jsjg, 
-    #     limit_mechanism_dto.v, 
-    #     limit_mechanism_dto.omega
-    # )
-    
-    base_path = Path("D:/petrol-app/mock/limit/mecha")
-
-    df_M = pd.read_excel(base_path / "旋转钻进_井口扭矩.xlsx")
-    df_T = pd.read_excel(base_path / "旋转钻进_井口轴向力.xlsx")
-    df_aq = pd.read_excel(base_path / "旋转钻进_安全系数.xlsx")
-
-    Sk = df_M.iloc[:, 0]
-
-    T = df_T.iloc[:, 1]
-    M = df_M.iloc[:, 1]
-    aq = df_aq.iloc[:, 1]
+    T_result, M_reuslt, aq_result, x_coords = limit_mecha.main(limit_mechanism_dto)
 
     df = pd.DataFrame({
-        'Sk': Sk,
-        'T': T,
-        'M': M,
-        'aq': aq
+        "Sk": x_coords.flatten(),   
+        "T": T_result.flatten(), # 井口轴向力
+        "M": M_reuslt.flatten(), # 井口扭矩
+        "aq": aq_result.flatten() # 安全系数
     })
-
-
-
-    # df = pd.DataFrame({
-    #     "Sk": x_coords.flatten(),   
-    #     "T": T_result.flatten(), # 井口轴向力
-    #     "M": M_reuslt.flatten(), # 井口扭矩
-    #     "aq": aq_result.flatten() # 安全系数
-    # })
 
     # **转换为 CSV 格式**
     output = io.StringIO()
@@ -156,24 +111,19 @@ async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
 @router.post("/limit/curve")
 async def get_limit_curve_result(limit_curve_dto: LimitCurveDTO ):
     # 读取上传的 Excel 文件
-    # guiji = pd.read_excel(limit_curve_dto.file_path1).values  
-    # zuanju = pd.read_excel(limit_curve_dto.file_path1).values  
-    # Sk, fs, fh = limit_curve_function(
-    #     guiji, 
-    #     limit_curve_dto.Holedia, 
-    #     limit_curve_dto.ml, 
-    #     zuanju, 
-    #     limit_curve_dto.js
-    # )
+    guiji = pd.read_excel(limit_curve_dto.file_path1, header=None).values  
+    zuanju = pd.read_excel(limit_curve_dto.file_path2, header=None).values  
 
-    base_path = Path("D:/petrol-app/mock/limit/curve")
-
-    Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
-    fs = pd.read_excel(base_path / "正弦屈曲临界载荷.xlsx").values.flatten()
-    fh = pd.read_excel(base_path / "螺旋屈曲临界载荷.xlsx").values.flatten()
+    fh, fs = limit_curve.main(
+        guiji, 
+        zuanju,
+        limit_curve_dto.Holedia, 
+        limit_curve_dto.ml, 
+        limit_curve_dto.js
+    )
 
     df = pd.DataFrame({
-        "Sk": pd.Series(range(1, 6001)),
+        "Sk": pd.Series(range(1, int(limit_curve_dto.js) + 1)),
         "fs": pd.Series(fs),
         "fh": pd.Series(fh),
     })
