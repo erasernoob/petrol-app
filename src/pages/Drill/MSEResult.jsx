@@ -22,6 +22,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             axisLine: {
               onZero: false
             },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
             position: 'left',
             inverse: true
         }, [
@@ -30,7 +33,6 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             nameLocation: 'center',
             nameGap: 25, // 轴名称与坐标轴的距离
             min: 'dataMin',
-            max: 300,
             type: 'value',
             offset: 0,
             alignTicks: true,
@@ -55,6 +57,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             min: 'dataMin',
             axisLine: {
               onZero: false
+            },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
             },
             position: 'left',
             inverse: true
@@ -88,6 +93,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             axisLine: {
               onZero: false
             },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
             position: 'left',
             inverse: true
         }, [
@@ -119,6 +127,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             min: 'dataMin',
             axisLine: {
               onZero: false
+            },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
             },
             position: 'left',
             inverse: true
@@ -159,9 +170,8 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
                                     <ReactECharts
                                         key={index}
                                         option={option}
-                                        style={{ height: '100%', width: '25%' }}
+                                        style={{ height: '100%', width: '40%' }}
                                         opts={{ renderer: 'canvas' }} // 强制使用Canvas
-                                        notMerge={true}
                                     />
                                 </>)
                         })
