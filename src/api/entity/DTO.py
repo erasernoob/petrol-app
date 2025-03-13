@@ -66,8 +66,12 @@ class LimitEyeDTO(BaseModel):
     K: float  # 稠度系数 (Pa·s^n)
     miu: float  # 塑性粘度 (Pa·s)
     taof: float  # 屈服值 (Pa)
+    y: int
+    yxmd: float
+    H: float
 
 class LimitHydroDTO(BaseModel):
+    file_path: str
     # 基础参数
     pailiang: float  # 排量 (L/min)
     Dw: float  # 井眼直径 (m)
@@ -77,7 +81,7 @@ class LimitHydroDTO(BaseModel):
     Rzt: float  # 钻铤外径 (m)
     rzt: float  # 钻铤内径 (m)
     Lzt: float  # 钻铤长度 (m)
-    jsjg: float  # 井深计算间隔 (m)
+    jsjg: int  # 井深计算间隔 (m)
     
     # 流体参数
     lbmx: int  # 流变模型 (1=宾汉, 2=幂律, 3=赫巴)
@@ -111,6 +115,7 @@ class LimitHydroDTO(BaseModel):
     d4: float  # 方钻杆内径 (m)
 
     # 岩屑参数
+    y: int
     yxmd: float  # 岩屑密度 (kg/m³)
     H: float  # 岩屑床高度 (%)
 class LimitMechanismDTO(BaseModel):
@@ -129,7 +134,7 @@ class LimitMechanismDTO(BaseModel):
     miua11: float  # 套管段摩阻系数
     miua22: float  # 裸眼段摩阻系数
     qfqd: float  # 钻柱屈服强度 (MPa)
-    jsjg: float  # 井深计算间隔 (m)
+    jsjg: int  # 井深计算间隔 (m)
 class LimitCurveDTO(BaseModel):
     file_path1: str
     file_path2: str

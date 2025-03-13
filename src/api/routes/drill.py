@@ -4,6 +4,7 @@ import io
 from fastapi import APIRouter
 from service.vibration import StickSlipModel 
 from pathlib import Path
+from service import mse
 import pandas as pd
 from entity.DTO import DrillVibrationDTO, MSEDTO
 
@@ -38,21 +39,18 @@ def get_limit_hydro(drillVirationDto: DrillVibrationDTO):
 
 @router.post('/drill/mse')
 def get_mse(mse_DTO : MSEDTO):
-    canshu = pd.read_excel(mse_DTO.file_path).values  
-    # MSE, wob, rpm, rop, Depth = mse_func(canshu)
 
-    base_path = Path("D:/petrol-app/mock/drill")
-    
-        # 读取 Excel 文件
-    MSE = pd.read_excel(base_path / "MSE.xlsx").values.flatten()
-    rop = pd.read_excel(base_path / "rop.xlsx").values.flatten()
+    # base_path = Path("D:/petrol-app/mock/drill")
+    #     # 读取 Excel 文件
+    # MSE = pd.read_excel(base_path / "MSE.xlsx").values.flatten()
+    # rop = pd.read_excel(base_path / "rop.xlsx").values.flatten()
 
-    rpm = pd.read_excel(base_path / "rpm.xlsx").values.flatten()
-    Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
-    wob = pd.read_excel(base_path / "wob.xlsx").values.flatten()
+    # rpm = pd.read_excel(base_path / "rpm.xlsx").values.flatten()
+    # Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
+    # wob = pd.read_excel(base_path / "wob.xlsx").values.flatten()
 
+    Sk, wob, rop, rpm, MSE = mse.calcu_mse(mse_DTO.file_path)
 
-# Creating a dictionary of Series
     data = {
         "MSE": pd.Series(MSE),
         "rop": pd.Series(rop),
@@ -62,15 +60,6 @@ def get_mse(mse_DTO : MSEDTO):
     }
     # Creating DataFrame
     df = pd.DataFrame(data)
-
-    # df = pd.DataFrame({
-    #     "MSE": MSE.flatten(),  # 总循环压耗
-    #     "wob": wob.flatten(),  # 钻压
-    #     "rpm": rpm.flatten(),  # 转速
-    #     "rop": rop.flatten(),  # 机械钻速
-    #     "Depth": Depth.flatten()  # 井深
-    # })
-    # # **转换为 CSV 格式**
     output = io.StringIO()
     df.to_csv(output, index=False, encoding="utf-8")
     csv_data = output.getvalue()

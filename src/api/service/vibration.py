@@ -1,8 +1,8 @@
 import numpy as np
-from pathlib import Path
 import pandas as pd
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+from pathlib import Path
 import os
 
 class StickSlipModel:
@@ -323,7 +323,7 @@ class StickSlipModel:
         
         return results
 
-    def get_download_folder(self):
+    def get_download_folder(self, prefix):
         """ 获取当前操作系统的下载文件夹路径 """
         if os.name == 'nt':  # Windows
             return Path(os.environ['USERPROFILE']) / 'Downloads'

@@ -8,37 +8,39 @@ import { useMemo } from "react"
  * @param {*} series     
  */
 
-export default function Option(chartData, yAxis, xAxis, series)  {
-    return useMemo(() => ({
-    animation: true, // 禁用动画
-    large: true,      // 开启大数据模式
-    largeThreshold: 500, // 超过500点时启用优化
+
+export default function Option(chartData, yAxis, xAxis, series) {
+  return {
+    animation: true,
+    large: true,
+    largeThreshold: 500,
     dataset: { source: chartData },
     dataZoom: [{
-      type: 'inside', // 内置型数据缩放
+      type: 'inside',
       start: 0,
       end: 100
     }],
-    yAxis: yAxis,
-    xAxis: xAxis,
-    series: series,
+    yAxis,
+    xAxis,
+    series,
     tooltip: {
       trigger: 'axis',
       axisPointer: { type: 'cross' }
     },
     legend: {
-      show: true, // 显示图例
-      orient: 'vertical', // 图例方向（可选 'vertical'）
-      left: 'left', // 图例位置
+      show: true,
+      orient: 'vertical',
+      left: 'left',
       top: 'bottom',
       textStyle: {
         fontSize: 12,
-        color: '#333' // 图例文本颜色
+        color: '#333'
       }
-  }
-
-  }), [chartData])
+    }
+  };
 }
+
+
 
 export const getOptionT = (dataSet) => {
     const minValue = -50;

@@ -6,7 +6,6 @@ import pandas as pd
 from entity.DTO import TorqueDTO
 from pathlib import Path
 from service import torque
-from service.Hydro import Hydro
 
 # 创建 APIRouter 实例
 router = APIRouter()

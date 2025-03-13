@@ -60,7 +60,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                         options={field.option}
                         className="input-component"
                       />
-                    ) : key != "yx" ? (
+                    ) : key != "yx" && key != "y" ? (
                       <Input className="input-component"></Input>
                     ) : (
                       <Checkbox

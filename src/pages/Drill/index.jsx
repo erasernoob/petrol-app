@@ -47,6 +47,7 @@ export default function DrillPage() {
             Message.error('计算内部出现错误，请检查')
         }
     }
+    
 
     const handleExport = () => {
 
