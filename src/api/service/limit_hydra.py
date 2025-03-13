@@ -58,10 +58,5 @@ def main(dto: LimitHydroDTO):
 
         return x_coords.flatten(), Pyx.flatten(), Plg.flatten()
 
-    return
 
 
-
-        # plt.show()
-if __name__ == "__main__":
-    main()

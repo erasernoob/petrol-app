@@ -12,17 +12,6 @@ import { color } from 'echarts'
 const RadioGroup = Radio.Group
 
 export default function MSEResult({ handleExport, chartOptions = [], options = [], chartData = [], extraData = {}, loading, waiting }) {
-    // 导出数据函数
-    // const handleExport = async () => {
-    //   const drillData = chartData.map((value) => {
-    //     return value.drillPressure
-    //   })
-    //   const annularData = chartData.map(value => {
-    //     return value.annularPressure
-    //   })
-    //   await saveData(drillData, '钻柱循环压力表.xlsx')
-    //   saveData(annularData, '环空循环压力表.xlsx')
-    // }
     const exportButton = <Button type='primary' onClick={save2Data} style={{ marginLeft: '22px' }}>导出数据</Button>
     
     const option1 = Option(chartData,
@@ -55,7 +44,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'MSE', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 1.5 },
+            lineStyle: { width: 1 },
             showSymbol: false
         }
     ],)
@@ -87,7 +76,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'wob', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 1.5, color: 'rgb(255,0,0)' },
+            lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
     ],)
@@ -119,7 +108,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'rpm', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 2, color: 'rgb(255,0,0)' },
+            lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
     ],)
@@ -151,7 +140,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'rop', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 2, color: 'rgb(255,0,0)' },
+            lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
     ],)
@@ -164,25 +153,16 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
                 <>
                 <div style={{ height: '72vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
                     {
-                        chartOptions.map((option) => {
+                        chartOptions.map((option, index) => {
                             return (
                                 <>
                                     <ReactECharts
+                                        key={index}
                                         option={option}
                                         style={{ height: '100%', width: '25%' }}
                                         opts={{ renderer: 'canvas' }} // 强制使用Canvas
                                         notMerge={true}
                                     />
-                                    <div className="extra-value" style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '20px',
-                                        // marginTop: '7px',
-                                        marginLeft: '0px'
-                                    }}>
-                                    </div>
-
                                 </>)
                         })
                     }

@@ -40,23 +40,14 @@ def get_limit_hydro(drillVirationDto: DrillVibrationDTO):
 @router.post('/drill/mse')
 def get_mse(mse_DTO : MSEDTO):
 
-    # base_path = Path("D:/petrol-app/mock/drill")
-    #     # 读取 Excel 文件
-    # MSE = pd.read_excel(base_path / "MSE.xlsx").values.flatten()
-    # rop = pd.read_excel(base_path / "rop.xlsx").values.flatten()
-
-    # rpm = pd.read_excel(base_path / "rpm.xlsx").values.flatten()
-    # Sk = pd.read_excel(base_path / "Sk.xlsx").values.flatten()
-    # wob = pd.read_excel(base_path / "wob.xlsx").values.flatten()
-
     Sk, wob, rop, rpm, MSE = mse.calcu_mse(mse_DTO.file_path)
 
     data = {
-        "MSE": pd.Series(MSE),
-        "rop": pd.Series(rop),
-        "rpm": pd.Series(rpm), # 垂深
-        "wob": pd.Series(wob), # 扭矩
-        "Sk": pd.Series(Sk)
+        "MSE": (MSE),
+        "rop": (rop),
+        "rpm": (rpm), # 垂深
+        "wob": (wob), # 扭矩
+        "Sk": (Sk)
     }
     # Creating DataFrame
     df = pd.DataFrame(data)
