@@ -42,7 +42,6 @@ export default function LimitPage() {
   const [file, setFile] = useState({ name: '', path: '' })
 
   useEffect(() => {
-      console.log(activeRoute)
       setWaiting(true)
       setLoading(false)
       setChartData([])
@@ -68,9 +67,7 @@ export default function LimitPage() {
         }
 
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
-      console.log(data)
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
-      console.log(res)
       setChartData(res)
       setLoading(false)
       Message.success('数据获取成功！')

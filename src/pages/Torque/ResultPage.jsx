@@ -63,6 +63,9 @@ export default function ResultPage({handleExport=save2Data, typeOptions=[], char
             name: '扭矩 (kN·m）',
             type: 'value',
             position: 'top',
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
             min: Math.min(...heatData.map(item => item.M ? item.M : 0)) === Math.max(...heatData.map(item => item.M ? item.M : 0)) ? -1 : 'dataMin', // 如果所有数据为 0，最小值设置为 -1
             max: Math.min(...heatData.map(item => item.M ? item.M : 0)) === Math.max(...heatData.map(item => item.M ? item.M : 0)) ? 1 : 'dataMax', // 如果所有数据为 0，最大值设置为 1
         },
