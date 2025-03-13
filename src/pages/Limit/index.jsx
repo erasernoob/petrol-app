@@ -83,10 +83,10 @@ export default function LimitPage() {
   }
   
   const formList = [
-    <DynamicForm handleSubmit={handleSubmit} datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
-    <DynamicForm handleSubmit={handleSubmit} datas={limit_hydro} tabs={tabs[1]} file={file}></DynamicForm>,
-    <MyForm  handleSubmit={handleSubmit} datas={limit_mechanism} fileList={fileList} />,
-    <MyForm handleSubmit={handleSubmit} datas={limit_curve} fileList={fileList} />,
+    <DynamicForm key={1}  handleSubmit={handleSubmit} datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
+    <DynamicForm key={2} handleSubmit={handleSubmit} datas={limit_hydro} tabs={tabs[1]} file={file}></DynamicForm>,
+    <MyForm key={3}   handleSubmit={handleSubmit} datas={limit_mechanism} fileList={fileList} />,
+    <MyForm  key={4} handleSubmit={handleSubmit} datas={limit_curve} fileList={fileList} />,
   ];
 
 
