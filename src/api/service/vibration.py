@@ -334,9 +334,8 @@ class StickSlipModel:
 
     def save_results(self, results):
 
-        download_folder = self.get_download_folder()
+        output_folder = self.get_download_folder("粘滑振动")
         # 创建输出目录
-        output_folder = download_folder / '粘滑振动'
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
     

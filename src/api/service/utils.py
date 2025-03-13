@@ -24,7 +24,7 @@ def get_output_folder(prefix):
         raise Exception("Unsupported OS")
 
 def get_timestamp():
-    return datetime.datetime.now().strftime("%Y%m%d_%H-%M-%S")
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     
 
 
