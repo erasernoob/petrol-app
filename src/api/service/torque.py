@@ -3,6 +3,7 @@ from pathlib import Path
 import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
+from service import utils
 from scipy.integrate import solve_ivp
 from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
@@ -301,9 +302,10 @@ def create_output_folder(working_condition):
     return output_folder
 
 def save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, prefix):
+    time = utils.get_timestamp()
     # 保存数据到CSV文件
-    pd.DataFrame(T).to_excel(f"{output_folder}/{prefix}_轴向力.xlsx", header=False, index=False)
-    pd.DataFrame(M).to_excel(f"{output_folder}/{prefix}_扭矩.xlsx", header=False, index=False)
+    pd.DataFrame(T).to_excel(f"{output_folder}/{prefix}_轴向力_{time}.xlsx", header=False, index=False)
+    pd.DataFrame(M).to_excel(f"{output_folder}/{prefix}_扭矩_{time}.xlsx", header=False, index=False)
     
 
 def odefunc(s, y, ks, dks, ddks, kphis, kalphas, taos, sspan, v, omega, taof, miu, Rt, Dw, miua, miut, qmt,

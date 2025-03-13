@@ -6,7 +6,7 @@ from service import hydra
 import pandas as pd
 from pathlib import Path
 from entity.DTO import HydroDTO
-from service.Hydro import Hydro
+
 
 # 创建 APIRouter 实例
 router = APIRouter()
