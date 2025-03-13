@@ -27,6 +27,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             name: 'ECD（g/cm3）',
             type: 'value',
             min: 'dataMin',
+            axisLabel: {
+                formatter: (value) => value.toFixed(1), // 保留一位小数
+            },
             // max: 1.35,
             offset: 0,
             alignTicks: true,

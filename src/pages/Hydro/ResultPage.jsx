@@ -72,6 +72,9 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         axisLine: {
           onZero: false
         },
+        axisLabel: {
+          formatter: (value) => value.toFixed(1), // 保留一位小数
+        },
         min: 'dataMin',
         offset: 0,
         alignTicks: true,
