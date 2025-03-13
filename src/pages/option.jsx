@@ -43,8 +43,15 @@ export default function Option(chartData, yAxis, xAxis, series) {
 
 
 export const getOptionT = (dataSet) => {
-    const minValue = -50;
-    const maxValue = 150;
+    const TValue = (
+        dataSet.length === 0 ? [0] : 
+        (dataSet.map(item => item.T ? item.T : 0))
+    )
+    console.log(TValue)
+    const min = Math.min(...TValue)
+    const max = Math.max(...TValue)
+    console.log(min)
+    console.log(max)
 
     return {
         title: { text: '轴向力分布云图' },
@@ -55,11 +62,14 @@ export const getOptionT = (dataSet) => {
         visualMap: {
             show: true,
             dimension: 3, // 第四个维度 (M) 决定颜色
-            min: minValue,
-            max: maxValue,
+            min: min,
+            max: max,
             inRange: {
                 color: ['blue', 'cyan', 'yellow', 'red']
-            }
+            },
+            type: 'continuous', // 连续映射
+            // 显示数值范围
+            calculable: true
         },
         grid3D: {
             // 如需调整 3D 画布大小，可增加 boxWidth、boxDepth 等配置
@@ -95,8 +105,13 @@ export const getOptionT = (dataSet) => {
 
 const getOptionM = (dataSet) => {
     // 设置 visualMap 的 M 值范围（这里使用硬编码的 0 到 14）
-    const minValue = 4;
-    const maxValue = 14;
+
+    const MValue = (
+        dataSet.length === 0 ? [0] : 
+        (dataSet.map(item => item.M ? item.M : 0))
+    )
+    const min = Math.min(...MValue)
+    const max = Math.max(...MValue)
     return {
         title: { text: '扭矩分布云图' },
         animation: true,
@@ -107,12 +122,15 @@ const getOptionM = (dataSet) => {
         visualMap: {
             show: true,
             dimension: 3, // 第四个维度 (M) 决定颜色
-            min: minValue,
-            max: maxValue,
+            min: min, // 自动获取数据的最小值
+            max: max, // 自动获取数据的最大值
             inRange: {
                 color: ['blue', 'cyan', 'yellow', 'red']
-            }
-        },
+            },
+            type: 'continuous', // 连续映射
+            // 显示数值范围
+            calculable: true
+            },
         grid3D: {
             // 如需调整 3D 画布大小，可增加 boxWidth、boxDepth 等配置
                 boxWidth: 200,   // x 轴可视长度
