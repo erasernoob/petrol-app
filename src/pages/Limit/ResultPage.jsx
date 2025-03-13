@@ -28,7 +28,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             type: 'value',
             min: 'dataMin',
             axisLabel: {
-                formatter: (value) => value.toFixed(1), // 保留一位小数
+                formatter: (value) => value.toFixed(2), // 保留一位小数
             },
             // max: 1.35,
             offset: 0,
