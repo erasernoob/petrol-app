@@ -69,7 +69,6 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
       {
         name: 'ECD (g/cm³)',
         type: 'value',
-        offset: 0,
         axisLine: {
           onZero: false
         },
