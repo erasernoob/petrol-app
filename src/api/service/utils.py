@@ -671,7 +671,7 @@ def deal_input_data(data):
 # 这是LIMIT水力延伸极限
 def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, C1, A2, C2, A3, C3,
           Rzz, rzz, Lzz, Rzt, rzt, Lzt, L1, d1, L2, d2, L3, d3, L4, d4, Lp, Li, rzzjt,
-          yxmd, H, jsjg, yx):
+          yxmd, H, jsjg, y):
 
     data = guiji
     wc = lbmx
@@ -957,7 +957,7 @@ def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, 
         Pp = fjt * Ppp / 10
         Pa = Paa / 10
 
-        if yx == 0:
+        if y == 0:
             # 环空循环压力
             Phk = PO2.flatten() + Pa
 
@@ -995,7 +995,7 @@ def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, 
 
             # 设定 Pyx 为 0
             Pyx = 0
-        elif yx == 1:
+        elif y == 1:
             # 考虑岩屑的环空压耗
             S = yxmd / rhoi
 
