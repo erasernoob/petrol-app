@@ -291,15 +291,16 @@ def create_output_folder(working_condition):
         5: "倒划眼"
     }
 
-    download_folder = get_download_folder()
-    # 创建输出目录
+    download_folder = utils.get_output_folder("摩阻扭矩")
     
+    # 创建输出目录
     folder_name = condition_names.get(working_condition, "未知工况")
-    output_folder = download_folder / folder_name
+    output_folder = download_folder / "" / folder_name
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     return output_folder
+    
 
 def save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, prefix):
     time = utils.get_timestamp()
