@@ -61,6 +61,12 @@ export default function LimitPage() {
       }
       setWaiting(false)
       setLoading(true)
+
+      if ( activeRoute == 3 &&  data.wc != 1 && data.wc != 5) {
+                data.v = 0
+                data.omega = 0
+        }
+
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
       console.log(data)
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
