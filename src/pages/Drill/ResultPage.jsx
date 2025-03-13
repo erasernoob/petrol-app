@@ -17,6 +17,7 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
         {
             type: 'value',
             name: '角位移 (rad)',
+            nameLocation:"start",
             axisLine: {
               onZero: false
             },
@@ -48,6 +49,7 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
         {
             type: 'value',
             name: '角加速度 (rad/s^2)',
+            nameLocation:"start",
             axisLine: {
               onZero: false
             },
@@ -82,6 +84,7 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
             axisLine: {
               onZero: false
             },
+            nameLocation:"start",
             position: 'left',
         }, [
             {
@@ -113,6 +116,7 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
             axisLine: {
               onZero: false
             },
+            nameLocation:"start",
             position: 'left',
         }, [
             {
@@ -144,6 +148,7 @@ export default function ResultPage({ handleExport = save2Data, typeOptions = [],
             axisLine: {
               onZero: false
             },
+            nameLocation:"start",
             position: 'left',
         }, [
             {
