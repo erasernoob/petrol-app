@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
+from service import utils
 from pathlib import Path
 import os
 
@@ -334,30 +335,31 @@ class StickSlipModel:
 
     def save_results(self, results):
 
-        output_folder = self.get_download_folder("粘滑振动")
+        output_folder = utils.get_output_folder("粘滑振动")
+        time = utils.get_timestamp()
         # 创建输出目录
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
     
         # 输出角位移数据
         data3 = np.column_stack((results['time'], results['angel_x']))
-        pd.DataFrame(data3).to_excel(output_folder / '角位移.xlsx', header=False, index=False)
+        pd.DataFrame(data3).to_excel(output_folder / f'角位移_{time}.xlsx', header=False, index=False)
 
         # 输出角速度数据
         data2 = np.column_stack((results['time'], results['angle_v']))
-        pd.DataFrame(data2).to_excel(output_folder / '角速度.xlsx', header=False, index=False)
+        pd.DataFrame(data2).to_excel(output_folder / f'角速度_{time}.xlsx', header=False, index=False)
 
         # 输出角加速度数据
         data1 = np.column_stack((results['time'], results['angle_a']))
-        pd.DataFrame(data1).to_excel(output_folder / '角加速度.xlsx', header=False, index=False)
+        pd.DataFrame(data1).to_excel(output_folder / f'角加速度_{time}.xlsx', header=False, index=False)
 
         # 输出钻头扭矩数据
         data4 = np.column_stack((results['time'], results['drill_m']))
-        pd.DataFrame(data4).to_excel(output_folder / '钻头扭矩.xlsx', header=False, index=False)
+        pd.DataFrame(data4).to_excel(output_folder / f'钻头扭矩_{time}.xlsx', header=False, index=False)
 
         # 输出钻头粘滑振动相轨迹数据
         data5 = np.column_stack((results['relativex'], results['relativey']))
-        pd.DataFrame(data5).to_excel(output_folder / '钻头粘滑振动相轨迹.xlsx', header=False, index=False)
+        pd.DataFrame(data5).to_excel(output_folder / f'钻头粘滑振动相轨迹_{time}.xlsx', header=False, index=False)
     
 
         
