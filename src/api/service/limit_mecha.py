@@ -1,16 +1,17 @@
 import numpy as np
 from pathlib import Path
+from scipy.optimize import fsolve, least_squares
+from scipy.interpolate import interp1d
+from functools import partial
 import pandas as pd
 from entity.DTO import LimitMechanismDTO
 from scipy.interpolate import interp1d
 from service import utils
-from scipy.signal import savgol_filter
 from scipy.integrate import solve_ivp
-from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
 import os
 
-from service.torque import data_recovery, odefunc, prepare_data, deal_curve_data
+from service.torque import data_recovery, odefunc,  deal_curve_data, spline_interp
 
 
 def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, v, omega):
@@ -238,17 +239,42 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
         Nbtemp = 0
         Nntemp = 0
 
-        # 使用scipy的solve_ivp代替MATLAB的ode45
-        def odefun(s, y):
-            return odefunc(s, y, ks, dks, ddks, kphis, kalphas, taos, sspan, v, omega, taof, miu,
-                           Rt, Dw, miua, miut, qmt, Ait, Aot, rhoi, rhoo, E, It, g, Mk, mk, Sk,
-                           alphak, phik, Ttemp, Mtemp, Nbtemp, Nntemp, sign1, sign2)
-
-        # 数值积分求解
-        result = solve_ivp(odefun, [0, len_calc], [T0, M0], method='RK45', t_eval=sspan, rtol=1e-3, atol=1e-6)
-
-        s = result.t
-        y = result.y.T
+         # 调用封装函数
+        s, y = matlab_ode_wrapper(
+            len_calc=len_calc,  # 计算长度（必须与sspan[-1]一致）
+            ds=ds,  # 计算间隔
+            T0=T0,  # 初始扭矩
+            M0=M0,  # 初始弯矩
+            ks=ks,  # 曲率数组
+            dks=dks,  # 曲率一阶导数数组
+            ddks=ddks,  # 曲率二阶导数数组
+            kphis=kphis,  # 曲率-phi系数数组
+            kalphas=kalphas,  # 曲率-alpha系数数组
+            taos=taos,  # 扭矩系数数组
+            Rt=Rt,  # 钻具半径数组
+            Dw=Dw,  # 井径
+            miua=miua,  # 轴向摩擦系数数组
+            miut=miut,  # 周向摩擦系数数组
+            qmt=qmt,  # 单位长度重量数组
+            Ait=Ait,  # 内截面积数组
+            Aot=Aot,  # 外截面积数组
+            rhoi=rhoi,  # 内流体密度
+            rhoo=rhoo,  # 外流体密度
+            E=E,  # 弹性模量
+            It=It,  # 惯性矩数组
+            g=g,  # 重力加速度
+            Mk=Mk,  # 样条alpha二阶导数数组
+            mk=mk,  # 样条phi二阶导数数组
+            Sk=Sk,  # 样条节点位置数组
+            alphak=alphak,  # 样条alpha节点值
+            phik=phik,  # 样条phi节点值
+            v=v,  # 钻速
+            omega=omega,  # 转速
+            taof=taof,  # 流体剪切应力
+            miu=miu,  # 流体摩擦系数
+            sign1=sign1,  # 方向标志1
+            sign2=sign2  # 方向标志2
+        )
 
         T = y[:, 0]
         M = y[:, 1]
@@ -318,6 +344,80 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
 
     return Tjk, Mjk, aqjk, x_coords
 
+def diff_func(vars, span):
+    diff_var = np.zeros_like(vars)
+
+    # Compute the difference
+    for i in range(len(vars)):
+        if i == 0:
+            diff_var[i] = (vars[i + 1] - vars[i]) / (span[i + 1] - span[i])
+        elif i == len(vars) - 1:
+            diff_var[i] = (vars[-1] - vars[-2]) / (span[-1] - span[-2])
+        else:
+            diff_var[i] = (vars[i + 1] - vars[i - 1]) / (span[i + 1] - span[i - 1])
+
+    # Smooth the derivative (similar to MATLAB's smooth function)
+    # diff_var = savgol_filter(diff_var, window_length=201, polyorder=2)  # Adjust the window size as needed
+
+    return diff_var
+
+def prepare_data(sspan, Mk, mk, Sk, alphak, phik):
+    alphas = np.zeros(len(sspan))
+    phis = np.zeros(len(sspan))
+    taos = np.zeros(len(sspan))
+
+    for i in range(len(sspan)):
+        alphas[i], phis[i] = spline_interp(Mk, mk, Sk, alphak, phik, sspan[i])
+
+    kphis = diff_func(phis, sspan)
+    kalphas = diff_func(alphas, sspan)
+
+    ks = np.sqrt(kalphas ** 2 + kphis ** 2 * np.sin(alphas) ** 2)
+    dks = diff_func(ks, sspan)
+    ddks = diff_func(dks, sspan)
+
+    for i in range(len(sspan)):
+        if i == 0:
+            alpha1 = alphas[0]
+            alpha2 = alphas[1]
+            phi1 = phis[0]
+            phi2 = phis[1]
+            ds = sspan[1] - sspan[0]
+        elif i == len(sspan) - 1:
+            alpha1 = alphas[-2]
+            alpha2 = alphas[-1]
+            phi1 = phis[-2]
+            phi2 = phis[-1]
+            ds = 2 * (sspan[1] - sspan[0])
+        else:
+            alpha1 = alphas[i - 1]
+            alpha2 = alphas[i + 1]
+            phi1 = phis[i - 1]
+            phi2 = phis[i + 1]
+            ds = sspan[1] - sspan[0]
+
+        dp = (phi2 - phi1) / 2
+        da = (alpha2 - alpha1) / 2
+        ac = (alpha1 + alpha2) / 2
+        edl = np.sqrt(da ** 2 + dp ** 2 * (np.sin(ac)) ** 2)
+
+        # Calculate theta using the provided formula
+        term1 = (da ** 2 / edl ** 2) * np.cos(dp)
+        term2 = (da * dp / edl ** 2) * (np.sin(alpha2) * np.cos(alpha2) - np.sin(alpha1) * np.cos(alpha1)) * np.sin(dp)
+        term3 = (dp ** 2 / edl ** 2) * np.sin(alpha1) * np.sin(alpha2) * (
+                    np.sin(alpha1) * np.sin(alpha2) + np.cos(alpha1) * np.cos(alpha2) * np.cos(dp))
+        theta = np.arccos(term1 - term2 + term3)
+
+        # Force theta to be real (in case of small imaginary parts due to numerical error)
+        theta = np.real(theta)
+
+        # Compute taos at the current index
+        taos[i] = theta / ds
+
+    # Replace any NaN values in taos with 0
+    taos = np.where(np.isnan(taos), 0, taos)
+    return alphas, phis, ks, dks, ddks, kphis, kalphas, taos
+
 def plot_and_export(data, ylabel, filename, jsjg, yssd):
     """
     绘制图像并导出 Excel 文件。
@@ -341,6 +441,168 @@ def plot_and_export(data, ylabel, filename, jsjg, yssd):
     export_data = np.column_stack((x_coords, data))
     pd.DataFrame(export_data).to_excel( output / filename, index=False, header=False)
     return x_coords
+
+
+def spline_interp(Mk, mk, Sk, alphak, phik, S0):
+    """与MATLAB完全一致的三次样条插值实现"""
+    Sk = np.asarray(Sk)
+    idx = np.searchsorted(Sk, S0, side='right') - 1
+    idx = np.clip(idx, 0, len(Sk) - 2)
+
+    M0, M1 = Mk[idx], Mk[idx + 1]
+    m0, m1 = mk[idx], mk[idx + 1]
+    alpha0, alpha1 = alphak[idx], alphak[idx + 1]
+    phi0, phi1 = phik[idx], phik[idx + 1]
+    Sl, Sr = Sk[idx], Sk[idx + 1]
+    Lk = Sr - Sl
+
+    C1 = alpha1 / Lk - M1 * Lk / 6
+    C0 = alpha0 / Lk - M0 * Lk / 6
+    c1 = phi1 / Lk - M1 * Lk / 6
+    c0 = phi0 / Lk - M0 * Lk / 6
+
+    alphacal = (M0 * (Sr - S0) ** 3) / (6 * Lk) + (M1 * (S0 - Sl) ** 3) / (6 * Lk) + C1 * (S0 - Sl) + C0 * (Sr - S0)
+    phical = (m0 * (Sr - S0) ** 3) / (6 * Lk) + (m1 * (S0 - Sl) ** 3) / (6 * Lk) + c1 * (S0 - Sl) + c0 * (Sr - S0)
+
+    return alphacal, phical
+
+
+def solve_func(x, M, T, k, dk, ddk, alpha, tao, kphi, kalpha, R, taof, v, miu, Dw, E, I, miua, miut, omega, flambda, qm,
+               rhoi, rhoo, Ai, Ao, g, sign1, sign2):
+    """与MATLAB完全一致的隐式方程定义"""
+    dT, dM, Nn, Nb = x
+    if abs(k) > 1e-12:
+        return [
+            dT + k * E * I * dk + sign1 * miua * np.sqrt(Nb ** 2 + Nn ** 2) + sign2 * flambda - qm * np.cos(alpha),
+            k * dM + M * dk - tao * E * I * dk - Nb + miut * Nn - (
+                        (qm + rhoi * g * Ai - rhoo * g * Ao) * kphi / k * np.sin(alpha) ** 2),
+            dM - (miut * R * np.sqrt(Nb ** 2 + Nn ** 2) + sign2 * 2 * np.pi * R ** 3 * omega * (
+                        taof / np.sqrt(v ** 2 + (R * omega) ** 2) + 2 * miu / (Dw - 2 * R))),
+            E * I * ddk - k * T + Nn + miut * Nb - ((qm + rhoi * g * Ai - rhoo * g * Ao) * kalpha / k * np.sin(alpha))
+        ]
+    else:
+        return [
+            dT + k * E * I * dk + sign1 * miua * np.sqrt(Nb ** 2 + Nn ** 2) + sign2 * flambda - qm * np.cos(alpha),
+            k * dM + M * dk - tao * E * I * dk - Nb + miut * Nn,
+            dM - (miut * R * np.sqrt(Nb ** 2 + Nn ** 2) + sign2 * 2 * np.pi * R ** 3 * omega * (
+                        taof / np.sqrt(v ** 2 + (R * omega) ** 2) + 2 * miu / (Dw - 2 * R))),
+            E * I * ddk - k * T + Nn + miut * Nb
+        ]
+
+
+def matlab_ode_wrapper(len_calc, ds, T0, M0,
+                       ks, dks, ddks, kphis, kalphas, taos,
+                       Rt, Dw, miua, miut, qmt,
+                       Ait, Aot, rhoi, rhoo, E, It, g,
+                       Mk, mk, Sk, alphak, phik,
+                       v, omega, taof, miu,
+                       sign1, sign2):
+    """与MATLAB算法完全等价的Python封装函数"""
+    # 生成计算点数组 (与MATLAB的0:ds:len_calc完全一致)
+    sspan = np.arange(0, len_calc + ds, ds)
+    sspan[-1] = min(sspan[-1], len_calc)  # 确保不超出总长
+
+    # 预创建插值器 (使用MATLAB默认的spline方法)
+    interps = {
+        'k': interp1d(sspan, ks, 'cubic', fill_value='extrapolate'),
+        'dk': interp1d(sspan, dks, 'cubic', fill_value='extrapolate'),
+        'ddk': interp1d(sspan, ddks, 'cubic', fill_value='extrapolate'),
+        'kphi': interp1d(sspan, kphis, 'cubic', fill_value='extrapolate'),
+        'kalpha': interp1d(sspan, kalphas, 'cubic', fill_value='extrapolate'),
+        'tao': interp1d(sspan, taos, 'cubic', fill_value='extrapolate')
+    }
+
+    # 状态容器 (模拟MATLAB的持久变量)
+    class State:
+        def __init__(self):
+            self.history = []
+            self.Ttemp = T0
+            self.Mtemp = M0
+            self.Nntemp = 0.0
+            self.Nbtemp = 0.0
+
+        def update(self, x):
+            self.history.append(x)
+            if len(self.history) > 5:
+                self.history.pop(0)
+            self.Ttemp, self.Mtemp, self.Nntemp, self.Nbtemp = np.mean(self.history, axis=0)
+    state = State()
+
+    # ODE函数定义
+    def odefunc(s, y):
+        nonlocal state
+        T, M = y[0], y[1]
+
+        # 参数插值
+        k = interps['k'](s)
+        dk = interps['dk'](s)
+        ddk = interps['ddk'](s)
+        kphi = interps['kphi'](s)
+        kalpha = interps['kalpha'](s)
+        tao = interps['tao'](s)
+
+        # 样条插值alpha
+        alpha, _ = spline_interp(Mk, mk, Sk, alphak, phik, s)
+
+        # 修正索引计算，避免浮点误差
+        a = min(int(np.ceil(s + 1e-9)) + 1, len(Rt) - 1)
+        R = Rt[a]
+        Ai = Ait[a]
+        Ao = Aot[a]
+        qm = qmt[a]
+        I = It[a]
+        miua_val = miua[a]
+        miut_val = miut[a]
+
+        # 流体阻力计算 (完全复现MATLAB公式)
+        flambda = v * (
+                2 * np.pi * R * taof / np.sqrt(v ** 2 + (R * omega) ** 2) +
+                4 * np.pi * R * miu / np.log(Dw / (2 * R))
+        )
+
+        # 隐式方程求解 (初始猜测来自前一步状态)
+        result = least_squares(
+            lambda x: solve_func(x, M, T, k, dk, ddk, alpha, tao, kphi, kalpha,
+                                 R, taof, v, miu, Dw, E, I, miua_val, miut_val,
+                                 omega, flambda, qm, rhoi, rhoo, Ai, Ao, g,
+                                 sign1, sign2),
+            x0=[state.Ttemp, state.Mtemp, state.Nntemp, state.Nbtemp],
+            method='lm',
+            # xtol=1e-8,
+            ftol=1e-10,
+            max_nfev=200
+        )
+
+        x = result.x
+
+        # 监控残差
+        if not result.success:
+            print(f"求解失败于 s={s:.2f}, 残差={np.linalg.norm(result.fun):.2e}")
+        # 在odefunc中添加调试代码
+        if abs(s - 4000) < 1e-6:
+            print("===== 4000m处调试信息 =====")
+            print(f"初始猜测: Ttemp={state.Ttemp:.2e}, Mtemp={state.Mtemp:.2e}")
+            print(f"参数解: x={result.x}")
+            print(f"残差范数: {result.cost:.2e}")
+            print(f"终止原因: {result.message}")
+
+        state.update(x)
+        return [x[0], x[1]]
+
+    # 执行数值积分 (严格匹配MATLAB的ode45默认设置)
+    result = solve_ivp(
+        fun=odefunc,
+        t_span=[0, len_calc],
+        y0=[T0, M0],
+        t_eval=sspan,
+        method='RK45',
+        rtol=1e-8,  # 对应MATLAB默认相对容差
+        atol=1e-10  # 对应MATLAB默认绝对容差
+    )
+
+    return result.t, result.y.T
+
+
 
 
 def main(dto: LimitMechanismDTO ):
