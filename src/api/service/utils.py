@@ -294,7 +294,12 @@ def hydro_limit_eye(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, r
 
     if yx == 0:
         # 当 yx == 0 时，直接计算 ECD 与 ECDyx
-        ECD = Pa * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
+        if wc == 3 or wc == 2:
+            ccc = 1.05
+        elif wc == 1:
+            ccc = 0.9
+
+        ECD = ccc * Pa * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
         ECDyx = 0
     elif yx == 1:
         # 考虑岩屑的环空压耗
@@ -329,8 +334,13 @@ def hydro_limit_eye(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, r
         # TODO注意这里是
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
 
+        if wc == 3 or wc == 2:
+            ccc = 1.05
+        elif wc == 1:
+            ccc = 0.9
+
         # 考虑岩屑的 ECD（同样保证逐元素运算）
-        ECDyx = Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
+        ECDyx = ccc * Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
         ECD = 0
 
     return ECD, ECDyx, aacs
@@ -959,13 +969,23 @@ def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, 
 
         if y == 0:
             # 环空循环压力
-            Phk = PO2.flatten() + Pa
+
+            if wc == 3 or wc == 2:
+                aaa = 1.05
+            elif wc == 1:
+                aaa = 0.9
+
+
+            Phk = PO2.flatten() + Pa * aaa
 
             # 管内循环压力
             if wc == 3:
-                nnnn = 0.62
-            else:
-                nnnn = 1
+                nnnn = 0.69
+            elif wc == 2:
+                nnnn = 1.25
+            elif wc == 1:
+                nnnn = 1.45
+
 
             nn = ntrans  # ntrans 应该是一个正整数
             # 创建一个长度为 nn 的一维数组（与 MATLAB 的 zeros(nn,1) 等价）
@@ -1028,14 +1048,21 @@ def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, 
             # TODO注意这里是
             Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
 
+            if wc == 3 or wc == 2:
+                aaa = 1.05
+            elif wc == 1:
+                aaa = 0.9
+
             # 考虑岩屑的环空循环压力
-            Phkyx = PO2.flatten() + Payx
+            Phkyx = PO2.flatten() + Payx  ** aaa
 
             # 考虑岩屑的管内循环压力
             if wc == 3:
-                nnnn = 0.67
-            else:
-                nnnn = 1
+                nnnn = 0.69
+            elif wc == 2:
+                nnnn = 1.25
+            elif wc == 1:
+                nnnn = 1.45
 
             nn = ntrans  # ntrans 是正整数
             # 创建一个长度为 nn 的一维数组（与 MATLAB 中的 zeros(nn,1) 等价）
