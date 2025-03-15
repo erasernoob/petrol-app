@@ -16,6 +16,22 @@ export default function Sider({form, tabsName, handleSubmit, datas, file={name: 
 
   const [orbit, setOrbit] = useState(false)
 
+  const handleUpload = async (id) => {
+    const filePath = await open({
+      name: "导入文件",
+       multiple: false, 
+       filters: [{extensions: ['xlsx'], name: ''}],
+    })
+    if (filePath) {
+      const filename = await basename(filePath)
+      setFile(() => ({name: filename, path: filePath}))
+      Message.success(`${filename}上传成功！`)
+      setOrbit((prev) => !prev)
+    } else {
+      Message.info('文件上传失败,请重新上传')
+    }
+  }
+
   const handleCancel = (id) => {
     if (id === 1) {
       setOrbit(false)
