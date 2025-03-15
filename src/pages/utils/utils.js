@@ -1,4 +1,4 @@
-import { open } from '@tauri-apps/plugin-shell';
+// import { open } from '@tauri-apps/plugin-shell';
 import { open as openNer } from '@tauri-apps/plugin-dialog';
 import { Message } from '@arco-design/web-react'
 import * as XLSX from "xlsx";
@@ -64,4 +64,23 @@ const save2Data = async (data=[], name) => {
     }, 200)
   }
 }
-export { saveData, save2Data, saveAtFrontend }
+
+// Handle UPLOAD FOR HYDRA
+const handleUpload = async (id) => {
+    const filePath = await openNer({
+      name: "导入文件",
+       multiple: false, 
+       filters: [{extensions: ['xlsx'], name: ''}],
+    })
+    if (filePath) {
+      const filename = await basename(filePath)
+      setFile(() => ({name: filename, path: filePath}))
+      Message.success(`${filename}上传成功！`)
+      setOrbit((prev) => !prev)
+    } else {
+      Message.info('文件上传失败,请重新上传')
+    }
+  }
+
+
+export { saveData, save2Data, saveAtFrontend, handleUpload }
