@@ -6,13 +6,32 @@ import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
 import Option from '../option'
-import { save2Data, saveData } from '../utils/utils'
+import { saveAtFrontend } from '../utils/utils'
+
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ handleExport, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
+export default function ResultPage({ curCondition, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    const exportButton = <Button type='primary' onClick={save2Data} style={{ marginLeft: '22px' }}>导出数据</Button>
+    const handleExport = async () => {
+        // 机械延伸
+        if (activeRoute == 3) {
+            await saveAtFrontend(chartData.map(value => value.T), `${curCondition}_井口轴向力`)
+            await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_井口扭矩`)
+            await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_安全系数`)
+        } else if (activeRoute == 2) {
+            await saveAtFrontend(chartData.map(value => value.P), `立管压力`)
+            await saveAtFrontend(chartData.map(value => value.Plg), `总循环压耗`)
+        } else if (activeRoute == 1) {
+            await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
+        } else if (activeRoute == 4) {
+            await saveAtFrontend(chartData.map(value => value.fs), `正弦屈曲临界载荷`)
+            await saveAtFrontend(chartData.map(value => value.fh), `螺旋屈曲临界载荷`)
+        }
+   }
+
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+    console.log(chartData)
     const option1 = Option(chartData,
         {
             type: 'value',
@@ -27,6 +46,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             name: 'ECD（g/cm3）',
             type: 'value',
             min: 'dataMin',
+            axisLabel: {
+                formatter: (value) => value.toFixed(2), // 保留一位小数
+            },
             // max: 1.35,
             offset: 0,
             alignTicks: true,
@@ -51,6 +73,9 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
+            axisLabel: {
+                formatter: (value) => value.toFixed(1), // 保留一位小数
+            },
             min: 'dataMin',
             position: 'left',
             inverse: false
@@ -63,7 +88,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
-            position: 'top',
+            // position: 'top',
         }
     ], [
         {
@@ -74,7 +99,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
     const option5 = Option(chartData,
@@ -83,6 +108,11 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             name: '井口扭矩（kN·m）',
             axisLine: {
                 onZero: false
+            },
+            min: Math.min(...chartData.map(item => item.M ? item.M : 0)) === Math.max(...chartData.map(item => item.M ? item.M : 0)) ? -1 : 'dataMin', // 如果所有数据为 0，最小值设置为 -1
+            max: Math.min(...chartData.map(item => item.M ? item.M : 0)) === Math.max(...chartData.map(item => item.M ? item.M : 0)) ? 1 : 'dataMax', // 如果所有数据为 0，最大值设置为 1
+            axisLabel: {
+                formatter: (value) => value.toFixed(1), // 保留一位小数
             },
             position: 'left',
             inverse: false
@@ -95,7 +125,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
                 onZero: false
             },
             alignTicks: true,
-            position: 'top',
+            // position: 'top',
         }
     ], [
         {
@@ -106,20 +136,23 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
     const option6 = Option(chartData,
         {
             type: 'value',
             name: '安全系数',
+            axisLabel: {
+                formatter: (value) => value.toFixed(1), // 保留一位小数
+            },
             axisLine: {
                 onZero: false
             },
             position: 'left',
             inverse: false,
             min: 'dataMin',
-            max: 26,
+            max: 'dataMax',
         }, [
         {
             name: '井深（m）',
@@ -129,7 +162,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             },
             offset: 0,
             alignTicks: true,
-            position: 'top',
+            // position: 'top',
         }
     ], [
         {
@@ -140,7 +173,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
     const option7 = Option(chartData,
@@ -208,8 +241,8 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
+            // nameLocation: 'start', // 将轴名称放在轴的下方
             position: 'left',
-            inverse: false
         }, [
         {
             name: '井深（m）',
@@ -219,7 +252,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
-            position: 'top',
+            // position: 'top',
         }
     ], [
         {
@@ -230,7 +263,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
     const option2 = Option(chartData,
@@ -240,8 +273,8 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
+            // nameLocation: 'start', // 将轴名称放在轴的下方
             position: 'left',
-            inverse: false
         }, [
         {
             name: '井深（m）',
@@ -251,7 +284,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             axisLine: {
                 onZero: false
             },
-            position: 'top',
+            // position: 'top',
         }
     ], [
         {
@@ -262,7 +295,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
 

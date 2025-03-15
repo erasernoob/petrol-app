@@ -6,12 +6,17 @@ import Option, { getOptionM, getOptionT } from '../option'
 import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
-import { save2Data, saveData } from '../utils/utils'
+import { save2Data, saveData, saveAtFrontend } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 const chartOptions = ['数据图', '云图']
 
-export default function ResultPage({handleExport=save2Data, typeOptions=[], chartData=[], heatData={}, extraData={}, loading, waiting}) {
+export default function ResultPage({ curCondition, typeOptions=[], chartData=[], heatData={}, extraData={}, loading, waiting}) {
+
+    const handleExport = async () => {
+        await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_轴向力`, chartData.map(value => value.T))
+        await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_扭矩`, chartData.map(value => value.M))
+    }
 
 
   const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
@@ -48,19 +53,29 @@ export default function ResultPage({handleExport=save2Data, typeOptions=[], char
         }
     ],)
     const option2 = Option(
-        chartData,
+    chartData,
+    {
+        type: 'value',
+        position: 'left',
+        name: '井深 (m)',
+        inverse: true,
+        axisLine: {
+              onZero: false
+        },
+    },
+    [
         {
-            type: 'value',
-            position: 'left',
-            name: '井深 (m)',
-            inverse: true
-        }, [
-        {
-            name: '扭矩 (kN·m） ',
+            name: '扭矩 (kN·m）',
             type: 'value',
             position: 'top',
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
+            min: Math.min(...heatData.map(item => item.M ? item.M : 0)) === Math.max(...heatData.map(item => item.M ? item.M : 0)) ? -1 : 'dataMin', // 如果所有数据为 0，最小值设置为 -1
+            max: Math.min(...heatData.map(item => item.M ? item.M : 0)) === Math.max(...heatData.map(item => item.M ? item.M : 0)) ? 1 : 'dataMax', // 如果所有数据为 0，最大值设置为 1
         },
-    ], [
+    ],
+    [
         {
             name: '扭矩 (kN·m）',
             type: 'line',
@@ -69,10 +84,11 @@ export default function ResultPage({handleExport=save2Data, typeOptions=[], char
             sampling: 'lttb', // 采用最佳采样算法
             smooth: true,     // 禁用平滑
             lineStyle: { width: 2 },
-            showSymbol: false
+            showSymbol: false,
         },
     ],
-    )
+);
+
   const [option, setOption] = useState(option1)
   const [curType, setCurType] = useState(typeOptions[0])
   const [curChart, setCurChart] = useState(chartOptions[0])

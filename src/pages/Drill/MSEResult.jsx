@@ -5,27 +5,20 @@ import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
-import { saveData } from '../utils/utils'
+import { saveData, save2Data } from '../utils/utils'
 import Option from '../option'
+import { saveAtFrontend } from '../utils/utils'
 import { color } from 'echarts'
 
 const RadioGroup = Radio.Group
 
-export default function MSEResult({ handleExport, chartOptions = [], options = [], chartData = [], extraData = {}, loading, waiting }) {
-    console.log(chartData)
-    // 导出数据函数
-    // const handleExport = async () => {
-    //   const drillData = chartData.map((value) => {
-    //     return value.drillPressure
-    //   })
-    //   const annularData = chartData.map(value => {
-    //     return value.annularPressure
-    //   })
-    //   await saveData(drillData, '钻柱循环压力表.xlsx')
-    //   saveData(annularData, '环空循环压力表.xlsx')
-    // }
+export default function MSEResult({ chartOptions = [], options = [], chartData = [], extraData = {}, loading, waiting }) {
+
+    const handleExport = async () => {
+        await saveAtFrontend(chartData.map(value => value.MSE), `MSE`)
+    }
+    
     const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
-    console.log(chartData)
     
     const option1 = Option(chartData,
         {
@@ -35,6 +28,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             axisLine: {
               onZero: false
             },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
             position: 'left',
             inverse: true
         }, [
@@ -43,7 +39,6 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             nameLocation: 'center',
             nameGap: 25, // 轴名称与坐标轴的距离
             min: 'dataMin',
-            max: 300,
             type: 'value',
             offset: 0,
             alignTicks: true,
@@ -57,7 +52,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'MSE', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 1.5 },
+            lineStyle: { width: 1 },
             showSymbol: false
         }
     ],)
@@ -68,6 +63,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             min: 'dataMin',
             axisLine: {
               onZero: false
+            },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
             },
             position: 'left',
             inverse: true
@@ -89,7 +87,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'wob', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 1.5, color: 'rgb(255,0,0)' },
+            lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
     ],)
@@ -100,6 +98,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             min: 'dataMin',
             axisLine: {
               onZero: false
+            },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
             },
             position: 'left',
             inverse: true
@@ -121,7 +122,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'rpm', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 2, color: 'rgb(255,0,0)' },
+            lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
     ],)
@@ -132,6 +133,9 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             min: 'dataMin',
             axisLine: {
               onZero: false
+            },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
             },
             position: 'left',
             inverse: true
@@ -153,7 +157,7 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
             encode: { x: 'rop', y: 'Sk' },
             sampling: 'lttb',
             smooth: false,
-            lineStyle: { width: 2, color: 'rgb(255,0,0)' },
+            lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
     ],)
@@ -166,25 +170,15 @@ export default function MSEResult({ handleExport, chartOptions = [], options = [
                 <>
                 <div style={{ height: '72vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
                     {
-                        chartOptions.map((option) => {
+                        chartOptions.map((option, index) => {
                             return (
                                 <>
                                     <ReactECharts
+                                        key={index}
                                         option={option}
-                                        style={{ height: '100%', width: '25%' }}
+                                        style={{ height: '100%', width: '40%' }}
                                         opts={{ renderer: 'canvas' }} // 强制使用Canvas
-                                        notMerge={true}
                                     />
-                                    <div className="extra-value" style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '20px',
-                                        // marginTop: '7px',
-                                        marginLeft: '0px'
-                                    }}>
-                                    </div>
-
                                 </>)
                         })
                     }

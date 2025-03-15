@@ -5,13 +5,23 @@ import { useEffect, useMemo, useState } from 'react'
 import { Tag } from '@arco-design/web-react'
 import Option from '../option'
 import { Spin } from '@arco-design/web-react'
-import { save2Data, saveData } from '../utils/utils'
+import { save2Data, saveAtFrontend, saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 
 export default function ResultPage({chartData=[], data, loading, waiting}) {
 
-  const handleExport = save2Data
+  const handleExport = async () => {
+    const drillData = chartData.map((value) => {
+      return value.drillPressure
+    })
+    const annularData = chartData.map(value => {
+      return value.annularPressure
+    })
+    await saveAtFrontend(drillData, '钻柱循环压力表')
+    await saveAtFrontend(annularData, '环空循环压力表')
+    await saveAtFrontend(chartData.map((value) => value.ECD), "ECD")
+  }
 
   const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
 
@@ -69,9 +79,11 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
       {
         name: 'ECD (g/cm³)',
         type: 'value',
-        offset: 0,
         axisLine: {
           onZero: false
+        },
+        axisLabel: {
+          formatter: (value) => value.toFixed(2), // 保留一位小数
         },
         min: 'dataMin',
         offset: 0,

@@ -7,18 +7,18 @@
   ],
   "permissions": [
     {
-      "identifier": "fs:write-files",
-      "allow": [
-        {
-          "path": "$DOWNLOAD/*"
-        }
-      ]
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$HOME/**/*" }]
     },
+
 
     "core:default",
     "opener:default",
     "dialog:default",
-    "fs:default",
+    "fs:write-all",
+    "fs:write-files",
+    "fs:allow-write",
+    "fs:allow-write-text-file",
     "shell:default"
   ]
 }

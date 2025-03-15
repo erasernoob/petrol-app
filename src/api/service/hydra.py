@@ -356,13 +356,22 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
 
     if yx == 0:
         # 环空循环压力
-        Phk = PO2.flatten() + Pa
+
+        if wc == 3 or wc == 2:
+            aaa = 1.05
+        elif wc == 1:
+            aaa = 0.9
+
+        Phk = PO2.flatten() + Pa * aaa
 
         # 管内循环压力
         if wc == 3:
-            nnnn = 0.62
-        else:
-            nnnn = 1
+            nnnn = 0.69
+        elif wc == 2:
+            nnnn = 1.25
+        elif wc == 1:
+            nnnn = 1.45
+
 
         nn = ntrans  # ntrans 应该是一个正整数
         # 创建一个长度为 nn 的一维数组（与 MATLAB 的 zeros(nn,1) 等价）
@@ -382,7 +391,13 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             PI2yx = PI2[-i] - PI2[-(i+1)]
             Ppyx = Pp[-i] - Pp[-(i+1)]
             Pgn[-(i+1)] = Pgn[-i] - PI2yx + nnnn * Ppyx
-        ECD = Pa * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
+        
+        if wc == 3 or wc == 2:
+            ccc = 1.05
+        elif wc == 1:
+            ccc = 0.9
+
+        ECD = ccc * Pa * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
 
         P = Pgn[0] + Pdm
 
@@ -428,14 +443,21 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         # TODO注意这里是
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
 
+        if wc == 3 or wc == 2:
+            aaa = 1.05
+        elif wc == 1:
+            aaa = 0.9
+
         # 考虑岩屑的环空循环压力
-        Phkyx = PO2.flatten() + Payx
+        Phkyx = PO2.flatten() + Payx * aaa
 
         # 考虑岩屑的管内循环压力
         if wc == 3:
-            nnnn = 0.67
-        else:
-            nnnn = 1
+            nnnn = 0.69
+        elif wc == 2:
+            nnnn = 1.25
+        elif wc == 1:
+            nnnn = 1.45
 
         nn = ntrans  # ntrans 是正整数
         # 创建一个长度为 nn 的一维数组（与 MATLAB 中的 zeros(nn,1) 等价）
@@ -450,8 +472,14 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             PI2yx = PI2[-i] - PI2[-(i + 1)]
             Ppyx = Pp[-i] - Pp[-(i + 1)]
             Pgnyx[-(i + 1)] = Pgnyx[-i] - PI2yx + nnnn * Ppyx
+        
+        if wc == 3 or wc == 2:
+            ccc = 1.05
+        elif wc == 1:
+            ccc = 0.9
+            
 
-        ECDyx = Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
+        ECDyx = ccc * Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
 
         P = Pgnyx[0] + Pdm
 

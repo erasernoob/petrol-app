@@ -60,7 +60,12 @@ export default function Sider({
 
     const handleUpload = async (id) => {
     console.log(id)
-    const filePath = await open({ multiple: false })
+    const filePath = await open({
+      name: "导入文件",
+       multiple: false, 
+       filters: [{extensions: ['xlsx'], name: ''}],
+    })
+ 
     if (filePath) {
       const filename = await basename(filePath)
       if (id === 1) {

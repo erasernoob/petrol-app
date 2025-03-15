@@ -17,6 +17,7 @@ const tabs = [
   ["基本参数", "钻井液", "岩屑床"],
   ["基本参数", "钻井液", "钻头", "钻杆接头", "地面管汇", "岩屑床"],
 ];
+const workConditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
 const subRoutesOptions = [
   { label: "裸眼延伸极限", value: 1 },
   { label: "水力延伸极限", value: 2 },
@@ -37,12 +38,12 @@ export default function LimitPage() {
   const [loading, setLoading] = useState(false)
   const [waiting, setWaiting] = useState(true)
   const [chartData, setChartData] = useState([])
+  const [condition, setCondition] = useState(workConditions[0])
   const [activeRoute, setActiveRoute] = useState(1);
   const [fileList, setFileList] = useState(defaultFileList);
   const [file, setFile] = useState({ name: '', path: '' })
 
   useEffect(() => {
-      console.log(activeRoute)
       setWaiting(true)
       setLoading(false)
       setChartData([])
@@ -61,12 +62,17 @@ export default function LimitPage() {
       }
       setWaiting(false)
       setLoading(true)
+
+      if (activeRoute == 3 &&  data.wc != 1 && data.wc != 5) {
+                data.v = 0
+                data.omega = 0
+        }
+
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
-      console.log(data)
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
-      console.log(res)
       setChartData(res)
       setLoading(false)
+      setCondition(workConditions[data.wc - 1])
       Message.success('数据获取成功！')
     } catch (error) {
       console.log(error)
@@ -77,10 +83,10 @@ export default function LimitPage() {
   }
   
   const formList = [
-    <DynamicForm handleSubmit={handleSubmit} datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
-    <DynamicForm handleSubmit={handleSubmit} datas={limit_hydro} tabs={tabs[1]} file={file}></DynamicForm>,
-    <MyForm  handleSubmit={handleSubmit} datas={limit_mechanism} fileList={fileList} />,
-    <MyForm handleSubmit={handleSubmit} datas={limit_curve} fileList={fileList} />,
+    <DynamicForm key={1}  handleSubmit={handleSubmit} datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
+    <DynamicForm key={2} handleSubmit={handleSubmit} datas={limit_hydro} tabs={tabs[1]} file={file}></DynamicForm>,
+    <MyForm key={3}   handleSubmit={handleSubmit} datas={limit_mechanism} fileList={fileList} />,
+    <MyForm  key={4} handleSubmit={handleSubmit} datas={limit_curve} fileList={fileList} />,
   ];
 
 
@@ -111,7 +117,7 @@ export default function LimitPage() {
         style={{ flex: "1", marginLeft: "5px" }}
         bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
       >
-        <ResultPage activeRoute={activeRoute} chartData={chartData} typeOptions={typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
+        <ResultPage curCondition={condition} activeRoute={activeRoute} chartData={chartData} typeOptions={typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
       </Card>
     </div>
   );
