@@ -56,7 +56,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
                 onZero: false
             },
             axisLabel: {
-                formatter: (value) => value.toFixed(0), // 保留一位小数
+                formatter: (value) => value.toFixed(1), // 保留一位小数
             },
             min: 'dataMin',
             position: 'left',
@@ -94,7 +94,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             min: Math.min(...chartData.map(item => item.M ? item.M : 0)) === Math.max(...chartData.map(item => item.M ? item.M : 0)) ? -1 : 'dataMin', // 如果所有数据为 0，最小值设置为 -1
             max: Math.min(...chartData.map(item => item.M ? item.M : 0)) === Math.max(...chartData.map(item => item.M ? item.M : 0)) ? 1 : 'dataMax', // 如果所有数据为 0，最大值设置为 1
             axisLabel: {
-                formatter: (value) => value.toFixed(0), // 保留一位小数
+                formatter: (value) => value.toFixed(1), // 保留一位小数
             },
             position: 'left',
             inverse: false
@@ -126,7 +126,7 @@ export default function ResultPage({ handleExport, activeRoute, typeOptions = []
             type: 'value',
             name: '安全系数',
             axisLabel: {
-                formatter: (value) => value.toFixed(0), // 保留一位小数
+                formatter: (value) => value.toFixed(1), // 保留一位小数
             },
             axisLine: {
                 onZero: false
