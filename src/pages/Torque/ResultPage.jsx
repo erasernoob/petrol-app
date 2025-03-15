@@ -13,19 +13,15 @@ const chartOptions = ['数据图', '云图']
 
 export default function ResultPage({ curCondition, typeOptions=[], chartData=[], heatData={}, extraData={}, loading, waiting}) {
 
-    const handleExport = async () => {
-        await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_轴向力`, chartData.map(value => value.T))
-        await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_扭矩`, chartData.map(value => value.M))
-    }
 
 
-  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
 
-    const optionM  = getOptionM(heatData.map(({E, N, TCS, M}) => ({E, N, TCS: -TCS, M})))
-    const optionT  = getOptionT(heatData.map(({E, N, TCS, T}) => ({E, N, TCS: -TCS, T})))
-    const option1 = Option(chartData,
+  
+  const optionM  = getOptionM(heatData.map(({E, N, TCS, M}) => ({E, N, TCS: -TCS, M})))
+  const optionT  = getOptionT(heatData.map(({E, N, TCS, T}) => ({E, N, TCS: -TCS, T})))
+  const option1 = Option(chartData,
         {
-            type: 'value',
+          type: 'value',
             name: '井深 (m)',
             axisLine: {
               onZero: false
@@ -33,15 +29,15 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
             position: 'left',
             inverse: true
         }, [
-            {
+          {
             name: '轴向力 (kN)',
             type: 'value',
             offset: 0,
             alignTicks: true,
             position: 'top',
-        }
-    ], [
-        {
+          }
+        ], [
+          {
             name: '轴向力 (kN)',
             type: 'line',
             yAxisIndex: 0,
@@ -50,7 +46,7 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
             smooth: false,
             lineStyle: { width: 2 },
             showSymbol: false
-        }
+          }
     ],)
     const option2 = Option(
     chartData,
@@ -60,11 +56,11 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
         name: '井深 (m)',
         inverse: true,
         axisLine: {
-              onZero: false
+          onZero: false
         },
     },
     [
-        {
+      {
             name: '扭矩 (kN·m）',
             type: 'value',
             position: 'top',
@@ -77,7 +73,7 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
     ],
     [
         {
-            name: '扭矩 (kN·m）',
+          name: '扭矩 (kN·m）',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'M', y: 'Sk' },
@@ -85,24 +81,33 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
             smooth: true,     // 禁用平滑
             lineStyle: { width: 2 },
             showSymbol: false,
-        },
-    ],
-);
-
-  const [option, setOption] = useState(option1)
-  const [curType, setCurType] = useState(typeOptions[0])
-  const [curChart, setCurChart] = useState(chartOptions[0])
-  const [curValue, setCurValue] = useState(typeOptions[0])
-
-  useEffect(() => {
-    if (curValue === typeOptions[0]) {
-      setOption(option1)
-    } else {
-      setOption(option2)
-    }
-    setCurChart(chartOptions[0])
-  }, [chartData, heatData, curValue])
-
+          },
+        ],
+      );
+      
+      const [option, setOption] = useState(option1)
+      const [curType, setCurType] = useState(typeOptions[0])
+      const [curChart, setCurChart] = useState(chartOptions[0])
+      const [curValue, setCurValue] = useState(typeOptions[0])
+      
+      useEffect(() => {
+        if (curValue === typeOptions[0]) {
+          setOption(option1)
+        } else {
+          setOption(option2)
+        }
+        setCurChart(chartOptions[0])
+      }, [chartData, heatData, curValue])
+      
+      const handleExport = async () => {
+        if (curValue == typeOptions[0]) {
+          await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_${curType}`, chartData.map(value => value.T))
+        } else {
+          await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_${curType}`, chartData.map(value => value.M))
+        }
+      }
+      const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+      
   return (
     <>
     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' , gap: '0px'}}>

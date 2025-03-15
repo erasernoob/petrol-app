@@ -13,15 +13,7 @@ const RadioGroup = Radio.Group
 
 export default function ResultPage({typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    const handleExport = async () => {
-        await saveAtFrontend(chartData.map(value => value.angle_a), `角加速度`)
-        await saveAtFrontend(chartData.map(value => value.angle_v), `角速度`)
-        await saveAtFrontend(chartData.map(value => value.angel_v), `角位移`)
-        await saveAtFrontend(chartData.map(value => value.drill_m), `钻头扭矩`)
-        await saveAtFrontend(chartData.map(value => value.relativex), `钻头粘滑振动相轨迹`, chartData.map(value => value.relativey))
-    }
-    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
-    const option1 = Option(chartData,
+        const option1 = Option(chartData,
         {
             type: 'value',
             name: '角位移 (rad)',
@@ -186,6 +178,34 @@ export default function ResultPage({typeOptions = [], chartOptions = [], chartDa
     const [curType, setCurType] = useState(typeOptions[0])
     const [SSI, setSSI] = useState(0)
     const [riskLevel, setRiskLevel] = useState({level: '', color: ''})
+
+    const handleExport = async () => {
+      const index = typeOptions.findIndex((item) => curType === item)
+      switch (index) {
+        case 0:
+          await saveAtFrontend(chartData.map(value => value.angle_a), `角加速度`)
+          break;
+        case 1:
+          await saveAtFrontend(chartData.map(value => value.angle_v), `角速度`)
+          break;
+        case 2:
+          await saveAtFrontend(chartData.map(value => value.angel_v), `角位移`)
+          break;
+        case 3:
+          await saveAtFrontend(chartData.map(value => value.drill_m), `钻头扭矩`)
+          break;
+        case 4:
+          await saveAtFrontend(chartData.map(value => value.relativex), `钻头粘滑振动相轨迹`, chartData.map(value => value.relativey))
+          break;
+        default:
+          break;
+      }
+  }
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+
+
+
+
     const handleRiskLevel = () => {
       let res = {level: '', color: ''}
       switch (true) {

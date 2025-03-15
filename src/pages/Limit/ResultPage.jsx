@@ -13,24 +13,8 @@ const RadioGroup = Radio.Group
 
 export default function ResultPage({ curCondition, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    const handleExport = async () => {
-        // 机械延伸
-        if (activeRoute == 3) {
-            await saveAtFrontend(chartData.map(value => value.T), `${curCondition}_井口轴向力`)
-            await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_井口扭矩`)
-            await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_安全系数`)
-        } else if (activeRoute == 2) {
-            await saveAtFrontend(chartData.map(value => value.P), `立管压力`)
-            await saveAtFrontend(chartData.map(value => value.Plg), `总循环压耗`)
-        } else if (activeRoute == 1) {
-            await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
-        } else if (activeRoute == 4) {
-            await saveAtFrontend(chartData.map(value => value.fs), `正弦屈曲临界载荷`)
-            await saveAtFrontend(chartData.map(value => value.fh), `螺旋屈曲临界载荷`)
-        }
-   }
 
-    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+
     console.log(chartData)
     const option1 = Option(chartData,
         {
@@ -331,6 +315,36 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         }
         if (typeOptions.length === 0) setOption(option1)
     }, [chartData, curType, activeRoute])
+
+        const handleExport = async () => {
+        // 机械延伸
+        const index = typeOptions.findIndex((item) => curType === item)
+        if (activeRoute === 2) {
+            if (index === 0) {
+                await saveAtFrontend(chartData.map(value => value.Plg), curType)
+            } else if (index === 1) {
+                await saveAtFrontend(chartData.map(value => value.P), curType)
+            }
+        } else if (activeRoute === 3) {
+            if (index === 0) {
+                await saveAtFrontend(chartData.map(value => value.T), `${curCondition}_${curType}`)
+            } else if (index === 1) {
+                await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_${curType}`)
+            } else if (index === 2) {
+                await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_${curType}`)
+            }
+        } else if (activeRoute === 4) {
+            if (index === 0) {
+                await saveAtFrontend(chartData.map(value => value.fs), curType)
+            } else if (index === 1) {
+                await saveAtFrontend(chartData.map(value => value.fh), curType)
+            }
+        } else if (activeRoute == 1) {
+            await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
+        }
+   }
+
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
 
     const tagList = (Object.entries({}).map(([key, value]) => {
         return (
