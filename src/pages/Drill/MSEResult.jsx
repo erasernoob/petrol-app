@@ -7,12 +7,18 @@ import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
 import { saveData, save2Data } from '../utils/utils'
 import Option from '../option'
+import { saveAtFrontend } from '../utils/utils'
 import { color } from 'echarts'
 
 const RadioGroup = Radio.Group
 
-export default function MSEResult({ handleExport, chartOptions = [], options = [], chartData = [], extraData = {}, loading, waiting }) {
-    const exportButton = <Button type='primary' onClick={save2Data} style={{ marginLeft: '22px' }}>导出数据</Button>
+export default function MSEResult({ chartOptions = [], options = [], chartData = [], extraData = {}, loading, waiting }) {
+
+    const handleExport = async () => {
+        await saveAtFrontend(chartData.map(value => value.MSE), `MSE`)
+    }
+    
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
     
     const option1 = Option(chartData,
         {

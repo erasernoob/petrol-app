@@ -9,6 +9,7 @@ import Papa from 'papaparse';
 import { post } from "../../components/axios"
 
 const options = ['轴向力', '扭矩']
+const work_conditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
 
 export default function TorquePage() {
     const [fileList, setFileList] = useState({ orbit: { name: '', path: '' }, drill: { name: '', path: '' } })
@@ -16,6 +17,7 @@ export default function TorquePage() {
     const [waiting, setWaiting] = useState(true)
     const [chartData, setChartData] = useState([])
     const [heatData, setHeatData] = useState([])
+    const [condition, setCondition] = useState(work_conditions[0])
 
     const handleSubmit = async (data) => {
         try {
@@ -35,7 +37,7 @@ export default function TorquePage() {
 
             setChartData(res.map(({Sk, T, M}) => ({Sk, T, M})))
             setHeatData(res.map(({M, T, N, E, TCS}) => ({M, T, N, E, TCS})))
-
+            setCondition(work_conditions[data.wc - 1])
             setLoading(false)
             Message.success('数据获取成功！')
         } catch (error) {
@@ -64,7 +66,7 @@ export default function TorquePage() {
                 style={{ flex: '1', marginLeft: '5px' }}
                 bodyStyle={{ padding: '10px', height: '100%', flex: 1 }}
             >
-                <ResultPage chartData={chartData} heatData={heatData} typeOptions={options} loading={loading} waiting={waiting} />
+                <ResultPage curCondition={condition} chartData={chartData} heatData={heatData} typeOptions={options} loading={loading} waiting={waiting} />
             </Card>
         </div>
     )

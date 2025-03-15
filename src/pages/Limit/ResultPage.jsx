@@ -6,13 +6,31 @@ import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
 import Option from '../option'
-import { save2Data, saveData } from '../utils/utils'
+import { saveAtFrontend } from '../utils/utils'
+
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ handleExport, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
+export default function ResultPage({ curCondition, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    const exportButton = <Button type='primary' onClick={save2Data} style={{ marginLeft: '22px' }}>导出数据</Button>
+    const handleExport = async () => {
+        // 机械延伸
+        if (activeRoute == 3) {
+            await saveAtFrontend(chartData.map(value => value.T), `${curCondition}_井口轴向力`)
+            await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_井口扭矩`)
+            await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_安全系数`)
+        } else if (activeRoute == 2) {
+            await saveAtFrontend(chartData.map(value => value.P), `立管压力`)
+            await saveAtFrontend(chartData.map(value => value.Plg), `总循环压耗`)
+        } else if (activeRoute == 1) {
+            await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
+        } else if (activeRoute == 4) {
+            await saveAtFrontend(chartData.map(value => value.fs), `正弦屈曲临界载荷`)
+            await saveAtFrontend(chartData.map(value => value.fh), `螺旋屈曲临界载荷`)
+        }
+   }
+
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
     console.log(chartData)
     const option1 = Option(chartData,
         {

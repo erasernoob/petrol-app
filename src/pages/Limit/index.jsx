@@ -17,6 +17,7 @@ const tabs = [
   ["基本参数", "钻井液", "岩屑床"],
   ["基本参数", "钻井液", "钻头", "钻杆接头", "地面管汇", "岩屑床"],
 ];
+const workConditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
 const subRoutesOptions = [
   { label: "裸眼延伸极限", value: 1 },
   { label: "水力延伸极限", value: 2 },
@@ -37,6 +38,7 @@ export default function LimitPage() {
   const [loading, setLoading] = useState(false)
   const [waiting, setWaiting] = useState(true)
   const [chartData, setChartData] = useState([])
+  const [condition, setCondition] = useState(workConditions[0])
   const [activeRoute, setActiveRoute] = useState(1);
   const [fileList, setFileList] = useState(defaultFileList);
   const [file, setFile] = useState({ name: '', path: '' })
@@ -61,7 +63,7 @@ export default function LimitPage() {
       setWaiting(false)
       setLoading(true)
 
-      if ( activeRoute == 3 &&  data.wc != 1 && data.wc != 5) {
+      if (activeRoute == 3 &&  data.wc != 1 && data.wc != 5) {
                 data.v = 0
                 data.omega = 0
         }
@@ -70,6 +72,7 @@ export default function LimitPage() {
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
       setChartData(res)
       setLoading(false)
+      setCondition(workConditions[data.wc - 1])
       Message.success('数据获取成功！')
     } catch (error) {
       console.log(error)
@@ -114,7 +117,7 @@ export default function LimitPage() {
         style={{ flex: "1", marginLeft: "5px" }}
         bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
       >
-        <ResultPage activeRoute={activeRoute} chartData={chartData} typeOptions={typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
+        <ResultPage curCondition={condition} activeRoute={activeRoute} chartData={chartData} typeOptions={typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
       </Card>
     </div>
   );

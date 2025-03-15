@@ -6,12 +6,17 @@ import Option, { getOptionM, getOptionT } from '../option'
 import { Tag } from '@arco-design/web-react'
 import 'echarts-gl';
 import { Spin } from '@arco-design/web-react'
-import { save2Data, saveData } from '../utils/utils'
+import { save2Data, saveData, saveAtFrontend } from '../utils/utils'
 
 const RadioGroup = Radio.Group
 const chartOptions = ['数据图', '云图']
 
-export default function ResultPage({handleExport=save2Data, typeOptions=[], chartData=[], heatData={}, extraData={}, loading, waiting}) {
+export default function ResultPage({ curCondition, typeOptions=[], chartData=[], heatData={}, extraData={}, loading, waiting}) {
+
+    const handleExport = async () => {
+        await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_轴向力`, chartData.map(value => value.T))
+        await saveAtFrontend(chartData.map(value => value.Sk), `${curCondition}_扭矩`, chartData.map(value => value.M))
+    }
 
 
   const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
