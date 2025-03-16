@@ -48,7 +48,7 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
             showSymbol: false
           }
     ],)
-    const option2 = Option(
+  const option2 = Option(
     chartData,
     {
         type: 'value',
