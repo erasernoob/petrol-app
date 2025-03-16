@@ -4,6 +4,7 @@ import pandas as pd
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
 from service import utils
+from service.mecha_utils import matlab_ode_wrapper, spline_interp
 from scipy.integrate import solve_ivp
 from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
@@ -182,18 +183,55 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, js, v, omega
     Mtemp = M0
     Nbtemp = 0
     Nntemp = 0
+
+    # 调用封装函数
+    s, y = matlab_ode_wrapper(
+            len_calc=len_calc,  # 计算长度（必须与sspan[-1]一致）
+            ds=ds,  # 计算间隔
+            T0=T0,  # 初始扭矩
+            M0=M0,  # 初始弯矩
+            ks=ks,  # 曲率数组
+            dks=dks,  # 曲率一阶导数数组
+            ddks=ddks,  # 曲率二阶导数数组
+            kphis=kphis,  # 曲率-phi系数数组
+            kalphas=kalphas,  # 曲率-alpha系数数组
+            taos=taos,  # 扭矩系数数组
+            Rt=Rt,  # 钻具半径数组
+            Dw=Dw,  # 井径
+            miua=miua,  # 轴向摩擦系数数组
+            miut=miut,  # 周向摩擦系数数组
+            qmt=qmt,  # 单位长度重量数组
+            Ait=Ait,  # 内截面积数组
+            Aot=Aot,  # 外截面积数组
+            rhoi=rhoi,  # 内流体密度
+            rhoo=rhoo,  # 外流体密度
+            E=E,  # 弹性模量
+            It=It,  # 惯性矩数组
+            g=g,  # 重力加速度
+            Mk=Mk,  # 样条alpha二阶导数数组
+            mk=mk,  # 样条phi二阶导数数组
+            Sk=Sk,  # 样条节点位置数组
+            alphak=alphak,  # 样条alpha节点值
+            phik=phik,  # 样条phi节点值
+            v=v,  # 钻速
+            omega=omega,  # 转速
+            taof=taof,  # 流体剪切应力
+            miu=miu,  # 流体摩擦系数
+            sign1=sign1,  # 方向标志1
+            sign2=sign2  # 方向标志2
+        )
     
-    # 使用scipy的solve_ivp代替MATLAB的ode45
-    def odefun(s, y):
-        return odefunc(s, y, ks, dks, ddks, kphis, kalphas, taos, sspan, v, omega, taof, miu,
-                      Rt, Dw, miua, miut, qmt, Ait, Aot, rhoi, rhoo, E, It, g, Mk, mk, Sk,
-                      alphak, phik, Ttemp, Mtemp, Nbtemp, Nntemp, sign1, sign2)
+    # # 使用scipy的solve_ivp代替MATLAB的ode45
+    # def odefun(s, y):
+    #     return odefunc(s, y, ks, dks, ddks, kphis, kalphas, taos, sspan, v, omega, taof, miu,
+    #                   Rt, Dw, miua, miut, qmt, Ait, Aot, rhoi, rhoo, E, It, g, Mk, mk, Sk,
+    #                   alphak, phik, Ttemp, Mtemp, Nbtemp, Nntemp, sign1, sign2)
     
-    # 数值积分求解
-    result = solve_ivp(odefun, [0, len_calc], [T0, M0], method='RK45', t_eval=sspan, rtol=1e-3, atol=1e-6)
+    # # 数值积分求解
+    # result = solve_ivp(odefun, [0, len_calc], [T0, M0], method='RK45', t_eval=sspan, rtol=1e-3, atol=1e-6)
     
-    s = result.t
-    y = result.y.T
+    # s = result.t
+    # y = result.y.T
     
     T = y[:, 0]
     M = y[:, 1]
@@ -469,13 +507,13 @@ def diff_func(vars_data, span):
         else:
             diff_var[i] = (vars_data[i+1] - vars_data[i-1]) / (span[i+1] - span[i-1])
     
-    # 对导数进行光滑处理
-    window_length = min(101, len(diff_var))
-    if window_length % 2 == 0:
-        window_length -= 1
+    # # 对导数进行光滑处理
+    # window_length = min(101, len(diff_var))
+    # if window_length % 2 == 0:
+    #     window_length -= 1
     
-    if window_length >= 3:
-        diff_var = savgol_filter(diff_var, window_length, 3)
+    # if window_length >= 3:
+        # diff_var = savgol_filter(diff_var, window_length, 3)
     
     return diff_var
 
@@ -534,43 +572,6 @@ def deal_input_data(data):
     Zs = Ys0
     
     return Length, Xs, Ys, Zs
-
-def spline_interp(Mk, mk, Sk, alphak, phik, S0):
-    np_len = len(Mk)
-    
-    if S0 >= Sk[-1]:
-        iter_val = np_len - 2
-    else:
-        iter_val = 0
-        for i in range(np_len - 1):
-            if S0 >= Sk[i] and S0 < Sk[i+1]:
-                iter_val = i
-                break
-    
-    if S0 < min(Sk):
-        iter_val = 0
-    
-    M0 = Mk[iter_val]
-    M1 = Mk[iter_val+1]
-    m0 = mk[iter_val]
-    m1 = mk[iter_val+1]
-    alpha0 = alphak[iter_val]
-    alpha1 = alphak[iter_val+1]
-    phi0 = phik[iter_val]
-    phi1 = phik[iter_val+1]
-    Sr = Sk[iter_val+1]
-    Sl = Sk[iter_val]
-    Lk = Sk[iter_val+1] - Sk[iter_val]
-    
-    C1 = alpha1 / Lk - M1 * Lk / 6
-    C0 = alpha0 / Lk - M0 * Lk / 6
-    c1 = phi1 / Lk - m1 * Lk / 6
-    c0 = phi0 / Lk - m0 * Lk / 6
-    
-    alphacal = M0 * (Sr - S0)**3 / 6 / Lk + M1 * (S0 - Sl)**3 / 6 / Lk + C1 * (S0 - Sl) + C0 * (Sr - S0)
-    phical = m0 * (Sr - S0)**3 / 6 / Lk + m1 * (S0 - Sl)**3 / 6 / Lk + c1 * (S0 - Sl) + c0 * (Sr - S0)
-    
-    return alphacal, phical
 
 def deal_curve_data(data, js):
     S = data[:, 0]
