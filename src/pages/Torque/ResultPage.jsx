@@ -12,7 +12,7 @@ const RadioGroup = Radio.Group
 const chartOptions = ['数据图', '云图']
 
 export default function ResultPage({ curCondition, typeOptions=[], chartData=[], heatData={}, extraData={}, loading, waiting}) {
-  
+ 
   const optionM  = getOptionM(heatData.map(({E, N, TCS, M}) => ({E, N, TCS: -TCS, M})))
   const optionT  = getOptionT(heatData.map(({E, N, TCS, T}) => ({E, N, TCS: -TCS, T})))
   const option1 = Option(chartData,
