@@ -8,7 +8,7 @@ from entity.DTO import LimitMechanismDTO
 from scipy.interpolate import interp1d
 from service import utils
 from scipy.integrate import solve_ivp
-from mecha_utils import matlab_ode_wrapper
+from service.mecha_utils import matlab_ode_wrapper
 import matplotlib.pyplot as plt
 import os
 
