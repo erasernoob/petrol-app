@@ -50,7 +50,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'MSE', y: 'Sk' },
-            sampling: 'lttb',
+            sampling: 'none',
             smooth: false,
             lineStyle: { width: 1 },
             showSymbol: false
@@ -85,7 +85,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'wob', y: 'Sk' },
-            sampling: 'lttb',
+            sampling: 'none',
             smooth: false,
             lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
@@ -120,7 +120,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rpm', y: 'Sk' },
-            sampling: 'lttb',
+            sampling: 'none',
             smooth: false,
             lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
@@ -155,7 +155,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rop', y: 'Sk' },
-            sampling: 'lttb',
+            sampling: 'none',
             smooth: false,
             lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
