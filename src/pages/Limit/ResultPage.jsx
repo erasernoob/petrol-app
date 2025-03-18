@@ -14,6 +14,10 @@ const RadioGroup = Radio.Group
 export default function ResultPage({ curCondition, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
 
+    const ecd = chartData.map((item) => item.ECD ? item.ECD : 10000)
+    const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
+
+
 
     console.log(chartData)
     const option1 = Option(chartData,
@@ -29,7 +33,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         {
             name: 'ECD（g/cm3）',
             type: 'value',
-            min: 'dataMin',
+            min: ecdMinVal,
             axisLabel: {
                 formatter: (value) => value.toFixed(2), // 保留一位小数
             },

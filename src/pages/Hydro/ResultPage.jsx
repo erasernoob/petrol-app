@@ -11,19 +11,9 @@ const RadioGroup = Radio.Group
 
 export default function ResultPage({chartData=[], data, loading, waiting}) {
 
-  const handleExport = async () => {
-    const drillData = chartData.map((value) => {
-      return value.drillPressure
-    })
-    const annularData = chartData.map(value => {
-      return value.annularPressure
-    })
-    await saveAtFrontend(drillData, '钻柱循环压力表')
-    await saveAtFrontend(annularData, '环空循环压力表')
-    await saveAtFrontend(chartData.map((value) => value.ECD), "ECD")
-  }
 
-  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+  const ecd = chartData.map((item) => item.ecd ? item.ecd : 10000)
+  const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
 
     // 使用 useMemo 让 option1 和 option2 在 chartData 变化时重新计算
   const option1 = useMemo(() => Option(
@@ -85,7 +75,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         axisLabel: {
           formatter: (value) => value.toFixed(2), // 保留一位小数
         },
-        min: 'dataMin',
+        min: ecdMinVal,
         offset: 0,
         alignTicks: true,
         position: 'top'
@@ -106,10 +96,26 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
   ), [chartData]); // 依赖于 chartData
   console.log(chartData)
 
-
-
   const [option, setOption] = useState({})
   const [curValue, setCurValue] = useState('循环压力')
+
+  const handleExport = async () => {
+    const drillData = chartData.map((value) => {
+      return value.drillPressure
+    })
+    const annularData = chartData.map(value => {
+      return value.annularPressure
+    })
+    if (option === option1) {
+      await saveAtFrontend(drillData, '钻柱循环压力表')
+      await saveAtFrontend(annularData, '环空循环压力表')
+    } else {
+      await saveAtFrontend(chartData.map((value) => value.ecd), "ECD")
+    }
+  }
+
+  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+
 
   useEffect(() => {
   const newOption = curValue === '循环压力' ? option1 : option2
