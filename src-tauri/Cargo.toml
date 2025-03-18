@@ -1,7 +1,7 @@
 [package]
 name = "petrol-app"
-version = "0.5.0"
-description = "A Tauri App"
+version = "0.6.0"
+description = "大位移井钻井关键参数联动分析软件"
 authors = ["erasernoob"]
 edition = "2021"
 
