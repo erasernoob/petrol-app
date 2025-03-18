@@ -12,8 +12,7 @@ import { useMemo } from "react"
 export default function Option(chartData, yAxis, xAxis, series) {
   return {
     animation: true,
-    large: true,
-    largeThreshold: 500,
+    animationThreshold: 20000, // ✅ 调高动画适用的数据量
     dataset: { source: chartData },
     dataZoom: [{
       type: 'inside',
