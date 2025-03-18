@@ -26,10 +26,10 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
         rhoi = rhoi  # 钻井液密度，kg/m3
         Dw = Dw  # 井眼直径，m
         tgxs = tgxs  # 套管下深，m
-        miua1 = miua11 / 30  # 套管段摩阻系数
-        miua2 = miua22 / 30  # 裸眼段摩阻系数
-        miut1 = miua11 * 1.2  # 套管段切向摩阻系数
-        miut2 = miua22 * 1.2  # 裸眼段切向摩阻系数
+        miua1 = miua11   # 套管段摩阻系数
+        miua2 = miua22   # 裸眼段摩阻系数
+        miut1 = miua11 * 1.6  # 套管段切向摩阻系数
+        miut2 = miua22 * 1.6  # 裸眼段切向摩阻系数
         qfqd = qfqd  # 钻柱屈服强度，MPa
         jsjg = jsjg  # 计算井深间隔，m
 

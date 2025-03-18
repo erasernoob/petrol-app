@@ -17,10 +17,10 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, js, v, omega
 
     if working_condition == 1:
         # 输入参数
-        miua1 = miua11 / 30  # 套管段摩阻系数
-        miua2 = miua22 / 30  # 裸眼段摩阻系数
-        miut1 = miua11 * 1.2  # 套管段切向摩阻系数
-        miut2 = miua22 * 1.2  # 裸眼段切向摩阻系数
+        miua1 = miua11  # 套管段摩阻系数
+        miua2 = miua22  # 裸眼段摩阻系数
+        miut1 = miua11 * 1.6  # 套管段切向摩阻系数
+        miut2 = miua22 * 1.6  # 裸眼段切向摩阻系数
         
         # 固定值
         M0 = abs(T0 * Dw / 3 * 0.5)  # 钻头扭矩
