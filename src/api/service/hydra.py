@@ -368,7 +368,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         if wc == 3:
             nnnn = 0.69
         elif wc == 2:
-            nnnn = 1.25
+            nnnn = 1.05
         elif wc == 1:
             nnnn = 1.45
 
@@ -392,8 +392,10 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             Ppyx = Pp[-i] - Pp[-(i+1)]
             Pgn[-(i+1)] = Pgn[-i] - PI2yx + nnnn * Ppyx
         
-        if wc == 3 or wc == 2:
+        if wc == 3:
             ccc = 1.05
+        elif wc == 2:
+            ccc = 1
         elif wc == 1:
             ccc = 0.9
 
@@ -443,8 +445,10 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         # TODO注意这里是
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
 
-        if wc == 3 or wc == 2:
+        if wc == 3:
             aaa = 1.05
+        elif wc == 2:
+            aaa = 1
         elif wc == 1:
             aaa = 0.9
 
@@ -455,7 +459,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         if wc == 3:
             nnnn = 0.69
         elif wc == 2:
-            nnnn = 1.25
+            nnnn = 1.05
         elif wc == 1:
             nnnn = 1.45
 
@@ -473,8 +477,10 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             Ppyx = Pp[-i] - Pp[-(i + 1)]
             Pgnyx[-(i + 1)] = Pgnyx[-i] - PI2yx + nnnn * Ppyx
         
-        if wc == 3 or wc == 2:
+        if wc == 3:  
             ccc = 1.05
+        elif wc == 2:
+            ccc = 1
         elif wc == 1:
             ccc = 0.9
             
