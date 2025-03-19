@@ -271,6 +271,9 @@ export default function ResultPage({typeOptions = [], chartOptions = [], chartDa
         <>
       <RadioGroup
         type='button'
+        style={{
+          marginLeft: '20px'
+        }}
         size='large'
         name='chart'
         value={curType}

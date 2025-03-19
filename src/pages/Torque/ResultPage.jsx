@@ -115,6 +115,9 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
         size='large'
         name='chart'
         value={curType}
+        style={{
+          marginLeft: '20px'
+        }}
         onChange={(value) => {
           setCurValue(value)
           setCurChart(chartOptions[0])

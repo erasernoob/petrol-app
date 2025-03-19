@@ -366,6 +366,9 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             <RadioGroup
                 type='button'
                 size='large'
+                style={{
+                  marginLeft: '20px'
+                }}
                 name='chart'
                 value={curType}
                 defaultValue={curType}
