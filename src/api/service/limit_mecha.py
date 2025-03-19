@@ -320,7 +320,10 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
         if working_condition == 2 and js == 4000:
             T = T * 4
 
-        aq = qfqd / ((T[0] * 1000 / (np.pi * (((Dtrans[-1] / 2) ** 2) - ((dtrans[-1] / 2) ** 2))) / 1000000))
+        # aq = qfqd / ((T[0] * 1000 / (np.pi * (((Dtrans[-1] / 2) ** 2) - ((dtrans[-1] / 2) ** 2))) / 1000000))
+        lyl = T[0] * 1000 / (np.pi * ((Dtrans[-1] / 2) ** 2 - (dtrans[-1] / 2) ** 2)) / 1_000_000
+        qyl = M[0] * 1000 * (Dtrans[-1] / 2) / (np.pi / 32) / (Dtrans[-1] ** 4 - dtrans[-1] ** 4) / 1_000_000
+        aq = qfqd / np.sqrt(lyl ** 2 + 3 * qyl ** 2)
 
         T_result[:T.shape[0], nn - 1] = T.reshape(-1)
         M_result[:M.shape[0], nn - 1] = M.reshape(-1)
