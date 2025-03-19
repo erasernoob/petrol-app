@@ -49,18 +49,31 @@ export default function Sider({
         name="chart"
         defaultValue={activeRoute}
         onChange={(value) => {
-          setActiveRoute(value);
-          // 将filelist重置
-          // file重置
-          setOrbit(false);
-          setDrillState(false);
-          setWaiting(true);
-          setLoading(false);
-          setChartData([]);
-          setFile({ name: "", path: "" });
-          setFileList(defaultFileList);
+          // 在实际更改路由之前，添加一个类来触发过渡动画
+          const mainContent = document.querySelector(".main-content");
+          if (mainContent) {
+            mainContent.classList.add("route-transitioning");
+          }
 
-          setParams(false);
+          // 延迟更新状态，给 CSS 过渡一些时间来开始
+          setTimeout(() => {
+            setActiveRoute(value);
+            setOrbit(false);
+            setDrillState(false);
+            setWaiting(true);
+            setLoading(false);
+            setChartData([]);
+            setFile({ name: "", path: "" });
+            setFileList(defaultFileList);
+            setParams(false);
+
+            // 动画结束后移除过渡类
+            setTimeout(() => {
+              if (mainContent) {
+                mainContent.classList.remove("route-transitioning");
+              }
+            }, 2000); // 增加到 1200ms 与 CSS 过渡时间匹配
+          }, 50);
         }}
         options={subRouteOptions}
       ></RadioGroup>
@@ -140,7 +153,14 @@ export default function Sider({
             }}
           >
             <div className="mse-tabs-container">{Tabs}</div>
-            <div style={{ display: "flex", alignItems: "center", gap: "20px", marginRight: "80px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "20px",
+                marginRight: "80px",
+              }}
+            >
               <FileUploader
                 params={params}
                 setParams={setParams}

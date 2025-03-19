@@ -3,6 +3,7 @@
     display: flex;
     height: 100%;
     width: 100%;
+    transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .input-page {
     padding-top: 20px;
@@ -11,7 +12,7 @@
     justify-content: center;
     /* align-items: center; */
     gap: 20px;
-    
+    transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* left side for the result */
@@ -144,6 +145,7 @@
     /* position: relative; */
     height: 100%;
     width: 100%;
+    transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* for torque */
@@ -181,6 +183,7 @@
     display: inline-block;
     border-right: 0px;
     border-bottom: 0px;
+    transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* drill -> MSE RESULT DIV */
@@ -203,6 +206,7 @@
   width: 100%;
   max-width: 550px;
   margin-bottom: 16px;
+  transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Make sure the form aligns properly */
@@ -261,4 +265,52 @@
 
 .mse-tabs-container {
     margin-left: 20px;
+}
+
+/* 淡出动画 */
+.content-fade-out {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 完全隐藏状态 */
+.content-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* 淡入动画 */
+.content-fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 卡片宽度和位置的平滑过渡 */
+.main-content .arco-card {
+  transition: width 2000ms cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 2000ms cubic-bezier(0.4, 0, 0.2, 1),
+              flex 2000ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 为结果卡片添加淡入淡出效果 */
+.result-card {
+  transition: opacity 2000ms cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-card-entering {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.result-card-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* 表单元素的平滑过渡 */
+.form-wrapper, .form-container, .fixed-position-form-item {
+  transition: all 2000ms cubic-bezier(0.4, 0, 0.2, 1);
 }
