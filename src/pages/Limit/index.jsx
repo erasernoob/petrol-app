@@ -94,7 +94,7 @@ export default function LimitPage() {
   return (
     <div className="main-content">
       <Card
-        title="参数输入"
+        title="参数"
         style={{
           width: "30%",
           height: "100%",
