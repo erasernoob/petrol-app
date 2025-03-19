@@ -9,7 +9,7 @@ import { useMemo } from "react"
  */
 
 
-export default function Option(chartData, yAxis, xAxis, series) {
+export default function Option(chartData, yAxis, xAxis, series, legend="") {
   return {
     animation: true,
     animationThreshold: 20000, // ✅ 调高动画适用的数据量
@@ -26,7 +26,7 @@ export default function Option(chartData, yAxis, xAxis, series) {
       trigger: 'axis',
       axisPointer: { type: 'cross' }
     },
-    legend: {
+    legend: !legend ? {
       show: true,
       orient: 'vertical',
       left: 'left',
@@ -35,7 +35,7 @@ export default function Option(chartData, yAxis, xAxis, series) {
         fontSize: 12,
         color: '#333'
       }
-    }
+    } : legend
   };
 }
 

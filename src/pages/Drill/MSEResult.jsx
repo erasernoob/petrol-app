@@ -55,7 +55,10 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             lineStyle: { width: 1 },
             showSymbol: false
         }
-    ],)
+    ],
+    {
+      show: false,
+    })
     const option2 = Option(chartData,
         {
             type: 'value',
@@ -90,7 +93,10 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
-    ],)
+    ],
+    {
+      show: false,
+    })
     const option3 = Option(chartData,
         {
             type: 'value',
@@ -125,7 +131,10 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
-    ],)
+    ],
+    {
+      show: false,
+    })
     const option4 = Option(chartData,
         {
             type: 'value',
@@ -160,7 +169,10 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             lineStyle: { width: 1, color: 'rgb(255,0,0)' },
             showSymbol: false
         }
-    ],)
+    ],
+    {
+      show: false,
+    })
 
    chartOptions = [option1, option2, option3, option4]
     return (
@@ -168,7 +180,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
 
             {chartData.length > 0 && loading === false && waiting === false ? (
                 <>
-                <div style={{ height: '72vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
+                <div style={{ height: '80vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
                     {
                         chartOptions.map((option, index) => {
                             return (
@@ -183,14 +195,14 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
                         })
                     }
                 </div>
-                <div style={{ display: 'flex', marginTop: '10px' , alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', marginBottom: '1px' , alignItems: 'center', justifyContent: 'center' }}>
                     {exportButton}
                 </div>
 
                 </>
                 )
                  :
-                <div className="mse-waiting-page" style={{ height: '79vh', display: 'flex', alignItems: 'center', margin: '0px 5px' , justifyContent: 'center' }}>
+                <div className="mse-waiting-page" style={{ height: '83vh', display: 'flex', alignItems: 'center', margin: '0px 0px' , justifyContent: 'center' }}>
                     
                     {waiting == true ? '输入参数开始计算' : <Spin size="30" tip='正在计算中......' />}
                 </div>
