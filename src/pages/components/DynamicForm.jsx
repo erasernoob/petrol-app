@@ -47,42 +47,59 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                 key={categoryKey}
                 className="custom-tabsPane"
               >
-                {Object.entries(data).map(([key, field]) => (
-                  <FormItem
-                    key={key}
-                    label={field.name}
-                    labelCol={
-                      tabsName[index] === "钻井液" ||
-                      tabsName[index] === "地面管汇"
-                        ? { span: "11", offset: "" }
-                        : { span: "9" }
-                    }
-                    wrapperCol={{ span: "10" }}
-                    field={key}
-                    // TODO: 测试用
-                    // labelCol={{flex: "1" ,offset: ""}}
-                    initialValue={field.value}
-                    rules={[
-                      { required: true, message: `${field.name} 不能为空` },
-                    ]}
-                  >
-                    {key === "lbmx" ? (
-                      <Select
-                        options={field.option}
-                        className="input-component"
-                      />
-                    ) : key != "yx" && key != "y" ? (
-                      <Input className="input-component"></Input>
-                    ) : (
-                      <Checkbox
-                        // checked={field.value === "1"} // 控制选中状态
-                        onChange={(checked) =>
-                          form.setFieldValue(key, checked ? 1 : 0)
-                        }
-                      ></Checkbox>
-                    )}
-                  </FormItem>
-                ))}
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "4vh",
+                    alignItems: "center",
+                    paddingTop: "10px",
+                    paddingRight: "4vw",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {Object.entries(data).map(([key, field]) => (
+                    <FormItem
+                      key={key}
+                      label={field.name}
+                      field={key}
+                      initialValue={field.value}
+                      rules={[
+                        { required: true, message: `${field.name} 不能为空` },
+                      ]}
+                      className="fixed-position-form-item"
+                      labelCol={{ span: 11 }}
+                      wrapperCol={{ span: 13 }}
+                      style={{
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        marginBottom: "20px",
+                        width: "100%",
+                        display: "flex",
+                      }}
+                    >
+                      {key === "lbmx" ? (
+                        <Select
+                          options={field.option}
+                          className="input-component"
+                          placeholder={`请选择${field.name}`}
+                        />
+                      ) : key != "yx" && key != "y" ? (
+                        <Input
+                          className="input-component"
+                          placeholder={`请输入${field.name}`}
+                        ></Input>
+                      ) : (
+                        <Checkbox
+                          onChange={(checked) =>
+                            form.setFieldValue(key, checked ? 1 : 0)
+                          }
+                        ></Checkbox>
+                      )}
+                    </FormItem>
+                  ))}
+                </div>
               </TabPane>
             );
           })}
@@ -90,27 +107,35 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
 
         <FormItem
           className="button-wrapper"
-          wrapperCol={{ offset: 6 }}
-          style={{ borderTop: "1px solid #e8e8e8" }}
+          style={{
+            borderTop: "1px solid #e8e8e8",
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+          }}
         >
-          <Button
-            type="primary"
-            className="button submit-button"
-            disabled={file.name == ""}
-            htmlType="submit"
+          <div
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: "10px"}}
           >
-            计算
-          </Button>
-          <Button
-            type="primary"
-            className="button reset-button"
-            disabled={!form.validate()}
-            onClick={() => {
-              form.resetFields();
-            }}
-          >
-            重置
-          </Button>
+            <Button
+              type="primary"
+              className="button submit-button"
+              disabled={file.name == ""}
+              htmlType="submit"
+            >
+              计算
+            </Button>
+            <Button
+              type="primary"
+              className="button reset-button"
+              disabled={!form.validate()}
+              onClick={() => {
+                form.resetFields();
+              }}
+            >
+              重置
+            </Button>
+          </div>
         </FormItem>
       </Form>
     </div>
