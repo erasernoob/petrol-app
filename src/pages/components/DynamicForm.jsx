@@ -52,7 +52,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                     width: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "4vh",
+                    gap: "3vh",
                     alignItems: "center",
                     paddingTop: "10px",
                     paddingRight: "4vw",

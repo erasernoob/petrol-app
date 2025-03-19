@@ -55,7 +55,7 @@
   justify-content: center; /* 水平居中 */
   padding-left: 0.3vw !important;
   padding-right: 0.3vw !important;
-  height: 18vh;
+  height: 13vh;
   font-size: 16px !important;
   writing-mode: vertical-rl;
   white-space: nowrap;
@@ -102,6 +102,25 @@
 
 }
 
+.full-width-radio-group {
+    width: 100% !important;
+}
+
+.full-width-radio-group .arco-radio-group {
+    display: flex !important;
+    width: 100% !important;
+    align-items: center !important;
+}
+
+.full-width-radio-group .arco-radio-group .arco-radio-button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
 
 
 
@@ -133,7 +152,7 @@
     border-bottom: 1px solid var(--color-neutral-3);
     display: flex;
     overflow-y: auto;
-    gap: 1.5vh;
+    gap: 3vh;
     flex-direction: column;
     align-items: center;
     padding-left: 3vw;

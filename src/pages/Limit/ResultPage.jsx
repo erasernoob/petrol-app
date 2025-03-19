@@ -358,7 +358,6 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             </>
         )
     }))
-    console.log(curType)
     return (
         <>
             <RadioGroup

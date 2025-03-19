@@ -47,20 +47,20 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .setup(|app| {
             // Determine the backend executable name based on the OS
-            let file_name = format!("backend{}", env::consts::EXE_SUFFIX); // Automatically adds .exe on Windows
+            // let file_name = format!("backend{}", env::consts::EXE_SUFFIX); // Automatically adds .exe on Windows
 
-            let backend_name = PathBuf::from("bin").join(file_name);
-            let backend_path = app
-                .path()
-                .resolve(&backend_name, BaseDirectory::Resource)
-                .expect("Failed to resolve backend executable path");
+            // let backend_name = PathBuf::from("bin").join(file_name);
+            // let backend_path = app
+            //     .path()
+            //     .resolve(&backend_name, BaseDirectory::Resource)
+            //     .expect("Failed to resolve backend executable path");
 
-            println!("backend_path {}", backend_path.display());
+            // println!("backend_path {}", backend_path.display());
 
-            let backend_process = start_backend(&backend_path).expect("start backend process failed");
+            // let backend_process = start_backend(&backend_path).expect("start backend process failed");
 
-            // Spawn the backend process
-            app.manage(BackendProcess(backend_process));
+            // // Spawn the backend process
+            // app.manage(BackendProcess(backend_process));
             // println!("Tauri application started, backend is running.");
             Ok(())
         })

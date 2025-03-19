@@ -35,27 +35,29 @@ export default function Sider({
   };
 
   const Tabs = (
-    <RadioGroup
-      type="button"
-      size="large"
-      name="chart"
-      defaultValue={1}
-      onChange={(value) => {
-        setActiveRoute(value);
-        // 将filelist重置
-        // file重置
-        setOrbit(false);
-        setDrillState(false);
-        setWaiting(true);
-        setLoading(false);
-        setChartData([]);
-        setFile({ name: "", path: "" });
-        setFileList(defaultFileList);
+    <div className="full-width-radio-group">
+      <RadioGroup
+        type="button"
+        size="large"
+        name="chart"
+        defaultValue={1}
+        onChange={(value) => {
+          setActiveRoute(value);
+          // 将filelist重置
+          // file重置
+          setOrbit(false);
+          setDrillState(false);
+          setWaiting(true);
+          setLoading(false);
+          setChartData([]);
+          setFile({ name: "", path: "" });
+          setFileList(defaultFileList);
 
-        setParams(false);
-      }}
-      options={subRouteOptions}
-    ></RadioGroup>
+          setParams(false);
+        }}
+        options={subRouteOptions}
+      ></RadioGroup>
+    </div>
   );
 
   const handleUpload = async (id) => {
