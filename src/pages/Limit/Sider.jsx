@@ -190,7 +190,11 @@ export default function Sider({
         <>
           {Tabs}
           {subRouteOptions.length >= 3 && (
-            <div className="file-uploader">
+            <div className="file-uploader"
+            style={{
+              paddingTop: "0px",
+            }}
+            >
               <FileUploader
                 orbit={orbit}
                 setOrbit={setOrbit}
