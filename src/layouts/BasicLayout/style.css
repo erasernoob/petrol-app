@@ -1,36 +1,38 @@
-/* 全局内容淡入淡出 + 缩放 */
 .content {
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1), transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 触发路由切换时，内容淡出并稍微缩小 */
-.route-transition .content {
+/* 完全隐藏的状态 */
+.content-hidden {
     opacity: 0;
-    transform: translateY(10px) scale(0.98);
+    transform: translateY(8px);
 }
 
-/* 基础布局 */
-.basic-layout {
-    width: 100%;
-    height: 100%;
+/* 淡出动画 */
+.content-fade-out {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 进入动画 - 让页面更流畅 */
+/* 淡入动画 */
+.content-fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 初始动画 */
 .fade-in {
-  opacity: 0;
-  transform: translateY(20px) scale(0.95); /* 轻微缩小 + 下移 */
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 进入完成后状态 */
 .fade-in.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1); /* 恢复原始状态 */
+    opacity: 1;
+    transform: translateY(0);
 }
-
-
 
 
 .basic-layout {
