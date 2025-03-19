@@ -1,4 +1,4 @@
-import { Radio, Button, Message } from '@arco-design/web-react'
+import { Radio, Button, Grid, Space} from '@arco-design/web-react'
 import { Empty } from '@arco-design/web-react';
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
@@ -9,6 +9,7 @@ import { Spin } from '@arco-design/web-react'
 import { save2Data, saveAtFrontend, saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
+const { Row, Col } = Grid;
 
 export default function ResultPage({chartData=[], data, loading, waiting}) {
 
@@ -129,10 +130,10 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
 
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
-      <>
+      <span>
         <span>{key}</span>
         <Tag size='large'>{value.toFixed(3)}</Tag>
-      </>
+      </span>
     )
   }))
 
@@ -140,8 +141,10 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
     <>
      {chartData.length > 0 && loading === false && waiting === false ? (
       <>
-      
-      <RadioGroup
+    <Row justify="center" align="start" style={{ height: '2vh' }}>
+        {/* <Col span={6} style={{ height: 90, lineHeight: '90px' }}> */}
+        <Col span={8}>
+        <RadioGroup
         type='button'
         size='large'
         name='chart'
@@ -155,19 +158,19 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         options={['循环压力', 'ECD']}
         >
       </RadioGroup>
-      <div style={{
-        display: 'inline-block',
-        marginLeft: '80px'
-      }}>
+        </Col>
+        {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
+        <Col span={16}>
         <div style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: '20px'
+          gap: "20px",
         }}>
           {tagList} 
         </div>
-      </div>
+        </Col>
+    </Row>
           <ReactECharts
             option={option}
             style={{ height: '78%', width: '100%' }}
@@ -178,7 +181,6 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '20px',
             // marginTop: '7px',
             marginLeft: '0px'
           }}>
