@@ -181,7 +181,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
 
             {chartData.length > 0 && loading === false && waiting === false ? (
                 <>
-                <div style={{ height: '80vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
+                <div style={{ height: '75vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
                     {
                         chartOptions.map((option, index) => {
                             return (
@@ -196,7 +196,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
                         })
                     }
                 </div>
-                <div style={{ display: 'flex', marginBottom: '1px' , alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', marginBottom: "0px", alignItems: 'center', justifyContent: 'center' }}>
                     {exportButton}
                 </div>
 
