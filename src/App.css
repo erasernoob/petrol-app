@@ -37,7 +37,7 @@ body {
 
 /* 主题色定义 */
 :root {
-  --primary-blue: #0066B3 !important; /* 专业深蓝色 */
+  --primary-blue: #1A3C6E !important; /* 专业深蓝色 */
   --secondary-blue: #4D99CC !important; /* 中蓝色 */
   --accent-orange: #FF8C00 !important; /* 鲜明橙色 */
   --accent-green: #4CAF50 !important; /* 状态绿色 */
@@ -197,6 +197,7 @@ body {
   color: #0a5ad2 !important; /* 已有的蓝色 */
   font-weight: 600 !important;
   border-bottom: 2px solid var(--secondary-blue) !important;
+  /* border-radius: 10px !important; */
   padding: 12px 16px !important;
   letter-spacing: 0.5px !important;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
@@ -204,6 +205,7 @@ body {
   
   color: transparent !important;
 }
+
 
 .arco-card-header-title {
   /* 字体样式 */
@@ -272,4 +274,100 @@ body {
   --chart-line-3: var(--chart-purple);
   --chart-line-4: var(--accent-green);
 }
+
+.arco-radio-group {
+  border: 0px !important;
+}
+
+/* Radio Button 按钮基础样式优化 */
+.arco-radio-button {
+  position: relative;
+  transition: all 0.3s ease !important;
+  overflow: hidden !important;
+  text-align: center !important; /* 确保整个按钮文本居中 */
+}
+
+/* 默认状态下的样式提升 */
+.arco-radio-button-inner {
+  font-weight: 500 !important;
+  text-align: center !important;
+  width: 100% !important;
+  padding-left: 0px !important;
+  /* padding-right: 100px !important; */
+  color: var(--font-color) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important; /* 水平居中对齐 */
+  position: relative;
+  z-index: 1;
+}
+
+/* 确保内部元素也居中 */
+.arco-radio-button-inner > * {
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+
+/* 悬停效果增强 */
+.arco-radio-button:hover {
+  border-color: var(--primary-blue) !important;
+  box-shadow: 0 2px 6px rgba(0, 102, 179, 0.2) !important;
+  transform: translateY(-1px) !important;
+}
+
+.arco-radio-button:hover .arco-radio-button-inner {
+  color: var(--primary-blue) !important;
+}
+
+.arco-radio-button.arco-radio-checked {
+  border-color: var(--primary-blue) !important;
+  background-color: rgba(0, 102, 179, 0.05) !important;
+  box-shadow: 0 2px 8px rgba(0, 102, 179, 0.25) !important;
+}
+
+.arco-radio-button.arco-radio-checked .arco-radio-button-inner {
+  color: var(--primary-blue) !important;
+  font-weight: 600 !important;
+  background: linear-gradient(to right, rgba(0, 102, 179, 0.1), transparent) !important;
+}
+
+@keyframes shineEffect {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 修复可能影响居中的元素 */
+.arco-radio-button input[type="radio"],
+.arco-radio-button-input {
+  position: absolute !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+}
+
+/* 兼容小尺寸按钮 */
+@media screen and (max-width: 768px) {
+  .arco-radio-button-inner {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    padding: 0 2px !important; /* 在小尺寸下添加轻微内边距 */
+  }
+}
+
+/* 标签基础样式优化 */
+.arco-tag {
+  border-radius: 4px !important;
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  border-width: 1.5px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
 
