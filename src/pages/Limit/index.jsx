@@ -73,7 +73,6 @@ export default function LimitPage() {
       setChartData(res)
       setLoading(false)
       setCondition(workConditions[data.wc - 1])
-      Message.success('数据获取成功！')
     } catch (error) {
       console.log(error)
       setLoading(false)

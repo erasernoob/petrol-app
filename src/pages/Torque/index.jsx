@@ -39,7 +39,6 @@ export default function TorquePage() {
             setHeatData(res.map(({M, T, N, E, TCS}) => ({M, T, N, E, TCS})))
             setCondition(work_conditions[data.wc - 1])
             setLoading(false)
-            Message.success('数据获取成功！')
         } catch (error) {
             console.log(error)
             setLoading(false)

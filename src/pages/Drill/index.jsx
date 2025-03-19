@@ -40,7 +40,6 @@ export default function DrillPage() {
       }).data;
       setChartData(res);
       setLoading(false);
-      Message.success("数据获取成功！");
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -62,7 +61,6 @@ export default function DrillPage() {
       }).data;
       setChartData(res);
       setLoading(false);
-      Message.success("数据获取成功！");
     } catch (error) {
       console.log(error);
       setLoading(false);

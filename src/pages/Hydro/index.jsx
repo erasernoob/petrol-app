@@ -40,7 +40,6 @@ export default function HydroPage() {
             const values = await post('/hydro/data')
             setExtraData(values)
             setLoading(false)
-            Message.success('数据获取成功！')
         } catch (error) {
             setLoading(false)
             setWaiting(true)
