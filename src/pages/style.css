@@ -53,9 +53,9 @@
 .arco-tabs-header-title {
   display: flex !important;
   justify-content: center; /* 水平居中 */
-  padding-left: 6px !important;
-  padding-right: 6px !important;
-  height: 100px;
+  padding-left: 0.3vw !important;
+  padding-right: 0.3vw !important;
+  height: 18vh;
   font-size: 16px !important;
   writing-mode: vertical-rl;
   white-space: nowrap;
@@ -130,25 +130,27 @@
 /* for torque */
 .my-custom-form {
     height: calc(100vh - 300px) !important; 
-    width: 100%;
+    border-bottom: 1px solid var(--color-neutral-3);
     display: flex;
-    overflow-x: hidden;
     overflow-y: auto;
+    gap: 1.5vh;
     flex-direction: column;
+    align-items: center;
+    padding-left: 3vw;
 }
 
 .form-wrapper-custom {
     padding-top: 20px;
     overflow-x: hidden;
     overflow-y: auto;
-
+    width: 100%;
     height: 100%;
-    max-width: 100%;
-    padding-left: 20px;
 }
 
 .fixed-form-item {
   padding: 10px 0;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff; /* 可选：固定背景色 */
   border-top: 1px solid #e8e8e8; /* 可选：分隔线 */
 }
@@ -157,7 +159,6 @@
     height: calc(100vh - 200px);
     border: 1px solid var(--color-neutral-3);
     border-radius: 5px;
-    /* 可选：圆角边框 */
     display: inline-block;
     border-right: 0px;
     border-bottom: 0px;
