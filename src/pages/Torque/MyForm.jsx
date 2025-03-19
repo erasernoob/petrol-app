@@ -18,6 +18,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
         form={form}
         onSubmit={async (data) => {
           handleSubmit(data);
+
         }}
       >
         <div className="my-custom-form">
@@ -136,7 +137,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.js && Object.keys(datas).length > 4 ? "35px" : "18px", paddingLeft: "0px !important"}}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition.js && Object.keys(datas.work_condition).length > 4 ? "38px" : "18px", paddingLeft: "0px !important"}}
           >
             <Button
               type="primary"
