@@ -320,6 +320,7 @@ export default function ResultPage({
 
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
           <RadioGroup
             type="button"
             style={{
@@ -333,11 +334,24 @@ export default function ResultPage({
             }}
             options={typeOptions}
           ></RadioGroup>
-          {chartData.length > 0 &&
+          <div style={{
+                display: 'inline-block',
+              }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginRight: '80px',
+          gap: '20px'
+        }}>{chartData.length > 0 &&
             loading === false &&
             waiting === false &&
             tagList}
-          <ReactECharts
+          </div>
+        </div>
+
+        </div>
+         <ReactECharts
             option={option}
             style={{ height: "78%", width: "100%" }}
             opts={{ renderer: "canvas" }} // 强制使用Canvas
@@ -367,7 +381,8 @@ export default function ResultPage({
           }}
         >
           {waiting == true ? (
-            <Empty description="输入参数开始计算"></Empty>
+            // <Empty description="输入参数开始计算"></Empty>
+            "输入参数开始计算"
           ) : (
             <Spin size="30" tip="正在计算中......" />
           )}

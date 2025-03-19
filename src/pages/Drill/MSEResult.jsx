@@ -205,7 +205,12 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
                  :
                 <div className="mse-waiting-page" style={{ height: '83vh', display: 'flex', alignItems: 'center', margin: '0px 0px' , justifyContent: 'center' }}>
                     
-                    {waiting == true ? <Empty description="输入参数开始计算"></Empty> : <Spin size="30" tip='正在计算中......' />}
+                    {waiting == true ? 
+                    // <Empty description="输入参数开始计算"></Empty> 
+                    "输入参数开始计算"
+                    : 
+                    <Spin size="30" tip='正在计算中......' /> 
+                    }
                 </div>
             }
 
