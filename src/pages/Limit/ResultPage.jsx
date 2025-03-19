@@ -360,6 +360,8 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
     }))
     return (
         <>
+           {chartData.length > 0 && loading === false && waiting === false ? (
+                <>
             <RadioGroup
                 type='button'
                 size='large'
@@ -372,8 +374,6 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 options={typeOptions}
             >
             </RadioGroup>
-            {chartData.length > 0 && loading === false && waiting === false ? (
-                <>
                     <ReactECharts
                         option={option}
                         style={{ height: '78%', width: '100%' }}

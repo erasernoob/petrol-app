@@ -137,6 +137,8 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
 
   return (
     <>
+     {chartData.length > 0 && loading === false && waiting === false ? (
+      <>
       <RadioGroup
         type='button'
         size='large'
@@ -148,8 +150,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         options={['循环压力', 'ECD']}
       >
       </RadioGroup>
-      {chartData.length > 0 && loading === false && waiting === false ? (
-        <>
+ 
           <ReactECharts
             option={option}
             style={{ height: '78%', width: '100%' }}

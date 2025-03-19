@@ -107,6 +107,8 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
   return (
     <>
     <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center' , gap: '0px'}}>
+      {chartData.length != 0 &&  
+      <>
       <RadioGroup
         type='button'
         size='large'
@@ -121,7 +123,9 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
         options={typeOptions}
         >
         </RadioGroup>
-      {chartData.length != 0 &&  <RadioGroup
+
+      
+      <RadioGroup
           name='chart'
           // direction='vertical'
           value={curChart}
@@ -135,7 +139,9 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
           }}
           options={chartOptions}
           >
-        </RadioGroup>}
+        </RadioGroup>
+      </>
+      }
     </div>
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>

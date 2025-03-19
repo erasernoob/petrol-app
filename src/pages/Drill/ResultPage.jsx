@@ -264,21 +264,22 @@ export default function ResultPage({typeOptions = [], chartOptions = [], chartDa
   return (
     <>
       <div style={{display: 'flex', justifyContent: '', alignItems: 'center' , gap: '0px'}}>
+      </div>
+
+      {chartData.length > 0 && loading === false && waiting === false ? (
+        <>
       <RadioGroup
         type='button'
         size='large'
         name='chart'
         value={curType}
         onChange={(value) => {
-            setCurType(value)
+          setCurType(value)
         }}
         options={typeOptions}
-      >
+        >
       </RadioGroup>
       { chartData.length > 0 && loading === false && waiting === false &&  tagList}
-      </div>
-      {chartData.length > 0 && loading === false && waiting === false ? (
-        <>
           <ReactECharts
             option={option}
             style={{ height: '78%', width: '100%' }}
