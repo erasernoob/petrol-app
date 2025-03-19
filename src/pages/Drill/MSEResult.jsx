@@ -181,7 +181,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
 
             {chartData.length > 0 && loading === false && waiting === false ? (
                 <>
-                <div style={{ height: '75vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
+                <div style={{ height: '71vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
                     {
                         chartOptions.map((option, index) => {
                             return (
