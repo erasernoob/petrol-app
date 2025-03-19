@@ -35,7 +35,7 @@ export default function Sider({
   };
 
   const Tabs = (
-    <div className="full-width-radio-group">
+    <div className={ subRouteOptions.length != 2 || subRouteOptions.length == 2 && activeRoute == 2  ? "full-width-radio-group" : "mse-width-radio-group"}>
       <RadioGroup
         type="button"
         size="large"

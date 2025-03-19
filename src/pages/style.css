@@ -102,17 +102,29 @@
 
 }
 
-.full-width-radio-group {
-    width: 100% !important;
-}
 
 .full-width-radio-group .arco-radio-group {
     display: flex !important;
-    width: 100% !important;
+    /* width: 100% !important; */
     align-items: center !important;
 }
 
 .full-width-radio-group .arco-radio-group .arco-radio-button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.mse-width-radio-group .arco-radio-group {
+    width: 30%;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.mse-width-radio-group .arco-radio-group .arco-radio-button {
     flex: 1 !important;
     min-width: 0 !important;
     text-align: center !important;
