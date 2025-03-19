@@ -35,12 +35,19 @@ export default function Sider({
   };
 
   const Tabs = (
-    <div className={ subRouteOptions.length != 2 || subRouteOptions.length == 2 && activeRoute == 2  ? "full-width-radio-group" : "mse-width-radio-group"}>
+    <div
+      className={
+        subRouteOptions.length != 2 ||
+        (subRouteOptions.length == 2 && activeRoute == 2)
+          ? "full-width-radio-group"
+          : "mse-width-radio-group"
+      }
+    >
       <RadioGroup
         type="button"
         size="large"
         name="chart"
-        defaultValue={1}
+        defaultValue={activeRoute}
         onChange={(value) => {
           setActiveRoute(value);
           // 将filelist重置
@@ -120,19 +127,34 @@ export default function Sider({
 
   return (
     <div className="input-page" style={{ paddingTop: "5px" }}>
-      {Tabs}
       {form === "default" ? (
         <>
-          <div className="file-uploader" style={uploaderStyle}>
-            <FileUploader
-              params={params}
-              setParams={setParams}
-              handleCancel={handleCancel}
-              handleUpload={handleUpload}
-            ></FileUploader>
-            <Button type="primary" disabled={!params} onClick={handleCalculate}>
-              计算
-            </Button>
+          <div
+            className="file-uploader-tabs-container"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "100px",
+              justifyContent: "space-between",
+              marginTop: "3px",
+            }}
+          >
+            <div className="mse-tabs-container">{Tabs}</div>
+            <div style={{ display: "flex", alignItems: "center", gap: "20px", marginRight: "80px" }}>
+              <FileUploader
+                params={params}
+                setParams={setParams}
+                handleCancel={handleCancel}
+                handleUpload={handleUpload}
+              />
+              <Button
+                type="primary"
+                disabled={!params}
+                onClick={handleCalculate}
+              >
+                计算
+              </Button>
+            </div>
           </div>
           <div className="mse-result-page">
             <MSEResult
@@ -146,6 +168,7 @@ export default function Sider({
       ) : (
         // to distinct the vibration and the limit page
         <>
+          {Tabs}
           {subRouteOptions.length >= 3 && (
             <div className="file-uploader">
               <FileUploader
