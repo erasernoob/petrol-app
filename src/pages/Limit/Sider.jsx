@@ -1,4 +1,4 @@
-import { Button, Message, Radio } from "@arco-design/web-react";
+import { Button, Message, Radio, Card } from "@arco-design/web-react";
 import { basename } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useState } from "react";
@@ -169,6 +169,7 @@ export default function Sider({
               />
               <Button
                 type="primary"
+                className="button submit-button"
                 disabled={!params}
                 onClick={handleCalculate}
               >
@@ -177,13 +178,21 @@ export default function Sider({
             </div>
           </div>
           <div className="mse-result-page">
+          <Card
+          title="计算结果"
+          className="mse-result-card"
+          bodyStyle={{ height: "100%", flex: 1, border: "0px !important" }}
+        >
             <MSEResult
               loading={loading}
               waiting={waiting}
               handleExport={handleExport}
               chartData={chartData}
             />
-          </div>
+        </Card>
+
+
+         </div>
         </>
       ) : (
         // to distinct the vibration and the limit page
