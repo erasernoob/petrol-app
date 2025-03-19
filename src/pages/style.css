@@ -24,7 +24,7 @@
     padding-left: 0px !important;
     padding-right: 0px !important;
     padding-top: 0px;
-    /* border: 1px solid var(--color-neutral-3); */
+    border: 1px solid var(--color-neutral-3);
 }
 
 .custom-tabsPane {
@@ -55,11 +55,11 @@
   justify-content: center; /* 水平居中 */
   padding-left: 0.3vw !important;
   padding-right: 0.3vw !important;
-  height: 13vh;
+  height: 11.64vh;
   font-size: 16px !important;
   writing-mode: vertical-rl;
   white-space: nowrap;
-  color: var(--font-color) !important;
+  color: var(--primary-color) !important;
   font-weight: var(--font-weight-bold) !important;
   transition: all 0.3s ease;
   border-radius: 4px 4px 0 0;
@@ -74,7 +74,7 @@
 .arco-tabs-header-title-active {
   background-color: rgba(77, 153, 204, 0.2) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  color: #0066B3 !important;
+  color: var(--primary-color) !important;
   font-weight: 600 !important;
 }
 
@@ -122,8 +122,29 @@
     justify-content: center !important;
 }
 
+.mse-width-radio-group {
+    width: 100% !important; /* 减小宽度，不占满100% */
+    margin: 0 auto !important; 
+}
 
+.mse-tabs-container {
+  width: 30%;
+}
 
+.mse-width-radio-group .arco-radio-group {
+    display: flex !important;
+    width: 100% !important;
+    align-items: center !important;
+}
+
+.mse-width-radio-group .arco-radio-group .arco-radio-button {
+    flex: 1 !important;
+    min-width: 0 !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
 
 .submit-button {
     width: 150px;
@@ -146,7 +167,6 @@
     /* position: relative; */
     height: 100%;
     width: 100%;
-    transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* for torque */
@@ -208,7 +228,6 @@
   width: 100%;
   max-width: 550px;
   margin-bottom: 16px;
-  transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Make sure the form aligns properly */
@@ -273,7 +292,6 @@
 .content-fade-out {
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 完全隐藏状态 */
@@ -286,23 +304,22 @@
 .content-fade-in {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 卡片宽度和位置的平滑过渡 */
-.main-content .arco-card {
+/* .main-content .arco-card {
   transition: width 2000ms cubic-bezier(0.4, 0, 0.2, 1), 
               margin 2000ms cubic-bezier(0.4, 0, 0.2, 1),
               flex 2000ms cubic-bezier(0.4, 0, 0.2, 1);
-}
+} */
 
 /* 为结果卡片添加淡入淡出效果 */
-.result-card {
-  transition: opacity 2000ms cubic-bezier(0.4, 0, 0.2, 1), 
-              transform 2000ms cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* .result-card {
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1), 
+              transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+} */
 
-.result-card-entering {
+/* .result-card-entering {
   opacity: 0;
   transform: translateX(20px);
 }
@@ -310,12 +327,8 @@
 .result-card-visible {
   opacity: 1;
   transform: translateX(0);
-}
+} */
 
-/* 表单元素的平滑过渡 */
-.form-wrapper, .form-container, .fixed-position-form-item {
-  transition: all 2000ms cubic-bezier(0.4, 0, 0.2, 1);
-}
 
 /* 添加到 style.css 中 */
 /* 防止按钮重复显示的样式 */
