@@ -16,7 +16,7 @@ const hydro = [
       // (1=宾汉, 2=幂律, 3=赫巴)
       lbmx: {
         name: "流变模式",
-        value: 3,
+        value: 1,
         option: [
           { label: "宾汉流体", value: 1 },
           { label: "幂律流体", value: 2 },
@@ -114,7 +114,7 @@ const limit_eye = [
       // (1=宾汉, 2=幂律, 3=赫巴)
       lbmx: {
         name: "流变模式",
-        value: 3,
+        value: 1,
         option: [
           { label: "宾汉流体", value: 1 },
           { label: "幂律流体", value: 2 },
@@ -155,8 +155,8 @@ const limit_hydro = [
   {
     fluid: {
       lbmx: {
-        name: "流变模型",
-        value: 3,
+        name: "流变模式",
+        value: 1,
         option: [
           { label: "宾汉流体", value: 1 },
           { label: "幂律流体", value: 2 },
