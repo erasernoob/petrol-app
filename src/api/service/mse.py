@@ -27,33 +27,8 @@ def calcu_mse(file_path):
     MSE = (WOB / Ab) + (120 * np.pi * RPM * T) / (Ab * ROP)
     MSE *= 0.0068947  # 单位转换
 
-
-
-
     wob = WOB
     rpm = RPM
     rop = ROP
-
-
-
-    # 保存 MSE 数据
-
-    output_folder = utils.get_output_folder("MSE")
-    time = utils.get_timestamp()
-    pd.DataFrame(MSE).to_excel( output_folder / f'MSE_{time}.xlsx', sheet_name='Sheet1', index=False, header=False)
-
-    # 保存 钻压 (wob) 数据
-    pd.DataFrame(wob).to_excel( output_folder /f'wob_{time}.xlsx', sheet_name='Sheet1', index=False, header=False)
-
-
-    # 保存 转速 (rpm) 数据
-    pd.DataFrame(rpm).to_excel( output_folder / f'rpm_{time}.xlsx', sheet_name='Sheet1', index=False, header=False)
-
-    # 保存 机械钻速 (rop) 数据
-    pd.DataFrame(rop).to_excel( output_folder / f'rop_{time}.xlsx', sheet_name='Sheet1', index=False, header=False)
-
-    # 保存 井深 (Depth) 数据
-    pd.DataFrame(Depth).to_excel( output_folder / f'Sk_{time}.xlsx', sheet_name='Sheet1', index=False, header=False)
-        
 
     return Depth, wob, ROP, RPM, MSE

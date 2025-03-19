@@ -286,7 +286,6 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, js, v, omega
     
     # 输出各工况结果
     # 旋转钻进
-    output_folder = create_output_folder(working_condition)
 
     # 首先计算井位置信息，供所有工况使用
     Sk = np.arange(len(T))
@@ -298,16 +297,6 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, js, v, omega
         N_pos[i] = N_pos[i-1] + dSk * np.sin(np.radians(alpha[i])) * np.cos(np.radians(phi[i]))
         E_pos[i] = E_pos[i-1] + dSk * np.sin(np.radians(alpha[i])) * np.sin(np.radians(phi[i]))
     
-    if working_condition == 1:
-        save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, "旋转钻进")
-    elif working_condition == 2:
-        save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, "滑动钻进")
-    elif working_condition == 3:
-        save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, "起钻")
-    elif working_condition == 4:
-        save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, "下钻")
-    elif working_condition == 5:
-        save_results(T, M, Sk, E_pos, N_pos, Tcs, output_folder, "倒划眼")
     
     return N_pos, E_pos, Tcs, T, M, Sk
 

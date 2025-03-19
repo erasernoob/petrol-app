@@ -438,12 +438,6 @@ def plot_and_export(data, ylabel, filename, jsjg, yssd):
     # 计算横坐标：前 n-1 个点为 jsjg * (1, 2, ..., n-1)，最后一个点为 yssd
     x_coords = np.concatenate((jsjg * np.arange(1, n), [yssd]))
 
-    output = utils.get_output_folder("机械延伸极限")
-
-
-    # 合并数据并导出到 Excel（无索引和表头）
-    export_data = np.column_stack((x_coords, data))
-    pd.DataFrame(export_data).to_excel( output / filename, index=False, header=False)
     return x_coords
 
 

@@ -23,40 +23,12 @@ def main(guiji, lbmx, pailiang, fluidden, n, K, miu, taof,
     
     print(ECD)
 
-    output_folder = utils.get_output_folder('水力学')
-
-    timestamp = utils.get_timestamp()
     # ------------------------------
     # 导出数据到 Excel 文件（不包含）
     # ------------------------------
     if yx == 0:
-    # 钻柱循环压力
-        pd.DataFrame(Pgn, columns=["钻柱循环压力（MPa）"]).to_excel(
-            output_folder / f'钻柱循环压力_{timestamp}.xlsx', sheet_name='Sheet1', index=False
-        )
-        # 环空循环压力
-        pd.DataFrame(Phk, columns=["环空循环压力（MPa）"]).to_excel(
-            output_folder / f'环空循环压力_{timestamp}.xlsx', sheet_name='Sheet1', index=False
-        )
-        # ECD
-        pd.DataFrame(ECD, columns=["ECD（g/cm3）"]).to_excel(
-            output_folder / f'ECD_{timestamp}.xlsx', sheet_name='Sheet1', index=False
-        )
         return Sk, Pgn, Phk, ECD, P, Plg, Pdm, dertaPzt
     else:
-        # 考虑岩屑时的钻柱循环压力
-        pd.DataFrame(Pgnyx, columns=["钻柱循环压力（MPa）"]).to_excel(
-            f'钻柱循环压力_{timestamp}.xlsx', sheet_name='Sheet1', index=False
-        )
-        # 考虑岩屑时的环空循环压力
-        pd.DataFrame(Phkyx, columns=["环空循环压力（MPa）"]).to_excel(
-            f'环空循环压力_{timestamp}.xlsx', sheet_name='Sheet1', index=False
-        )
-        # 考虑岩屑时的 ECD
-        pd.DataFrame(ECDyx, columns=["ECD（g/cm3）"]).to_excel(
-            f'ECD_{timestamp}.xlsx', sheet_name='Sheet1', index=False
-        )
-
         return Sk, Pgnyx, Phkyx, ECDyx, P, Plg, Pdm, dertaPzt
 
 
