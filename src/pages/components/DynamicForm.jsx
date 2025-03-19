@@ -1,6 +1,12 @@
-import { Checkbox, Tabs } from "@arco-design/web-react";
-import { Form, Button, Input, Select } from "@arco-design/web-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  Select,
+  Tabs,
+} from "@arco-design/web-react";
+import { useState } from "react";
 
 const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
   const [tabTime, setTabTime] = useState(0);
@@ -16,7 +22,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
       <Form
         style={{
           height: "100%",
-          textAlign: 'left'
+          textAlign: "left",
         }}
         layout="horizontal"
         size="large"
@@ -24,7 +30,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
         onSubmit={async (data) => {
           handleSubmit(data);
         }}
-        >
+      >
         <Tabs
           type="card"
           tabPosition="left"
@@ -32,28 +38,33 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           size="large"
           lazyload={false}
           onChange={() => setTabTime(() => tabTime + 1)}
-          >
+        >
           {datas.map((category, index) => {
             const [categoryKey, data] = Object.entries(category)[0];
             return (
               <TabPane
-              title={tabsName[index]}
-              key={categoryKey}
-              className="custom-tabsPane"
+                title={tabsName[index]}
+                key={categoryKey}
+                className="custom-tabsPane"
               >
                 {Object.entries(data).map(([key, field]) => (
                   <FormItem
-                  key={key}
-                  label={field.name}
-                  labelCol={ tabsName[index] === '钻井液' || tabsName[index] === '地面管汇' ? {span: '11', offset: ''} : {span: '9'}}
-                  wrapperCol={{span: '10',}}
-                  field={key}
-                  // TODO: 测试用
-                  // labelCol={{flex: "1" ,offset: ""}}
-                  initialValue={field.value}
-                  rules={[
-                    { required: true, message: `${field.name} 不能为空` },
-                  ]}
+                    key={key}
+                    label={field.name}
+                    labelCol={
+                      tabsName[index] === "钻井液" ||
+                      tabsName[index] === "地面管汇"
+                        ? { span: "11", offset: "" }
+                        : { span: "9" }
+                    }
+                    wrapperCol={{ span: "10" }}
+                    field={key}
+                    // TODO: 测试用
+                    // labelCol={{flex: "1" ,offset: ""}}
+                    initialValue={field.value}
+                    rules={[
+                      { required: true, message: `${field.name} 不能为空` },
+                    ]}
                   >
                     {key === "lbmx" ? (
                       <Select
@@ -77,13 +88,15 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           })}
         </Tabs>
 
-        <FormItem className='button-wrapper' wrapperCol={{ offset: 6 }} style={{borderTop: "1px solid #e8e8e8"}}>
+        <FormItem
+          className="button-wrapper"
+          wrapperCol={{ offset: 6 }}
+          style={{ borderTop: "1px solid #e8e8e8" }}
+        >
           <Button
             type="primary"
             className="button submit-button"
-            disabled={
-              file.name == "" 
-            }
+            disabled={file.name == ""}
             htmlType="submit"
           >
             计算
