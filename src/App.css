@@ -87,7 +87,6 @@ body {
 
 /* 输入框样式 */
 .arco-input:not(#username_input, #password_input) {
-  background: var(--lighter-bg) !important;
   border: 1.4px solid var(--border-gray) !important;
 }
 
@@ -241,7 +240,6 @@ body {
   font-family: "Arial", sans-serif !important;
   font-size: 14px !important;
   color: var(--font-color) !important;
-  background-color: var(--lighter-bg) !important;
 }
 
 /* 状态提示色 */

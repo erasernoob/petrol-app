@@ -179,12 +179,13 @@
 
 .input-form {
     height: calc(100vh - 200px);
+    padding-top: 0px  !important;
     border: 1px solid var(--color-neutral-3);
     border-radius: 5px;
     display: inline-block;
     border-right: 0px;
+    border-top: 0px;
     border-bottom: 0px;
-    transition: all 1200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* drill -> MSE RESULT DIV */
@@ -314,4 +315,20 @@
 /* 表单元素的平滑过渡 */
 .form-wrapper, .form-container, .fixed-position-form-item {
   transition: all 2000ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 添加到 style.css 中 */
+/* 防止按钮重复显示的样式 */
+.main-content.transitioning .input-page > div:last-child {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* 确保按钮容器的绝对定位 */
+.input-page > div:last-child {
+  position: relative;
+  z-index: 10;
+  padding: 15px 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
