@@ -1,4 +1,5 @@
 import { Radio, Button, Message } from '@arco-design/web-react'
+import { Empty } from '@arco-design/web-react';
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
@@ -139,6 +140,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
     <>
      {chartData.length > 0 && loading === false && waiting === false ? (
       <>
+      
       <RadioGroup
         type='button'
         size='large'
@@ -147,10 +149,25 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         onChange={(value) => {
           setCurValue(value)
         }}
+        style={{
+          marginLeft: '20px'
+        }}
         options={['循环压力', 'ECD']}
-      >
+        >
       </RadioGroup>
- 
+      <div style={{
+        display: 'inline-block',
+        marginLeft: '80px'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: '20px'
+        }}>
+          {tagList} 
+        </div>
+      </div>
           <ReactECharts
             option={option}
             style={{ height: '78%', width: '100%' }}
@@ -165,13 +182,12 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
             // marginTop: '7px',
             marginLeft: '0px'
           }}>
-            {tagList} 
             {exportButton}
           </div>
         </>
       ) : (
         <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {waiting == true ? '输入参数开始计算' :  <Spin size="30" tip='正在计算中......' /> }
+          {waiting == true ? <Empty description="输入参数开始计算"></Empty> :  <Spin size="30" tip='正在计算中......' /> }
         </div>
       )}
 

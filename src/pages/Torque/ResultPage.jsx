@@ -1,5 +1,6 @@
 import { Radio, Button, Message } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
+import { Empty } from '@arco-design/web-react'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
 import Option, { getOptionM, getOptionT } from '../option'
@@ -164,7 +165,7 @@ export default function ResultPage({ curCondition, typeOptions=[], chartData=[],
         </>
       ) : (
         <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {waiting == true ? '输入参数开始计算' :  <Spin size="30" tip='正在计算中......' /> }
+          {waiting == true ? <Empty description="输入参数开始计算"></Empty> :  <Spin size="30" tip='正在计算中......' /> }
         </div>
       )}
 
