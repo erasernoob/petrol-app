@@ -136,7 +136,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: "20px", paddingLeft: "0px !important"}}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.js && Object.keys(datas).length > 4 ? "35px" : "18px", paddingLeft: "0px !important"}}
           >
             <Button
               type="primary"
