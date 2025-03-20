@@ -67,6 +67,10 @@ const hydro = [
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
   },
+  // to distinguish the limit and the hyra
+  {
+    flag: "1"
+  }
 ];
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
@@ -136,6 +140,9 @@ const limit_eye = [
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
   },
+  {
+    flag: "0",
+  }
 ];
 
 const limit_hydro = [
@@ -206,6 +213,9 @@ const limit_hydro = [
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
   },
+  {
+    flag: "0",
+  }
 ];
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）

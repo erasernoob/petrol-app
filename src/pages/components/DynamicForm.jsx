@@ -16,6 +16,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
   const FormItem = Form.Item;
 
   const [form] = Form.useForm();
+  console.log( datas[datas.length - 1].flag)
 
   return (
     <div className="form-wrapper">
@@ -40,6 +41,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           onChange={() => setTabTime(() => tabTime + 1)}
         >
           {datas.map((category, index) => {
+            if (index === datas.length - 1) return
             const [categoryKey, data] = Object.entries(category)[0];
             return (
               <TabPane
@@ -52,7 +54,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
                     width: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    gap: "3vh",
+                    gap: "2vh",
                     alignItems: "center",
                     paddingTop: "10px",
                     paddingRight: "4vw",
@@ -109,13 +111,14 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           className="button-wrapper"
           style={{
             borderTop: "1px solid #e8e8e8",
+            height: datas[datas.length - 1].flag === "1" ? "1%" : "",
             display: "flex",
             justifyContent: "center",
             width: "100%",
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: "10px"}}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: "3px"}}
           >
             <Button
               type="primary"
