@@ -9,7 +9,7 @@
   "app": {
     "windows": [
       {
-        "title": "petrol-app",
+        "title": "大位移井钻井关键参数联动分析系统",
         "minWidth": 1590,
         "minHeight": 820
       }
