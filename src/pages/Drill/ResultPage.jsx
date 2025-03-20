@@ -1,4 +1,4 @@
-import { Button, Radio, Spin, Tag } from "@arco-design/web-react";
+import { Button, Radio, Spin, Tag, Grid } from "@arco-design/web-react";
 import { Empty } from "@arco-design/web-react";
 import ReactECharts from "echarts-for-react";
 import "echarts-gl";
@@ -7,6 +7,8 @@ import Option from "../option";
 import { saveAtFrontend } from "../utils/utils";
 
 const RadioGroup = Radio.Group;
+
+const { Row, Col } = Grid;
 
 export default function ResultPage({
   typeOptions = [],
@@ -298,13 +300,17 @@ export default function ResultPage({
 
   const tagList = (
     <>
-      <span style={{ marginLeft: "100px" }}>粘滑振动等级（SSI）</span>
+    <span>
+      <span style={{ marginLeft: "" }}>粘滑振动等级（SSI）</span>
       <Tag size="large">{SSI}</Tag>
-      <span style={{ marginLeft: "100px", marginRight: "20px" }}>风险等级</span>
+    </span>
+    <span>
+     <span style={{ marginLeft: "80px", marginRight: "10px" }}>风险等级</span>
       <Tag size="large" style={{ color: riskLevel.color }}>
         {riskLevel.level}
       </Tag>
-    </>
+    </span>
+   </>
   );
 
   return (
@@ -320,8 +326,11 @@ export default function ResultPage({
 
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>
-        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-          <RadioGroup
+
+        <Row justify="center" align="start" style={{ height: '2vh' }}>
+        {/* <Col span={6} style={{ height: 90, lineHeight: '90px' }}> */}
+        <Col span={8}>
+         <RadioGroup
             type="button"
             style={{
               marginLeft: "20px",
@@ -334,23 +343,23 @@ export default function ResultPage({
             }}
             options={typeOptions}
           ></RadioGroup>
-          <div style={{
-                display: 'inline-block',
-              }}>
+        </Col>
+        {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
+        <Col span={16}>
         <div style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          marginRight: '80px',
-          gap: '20px'
-        }}>{chartData.length > 0 &&
+          gap: "20px",
+        }}>
+        {chartData.length > 0 &&
             loading === false &&
             waiting === false &&
             tagList}
-          </div>
         </div>
+        </Col>
+    </Row>
 
-        </div>
          <ReactECharts
             option={option}
             style={{ height: "78%", width: "100%" }}
