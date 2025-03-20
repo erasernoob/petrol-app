@@ -22,40 +22,13 @@ def main(dto: LimitHydroDTO):
 )
 
 
-    output = utils.get_output_folder("水力延伸极限")
-    time = utils.get_timestamp()
-
     if dto.y == 0:
-        # # 输出立管压力图
         x_coords = np.append(dto.jsjg * np.arange(1, Plg.shape[1]), yssd)
-        # 导出立管压力数据
-
-        dataToExport = np.column_stack([x_coords, Plg[0, :]])
-        df = pd.DataFrame(dataToExport, columns=['深度（m）', '立管压力（MPa）'])
-        df.to_excel( output / f'立管压力_{time}.xlsx', index=False, sheet_name='Sheet1')
-
-
-        # 导出总循环压耗数据
-        dataToExport = np.column_stack([x_coords, P])
-        df = pd.DataFrame(dataToExport, columns=['深度（m）', '总循环压耗（MPa）'])
-        df.to_excel( output / f'总循环压耗_{time}.xlsx', index=False, sheet_name='Sheet1')
-
         return x_coords.flatten(), P.flatten(), Plg.flatten()
     elif dto.y == 1:
         # # 输出立管压力图
         # plt.figure()
         x_coords = np.append(dto.jsjg * np.arange(1, Plg.shape[1]), yssd)
-
-        dataToExport = np.column_stack([x_coords, Plg[0, :]])
-        df = pd.DataFrame(dataToExport, columns=['深度（m）', '立管压力（MPa）'])
-        df.to_excel( output / f'立管压力_{time}.xlsx', index=False, sheet_name='Sheet1')
-
-
-        # 导出总循环压耗数据
-        dataToExport = np.column_stack([x_coords, Pyx])
-        df = pd.DataFrame(dataToExport, columns=['深度（m）', '总循环压耗（MPa）'])
-        df.to_excel( output / f'总循环压耗_{time}.xlsx', index=False, sheet_name='Sheet1')
-
         return x_coords.flatten(), Pyx.flatten(), Plg.flatten()
 
 

@@ -1,3 +1,40 @@
+.content {
+    transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1), transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 完全隐藏的状态 */
+.content-hidden {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+/* 淡出动画 */
+.content-fade-out {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1), transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 淡入动画 */
+.content-fade-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 初始动画 */
+.fade-in {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 800ms cubic-bezier(0.4, 0, 0.2, 1), transform 800ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
 .basic-layout {
     width: 100%;
     height: 100%;
@@ -12,15 +49,4 @@
 
 .arco-menu-selected {
     background-color: blue;
-}
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
 }

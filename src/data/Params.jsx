@@ -16,7 +16,7 @@ const hydro = [
       // (1=宾汉, 2=幂律, 3=赫巴)
       lbmx: {
         name: "流变模式",
-        value: 3,
+        value: 1,
         option: [
           { label: "宾汉流体", value: 1 },
           { label: "幂律流体", value: 2 },
@@ -67,6 +67,10 @@ const hydro = [
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
   },
+  // to distinguish the limit and the hyra
+  {
+    flag: "1"
+  }
 ];
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
@@ -114,7 +118,7 @@ const limit_eye = [
       // (1=宾汉, 2=幂律, 3=赫巴)
       lbmx: {
         name: "流变模式",
-        value: 3,
+        value: 1,
         option: [
           { label: "宾汉流体", value: 1 },
           { label: "幂律流体", value: 2 },
@@ -136,6 +140,9 @@ const limit_eye = [
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
   },
+  {
+    flag: "0",
+  }
 ];
 
 const limit_hydro = [
@@ -155,8 +162,8 @@ const limit_hydro = [
   {
     fluid: {
       lbmx: {
-        name: "流变模型",
-        value: 3,
+        name: "流变模式",
+        value: 1,
         option: [
           { label: "宾汉流体", value: 1 },
           { label: "幂律流体", value: 2 },
@@ -206,6 +213,9 @@ const limit_hydro = [
       H: { name: "岩屑床高度 (%)", value: 10 },
     },
   },
+  {
+    flag: "0",
+  }
 ];
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）

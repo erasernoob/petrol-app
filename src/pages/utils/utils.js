@@ -42,7 +42,7 @@ const saveAtFrontend = async (data=[], name, data2=[]) => {
 
   const filePath = await save({
       title: "导出数据到本地",
-      defaultPath: name + ".xlsx",
+      defaultPath: `${name}.xlsx`,
       filters: [{ name: "xlsx Files", extensions: ["xlsx"] }]
     });
   if (filePath) {

@@ -5,7 +5,7 @@ export default function DrillPage() {
     return (
         <div className="main-content">
             <Card
-                title='参数输入'
+                title='参数'
                 style={{
                     width: '35%',
                     height: '100%',

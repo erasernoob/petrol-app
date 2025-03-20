@@ -1,4 +1,5 @@
-import { Radio, Button, Message } from '@arco-design/web-react'
+import { Radio, Button, Grid, Space} from '@arco-design/web-react'
+import { Empty } from '@arco-design/web-react';
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
@@ -8,22 +9,13 @@ import { Spin } from '@arco-design/web-react'
 import { save2Data, saveAtFrontend, saveData } from '../utils/utils'
 
 const RadioGroup = Radio.Group
+const { Row, Col } = Grid;
 
 export default function ResultPage({chartData=[], data, loading, waiting}) {
 
-  const handleExport = async () => {
-    const drillData = chartData.map((value) => {
-      return value.drillPressure
-    })
-    const annularData = chartData.map(value => {
-      return value.annularPressure
-    })
-    await saveAtFrontend(drillData, '钻柱循环压力表')
-    await saveAtFrontend(annularData, '环空循环压力表')
-    await saveAtFrontend(chartData.map((value) => value.ECD), "ECD")
-  }
 
-  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+  const ecd = chartData.map((item) => item.ecd ? item.ecd : 10000)
+  const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
 
     // 使用 useMemo 让 option1 和 option2 在 chartData 变化时重新计算
   const option1 = useMemo(() => Option(
@@ -85,7 +77,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         axisLabel: {
           formatter: (value) => value.toFixed(2), // 保留一位小数
         },
-        min: 'dataMin',
+        min: ecdMinVal,
         offset: 0,
         alignTicks: true,
         position: 'top'
@@ -106,10 +98,26 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
   ), [chartData]); // 依赖于 chartData
   console.log(chartData)
 
-
-
   const [option, setOption] = useState({})
   const [curValue, setCurValue] = useState('循环压力')
+
+  const handleExport = async () => {
+    const drillData = chartData.map((value) => {
+      return value.drillPressure
+    })
+    const annularData = chartData.map(value => {
+      return value.annularPressure
+    })
+    if (option === option1) {
+      await saveAtFrontend(drillData, '钻柱循环压力表')
+      await saveAtFrontend(annularData, '环空循环压力表')
+    } else {
+      await saveAtFrontend(chartData.map((value) => value.ecd), "ECD")
+    }
+  }
+
+  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+
 
   useEffect(() => {
   const newOption = curValue === '循环压力' ? option1 : option2
@@ -122,16 +130,21 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
 
   const tagList = (Object.entries(data).map(([key, value]) => {
     return (
-      <>
+      <span>
         <span>{key}</span>
         <Tag size='large'>{value.toFixed(3)}</Tag>
-      </>
+      </span>
     )
   }))
 
   return (
     <>
-      <RadioGroup
+     {chartData.length > 0 && loading === false && waiting === false ? (
+      <>
+    <Row justify="center" align="start" style={{ height: '2vh' }}>
+        {/* <Col span={6} style={{ height: 90, lineHeight: '90px' }}> */}
+        <Col span={8}>
+        <RadioGroup
         type='button'
         size='large'
         name='chart'
@@ -139,11 +152,25 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
         onChange={(value) => {
           setCurValue(value)
         }}
+        style={{
+          marginLeft: '20px'
+        }}
         options={['循环压力', 'ECD']}
-      >
+        >
       </RadioGroup>
-      {chartData.length > 0 && loading === false && waiting === false ? (
-        <>
+        </Col>
+        {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
+        <Col span={16}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: "20px",
+        }}>
+          {tagList} 
+        </div>
+        </Col>
+    </Row>
           <ReactECharts
             option={option}
             style={{ height: '78%', width: '100%' }}
@@ -154,17 +181,18 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: '20px',
             // marginTop: '7px',
             marginLeft: '0px'
           }}>
-            {tagList} 
             {exportButton}
           </div>
         </>
       ) : (
         <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {waiting == true ? '输入参数开始计算' :  <Spin size="30" tip='正在计算中......' /> }
+          {waiting == true ? 
+          // <Empty description="输入参数开始计算"></Empty> 
+          "输入参数开始计算"
+          :  <Spin size="30" tip='正在计算中......' /> }
         </div>
       )}
 

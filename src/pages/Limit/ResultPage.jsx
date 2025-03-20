@@ -1,4 +1,5 @@
 import { Radio, Button, Message } from '@arco-design/web-react'
+import { Empty } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
 import { useSelector } from 'react-redux'
 import { useEffect, useMemo, useState } from 'react'
@@ -13,24 +14,12 @@ const RadioGroup = Radio.Group
 
 export default function ResultPage({ curCondition, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
-    const handleExport = async () => {
-        // 机械延伸
-        if (activeRoute == 3) {
-            await saveAtFrontend(chartData.map(value => value.T), `${curCondition}_井口轴向力`)
-            await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_井口扭矩`)
-            await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_安全系数`)
-        } else if (activeRoute == 2) {
-            await saveAtFrontend(chartData.map(value => value.P), `立管压力`)
-            await saveAtFrontend(chartData.map(value => value.Plg), `总循环压耗`)
-        } else if (activeRoute == 1) {
-            await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
-        } else if (activeRoute == 4) {
-            await saveAtFrontend(chartData.map(value => value.fs), `正弦屈曲临界载荷`)
-            await saveAtFrontend(chartData.map(value => value.fh), `螺旋屈曲临界载荷`)
-        }
-   }
 
-    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+    const ecd = chartData.map((item) => item.ECD ? item.ECD : 10000)
+    const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
+
+
+
     console.log(chartData)
     const option1 = Option(chartData,
         {
@@ -45,7 +34,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         {
             name: 'ECD（g/cm3）',
             type: 'value',
-            min: 'dataMin',
+            min: ecdMinVal,
             axisLabel: {
                 formatter: (value) => value.toFixed(2), // 保留一位小数
             },
@@ -180,6 +169,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         {
             type: 'value',
             name: '正弦屈曲临界载荷（kN）',
+            nameLocation: 'start',  // 将 y 轴名称放到底部
             axisLine: {
                 onZero: false
             },
@@ -209,6 +199,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         {
             type: 'value',
             name: '螺旋屈曲临界载荷（kN）',
+            nameLocation: 'start',  // 将 y 轴名称放到底部
             axisLine: {
                 onZero: false
             },
@@ -332,6 +323,36 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         if (typeOptions.length === 0) setOption(option1)
     }, [chartData, curType, activeRoute])
 
+        const handleExport = async () => {
+        // 机械延伸
+        const index = typeOptions.findIndex((item) => curType === item)
+        if (activeRoute === 2) {
+            if (index === 0) {
+                await saveAtFrontend(chartData.map(value => value.Plg), curType)
+            } else if (index === 1) {
+                await saveAtFrontend(chartData.map(value => value.P), curType)
+            }
+        } else if (activeRoute === 3) {
+            if (index === 0) {
+                await saveAtFrontend(chartData.map(value => value.T), `${curCondition}_${curType}`)
+            } else if (index === 1) {
+                await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_${curType}`)
+            } else if (index === 2) {
+                await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_${curType}`)
+            }
+        } else if (activeRoute === 4) {
+            if (index === 0) {
+                await saveAtFrontend(chartData.map(value => value.fs), curType)
+            } else if (index === 1) {
+                await saveAtFrontend(chartData.map(value => value.fh), curType)
+            }
+        } else if (activeRoute == 1) {
+            await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
+        }
+   }
+
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+
     const tagList = (Object.entries({}).map(([key, value]) => {
         return (
             <>
@@ -340,12 +361,16 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             </>
         )
     }))
-    console.log(curType)
     return (
         <>
+           {chartData.length > 0 && loading === false && waiting === false ? (
+                <>
             <RadioGroup
                 type='button'
                 size='large'
+                style={{
+                  marginLeft: '20px'
+                }}
                 name='chart'
                 value={curType}
                 defaultValue={curType}
@@ -355,8 +380,6 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 options={typeOptions}
             >
             </RadioGroup>
-            {chartData.length > 0 && loading === false && waiting === false ? (
-                <>
                     <ReactECharts
                         option={option}
                         style={{ height: '78%', width: '100%' }}
@@ -377,7 +400,12 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 </>
             ) : (
                 <div style={{ height: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {waiting == true ? '输入参数开始计算' : <Spin size="30" tip='正在计算中......' />}
+                    {waiting == true ? 
+                    // <Empty description="输入参数开始计算"></Empty> 
+                    "输入参数开始计算"
+                    : 
+                    <Spin size="30" tip='正在计算中......' /> 
+                    }
                 </div>
             )}
         </>

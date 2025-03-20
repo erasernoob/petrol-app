@@ -1,17 +1,17 @@
 import { Card, Message } from "@arco-design/web-react";
-import { useState, useEffect } from "react";
+import Papa from 'papaparse';
+import { useEffect, useState } from "react";
+import { post } from "../../components/axios";
+import {
+    limit_curve,
+    limit_eye,
+    limit_hydro,
+    limit_mechanism,
+} from "../../data/Params";
+import DynamicForm from "../components/DynamicForm";
+import MyForm from "../Torque/MyForm";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
-import Papa from 'papaparse';
-import { post } from "../../components/axios"
-import DynamicForm from "../components/DynamicForm";
-import {
-  limit_curve,
-  limit_eye,
-  limit_hydro,
-  limit_mechanism,
-} from "../../data/Params";
-import MyForm from "../Torque/MyForm";
 
 const tabs = [
   ["基本参数", "钻井液", "岩屑床"],
@@ -73,12 +73,11 @@ export default function LimitPage() {
       setChartData(res)
       setLoading(false)
       setCondition(workConditions[data.wc - 1])
-      Message.success('数据获取成功！')
     } catch (error) {
       console.log(error)
       setLoading(false)
       setWaiting(true)
-      Message.error('计算内部出现错误，请检查')
+      Message.error('计算内部出现错误，请检查输入参数！')
     }
   }
   
@@ -94,7 +93,7 @@ export default function LimitPage() {
   return (
     <div className="main-content">
       <Card
-        title="参数输入"
+        title="参数"
         style={{
           width: "30%",
           height: "100%",

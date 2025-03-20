@@ -18,6 +18,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
         form={form}
         onSubmit={async (data) => {
           handleSubmit(data);
+
         }}
       >
         <div className="my-custom-form">
@@ -104,8 +105,8 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
               })}
         </div>
 
-        <div className=''>
-        <FormItem wrapperCol={{ offset: 5 }} >
+        {/* <div className=''>
+        <FormItem >
           <Button
             type="primary"
             className="button submit-button"
@@ -125,7 +126,40 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList}) => {
             重置
           </Button>
         </FormItem>
-        </div>
+        </div> */}
+        <FormItem
+          className="button-wrapper"
+          style={{
+            borderTop: "1px solid #e8e8e8",
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+          }}
+        >
+          <div
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition  && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "38px" : "18px", paddingLeft: "0px !important"}}
+          >
+            <Button
+              type="primary"
+              className="button submit-button"
+              disabled={handleDisabled()}
+              htmlType="submit"
+            >
+              计算
+            </Button>
+            <Button
+              type="primary"
+              className="button reset-button"
+              disabled={!form.validate()}
+              onClick={() => {
+                form.resetFields();
+              }}
+            >
+              重置
+            </Button>
+          </div>
+        </FormItem>
+ 
           </Form>
 
    </div>

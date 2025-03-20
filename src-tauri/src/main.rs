@@ -8,7 +8,7 @@ use std::path::PathBuf;
 #[cfg(windows)]
 use std::os::windows::process::CommandExt;
 
-use std::process::{Child, Command};
+use std::process::{Child, Command, Stdio};
 use tauri::path::BaseDirectory;
 use tauri::Manager;
 
@@ -35,6 +35,8 @@ fn start_backend(backend_path: &PathBuf) -> std::io::Result<Child> {
 #[cfg(windows)]
 fn start_backend(backend_path: &PathBuf) -> std::io::Result<Child> {
     Command::new(&backend_path)
+        .stdout(Stdio::piped()) // 关键：重定向 stdout
+        .stderr(Stdio::piped()) // 关键：重定向 stderr
         .creation_flags(0x08000000)
         .spawn()
 }
@@ -62,6 +64,7 @@ fn main() {
             // println!("Tauri application started, backend is running.");
             Ok(())
         })
+        .plugin(tauri_plugin_shell::init()) // 确保启用 shell 插件
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
         .run(tauri::generate_context!())

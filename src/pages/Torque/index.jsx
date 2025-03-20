@@ -1,12 +1,11 @@
 import { Card, Message } from "@arco-design/web-react"
-import ResultPage from "./ResultPage"
-import { useState, useEffect, useMemo } from 'react'
-import Sider from "./Sider"
-import MyForm from "./MyForm"
-import Option, { getOptionM } from "../option"
-import { torque } from '../../data/Params'
-import Papa from 'papaparse';
+import Papa from 'papaparse'
+import { useState } from 'react'
 import { post } from "../../components/axios"
+import { torque } from '../../data/Params'
+import MyForm from "./MyForm"
+import ResultPage from "./ResultPage"
+import Sider from "./Sider"
 
 const options = ['轴向力', '扭矩']
 const work_conditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
@@ -39,13 +38,12 @@ export default function TorquePage() {
             setHeatData(res.map(({M, T, N, E, TCS}) => ({M, T, N, E, TCS})))
             setCondition(work_conditions[data.wc - 1])
             setLoading(false)
-            Message.success('数据获取成功！')
         } catch (error) {
             console.log(error)
             setLoading(false)
             // setFileList([{ name: '', path: '' }])
             setWaiting(true)
-            Message.error('计算内部出现错误，请检查')
+            Message.error('计算内部出现错误，请检查输入参数！')
         }
         
     }
@@ -53,7 +51,7 @@ export default function TorquePage() {
     return (
         <div className="main-content">
             <Card
-                title='参数输入'
+                title='参数'
                 style={{
                     width: '30%',
                     height: '100%',

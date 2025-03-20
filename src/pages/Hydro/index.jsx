@@ -1,15 +1,12 @@
-import { Card, Watermark } from "@arco-design/web-react"
-import { hydro } from '../../data/Params'
-import Sider from "./Sider"
-import ResultPage from "./ResultPage"
-import { post } from '../../components/axios';
-import '../style.css'
-import { useSelector, useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { Card, Message } from "@arco-design/web-react";
 import Papa from 'papaparse';
-import { setHydro } from '../../store/dataSlice';
-import DynamicForm from "../components/DynamicForm"
-import { Message } from "@arco-design/web-react";
+import { useState } from 'react';
+import { post } from '../../components/axios';
+import { hydro } from '../../data/Params';
+import DynamicForm from "../components/DynamicForm";
+import '../style.css';
+import ResultPage from "./ResultPage";
+import Sider from "./Sider";
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 export default function HydroPage() {
@@ -40,18 +37,17 @@ export default function HydroPage() {
             const values = await post('/hydro/data')
             setExtraData(values)
             setLoading(false)
-            Message.success('数据获取成功！')
         } catch (error) {
             setLoading(false)
             setWaiting(true)
             console.log(error)
-            Message.error('计算内部出现错误，请检查')
+            Message.error('计算内部出现错误，请检查输入参数！')
         }
     }
     return (
         <div className="main-content">
             <Card
-                title='参数输入'
+                title='参数'
                 style={{
                     width: '30%',
                     height: '100%',
