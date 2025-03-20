@@ -1,12 +1,11 @@
 import { Card, Message } from "@arco-design/web-react"
-import ResultPage from "./ResultPage"
-import { useState, useEffect, useMemo } from 'react'
-import Sider from "./Sider"
-import MyForm from "./MyForm"
-import Option, { getOptionM } from "../option"
-import { torque } from '../../data/Params'
-import Papa from 'papaparse';
+import Papa from 'papaparse'
+import { useState } from 'react'
 import { post } from "../../components/axios"
+import { torque } from '../../data/Params'
+import MyForm from "./MyForm"
+import ResultPage from "./ResultPage"
+import Sider from "./Sider"
 
 const options = ['轴向力', '扭矩']
 const work_conditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
@@ -44,7 +43,7 @@ export default function TorquePage() {
             setLoading(false)
             // setFileList([{ name: '', path: '' }])
             setWaiting(true)
-            Message.error('计算内部出现错误，请检查')
+            Message.error('计算内部出现错误，请检查输入参数！')
         }
         
     }
