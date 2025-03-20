@@ -136,7 +136,6 @@ export default function Sider({
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "100px",
               justifyContent: "space-between",
               marginTop: "3px",
             }}

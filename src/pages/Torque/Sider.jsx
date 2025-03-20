@@ -73,7 +73,7 @@ export default function Sider({
           handleUpload={handleUpload}
         />
       </div>
-      <div className="input-form">{form}</div>
+      <div className="input-form-torque">{form}</div>
     </div>
   );
 }
