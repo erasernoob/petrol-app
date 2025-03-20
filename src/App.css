@@ -166,7 +166,7 @@ body {
   color: var(--font-color) !important;
   font-weight: var(--font-weight-bold) !important;
   padding: 5px 8px !important;
-  transition: all 0.3s ease !important;
+  /* transition: all 0.3s ease !important; */
   border-radius: 3px !important;
 }
 
@@ -281,6 +281,7 @@ body {
 
 /* Radio Button 按钮基础样式优化 */
 .arco-radio-button {
+  min-width: 70px;
   position: relative;
   transition: all 0.3s ease !important;
   overflow: hidden !important;

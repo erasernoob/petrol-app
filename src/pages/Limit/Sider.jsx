@@ -50,11 +50,7 @@ export default function Sider({
         defaultValue={activeRoute}
         onChange={(value) => {
           // 在实际更改路由之前，添加一个类来触发过渡动画
-          const mainContent = document.querySelector(".main-content");
-          if (mainContent) {
-            mainContent.classList.add("route-transitioning");
-          }
-
+          
           // 延迟更新状态，给 CSS 过渡一些时间来开始
           setTimeout(() => {
             setActiveRoute(value);
@@ -66,14 +62,7 @@ export default function Sider({
             setFile({ name: "", path: "" });
             setFileList(defaultFileList);
             setParams(false);
-
-            // 动画结束后移除过渡类
-            setTimeout(() => {
-              if (mainContent) {
-                mainContent.classList.remove("route-transitioning");
-              }
-            }, 2000); // 增加到 1200ms 与 CSS 过渡时间匹配
-          }, 50);
+          }, 0);
         }}
         options={subRouteOptions}
       ></RadioGroup>
