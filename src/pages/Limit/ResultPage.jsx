@@ -169,6 +169,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         {
             type: 'value',
             name: '正弦屈曲临界载荷（kN）',
+            nameLocation: 'start',  // 将 y 轴名称放到底部
             axisLine: {
                 onZero: false
             },
@@ -198,6 +199,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         {
             type: 'value',
             name: '螺旋屈曲临界载荷（kN）',
+            nameLocation: 'start',  // 将 y 轴名称放到底部
             axisLine: {
                 onZero: false
             },
