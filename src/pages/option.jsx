@@ -9,7 +9,7 @@ import { useMemo } from "react"
  */
 
 
-export default function Option(chartData, yAxis, xAxis, series, legend="") {
+export default function Option(chartData, yAxis, xAxis, series, legend="", tooltip="") {
   return {
     animation: true,
     animationThreshold: 20000, // ✅ 调高动画适用的数据量
@@ -22,9 +22,11 @@ export default function Option(chartData, yAxis, xAxis, series, legend="") {
     yAxis,
     xAxis,
     series,
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: { type: 'cross' }
+    tooltip:  {
+        trigger: 'axis', // 使 tooltip 响应 x 轴
+        axisPointer: {
+            type: 'line' // 显示垂直指示线
+        },
     },
     legend: !legend ? {
       show: true,
