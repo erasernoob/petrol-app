@@ -45,14 +45,26 @@ export default function Option(chartData, yAxis, xAxis, series, legend="", toolt
 
 export const getOptionT = (dataSet) => {
     // 计算 M 值的范围
-    const TValues = dataSet.map(item => item.T || 0);
+    const TValues = dataSet
+        .filter(item => item.T !== undefined)
+        .map(item => item.T || 0);
     const minT = Math.min(...TValues);
     const maxT = Math.max(...TValues);
 
     // 计算 E、N 和 TCS 的最小值和最大值
-    const EValues = dataSet.map(item => item.E ? item.E.toFixed(2) : 0);
-    const NValues = dataSet.map(item => item.N ? item.N.toFixed(2) : 0);
-    const TCSValues = dataSet.map(item => item.TCS ? item.TCS.toFixed(2) : 0);
+
+    // 计算 E、N 和 TCS 的最小值和最大值
+    const EValues = dataSet
+        .filter(item => item.E !== undefined)
+        .map(item => item.E ? item.E.toFixed(2) : 0);
+
+    const NValues = dataSet
+        .filter(item => item.N !== undefined)
+        .map(item => item.N ? item.N.toFixed(2) : 0);
+    const TCSValues = dataSet
+        .filter(item => item.TCS !== undefined)
+        .map(item => item.TCS ? item.TCS.toFixed(2) : 0);
+
 
     const minE = Math.min(...EValues), maxE = Math.max(...EValues);
     const minN = Math.min(...NValues), maxN = Math.max(...NValues);
@@ -122,14 +134,23 @@ export const getOptionT = (dataSet) => {
     if (dataSet.length === 0) return {};
 
     // 计算 M 值的范围
-    const MValues = dataSet.map(item => item.M || 0);
+    const MValues = dataSet
+        .filter(item => item.M !== undefined)
+        .map(item => item.M || 0);
     const minM = Math.min(...MValues);
     const maxM = Math.max(...MValues);
 
     // 计算 E、N 和 TCS 的最小值和最大值
-    const EValues = dataSet.map(item => item.E ? item.E.toFixed(2) : 0);
-    const NValues = dataSet.map(item => item.N ? item.N.toFixed(2) : 0);
-    const TCSValues = dataSet.map(item => item.TCS ? item.TCS.toFixed(2) : 0);
+    const EValues = dataSet
+        .filter(item => item.E !== undefined)
+        .map(item => item.E ? item.E.toFixed(2) : 0);
+
+    const NValues = dataSet
+        .filter(item => item.N !== undefined)
+        .map(item => item.N ? item.N.toFixed(2) : 0);
+    const TCSValues = dataSet
+        .filter(item => item.TCS !== undefined)
+        .map(item => item.TCS ? item.TCS.toFixed(2) : 0);
 
     const minE = Math.min(...EValues), maxE = Math.max(...EValues);
     const minN = Math.min(...NValues), maxN = Math.max(...NValues);
@@ -169,6 +190,7 @@ export const getOptionT = (dataSet) => {
             boxHeight: boxHeight, // 根据数据动态计算 y 轴比例
             boxDepth: boxDepth,   // 根据数据动态计算 z 轴比例
             viewControl: { alpha: 10, beta: 10 }
+            // viewControl: { alpha: 0, beta: 0 }
         },
         xAxis3D: { name: '东/西 (m)'},
         yAxis3D: { name: '南/北 (m)'},
