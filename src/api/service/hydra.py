@@ -395,7 +395,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             fd = 0.316 / (Reazz ** 0.25)
         # 注意：MATLAB 中的 ".*" 表示逐元素乘法，这里假设 H 和 Pazz 均为 NumPy 数组
         term1 = (Va ** 2) / g / (Dw - Rzz) / (S - 1)
-        Payxzz = (0.0026068625 * H * Pazz / 10 / fd *
+        Payxzz = (0.026068625 * H * Pazz / 10 / fd *
                   (term1 ** (-1.25)) +
                   (1 + 0.00581695 * H) * Pazz / 10)
 
@@ -405,7 +405,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         else:
             fdzt = 0.316 / (Reazt ** 0.25)
         term2 = (Vazt ** 2) / g / (Dw - Rzt) / (S - 1)
-        Payxzt = (0.0026068625 * H * Pazt / 10 / fdzt *
+        Payxzt = (0.026068625 * H * Pazt / 10 / fdzt *
                   (term2 ** (-1.25)) +
                   (1 + 0.00581695 * H) * Pazt / 10)
 

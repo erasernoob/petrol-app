@@ -1,58 +1,61 @@
 /* for all page */
 .main-content {
-    display: flex;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  height: 100%;
+  width: 100%;
 }
 
 .input-page {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* align-items: center; */
-    gap: 20px;
-    
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* align-items: center; */
+  gap: 20px;
+
 }
 
 /* left side for the result */
 .result-content {
-    height: 100%;
-    width: 70%;
+  height: 100%;
+  width: 70%;
 }
 
 .arco-card .arco-card-body {
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-    padding-top: 0px;
-    border: 1px solid var(--color-neutral-3);
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-top: 0px;
+  border: 1px solid var(--color-neutral-3);
+  border-bottom: 0px;
 }
 
 .custom-tabsPane {
-    display: flex !important;
-    gap: 6vh;
-    flex-direction: column;
-    height: 100%;
-    padding-top: 20px;
-    color: var(--font-color) !important;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scrolling */
-    align-items: center;
+  display: flex !important;
+  gap: 6vh;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 20px;
+  color: var(--font-color) !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Prevent horizontal scrolling */
+  align-items: center;
 }
 
 .arco-tabs-content-inner {
-    height: 100%;
-    color: var(--font-color) !important;
+  height: 100%;
+  color: var(--font-color) !important;
 }
 
 .arco-tabs-pane {
-    border-bottom: 0px !important;
-    color: var(--font-color) !important;
+  border-bottom: 0px !important;
+  color: var(--font-color) !important;
 }
 
 /* 选项卡标题 */
 .arco-tabs-header-title {
   display: flex !important;
-  justify-content: center; /* 水平居中 */
+  justify-content: center;
+  /* 水平居中 */
   padding-left: 0.3vw !important;
   padding-right: 0.3vw !important;
   height: 11.64vh;
@@ -91,40 +94,42 @@
 
 /* 选项卡内容区域 */
 .arco-tabs-content-vertical {
-    border-bottom: 0px !important;
-    color: var(--font-color) !important;
+  border-bottom: 0px !important;
+  color: var(--font-color) !important;
 }
 
 /* 选项卡整体 */
 .custom-tabs {
-    height: 100%;
-    color: var(--font-color) !important;
+  height: 100%;
+  color: var(--font-color) !important;
 
 }
 
 .full-width-radio-group {
-    width: 98% !important; /* 减小宽度，不占满100% */
-    margin: 0 auto !important; 
+  width: 98% !important;
+  /* 减小宽度，不占满100% */
+  margin: 0 auto !important;
 }
 
 .full-width-radio-group .arco-radio-group {
-    display: flex !important;
-    width: 100% !important;
-    align-items: center !important;
+  display: flex !important;
+  width: 100% !important;
+  align-items: center !important;
 }
 
 .full-width-radio-group .arco-radio-group .arco-radio-button {
-    flex: 1 !important;
-    min-width: 0 !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .mse-width-radio-group {
-    width: 100% !important; /* 减小宽度，不占满100% */
-    margin: 0 auto !important; 
+  width: 98% !important;
+  /* 减小宽度，不占满100% */
+  margin: 0 auto !important;
 }
 
 .mse-tabs-container {
@@ -132,87 +137,101 @@
 }
 
 .mse-width-radio-group .arco-radio-group {
-    display: flex !important;
-    width: 100% !important;
-    align-items: center !important;
+  display: flex !important;
+  width: 100% !important;
+  align-items: center !important;
 }
 
 .mse-width-radio-group .arco-radio-group .arco-radio-button {
-    flex: 1 !important;
-    min-width: 0 !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+  text-align: center !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .submit-button {
-    width: 150px;
+  width: 150px;
 }
 
 .file-uploader {
-    padding-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
 
 .input-component {
-    /* margin-left: 40px; */
-    width: 200px;
+  /* margin-left: 40px; */
+  width: 200px;
 }
 
 .form-wrapper {
-    /* position: relative; */
-    height: 100%;
-    width: 100%;
+  /* position: relative; */
+  height: 100%;
+  width: 100%;
 }
 
 /* for torque */
 .my-custom-form {
-    height: calc(100vh - 300px) !important; 
-    border-bottom: 1px solid var(--color-neutral-3);
-    display: flex;
-    overflow-y: auto;
-    gap: 3vh;
-    flex-direction: column;
-    align-items: center;
-    padding-left: 3vw;
+  height: calc(100vh - 272.5px) !important;
+  border-top: 1px solid var(--color-neutral-3);
+  border-bottom: 1px solid var(--color-neutral-3);
+  display: flex;
+  overflow-y: auto;
+  gap: 2vh;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 3vw;
+  padding-top: 20px;
 }
 
 .form-wrapper-custom {
-    padding-top: 20px;
-    overflow-x: hidden;
-    overflow-y: auto;
-    width: 100%;
-    height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 100%;
+  height: 100%;
 }
 
 .fixed-form-item {
   padding: 10px 0;
   margin-left: auto;
   margin-right: auto;
-  background: #fff; /* 可选：固定背景色 */
-  border-top: 1px solid #e8e8e8; /* 可选：分隔线 */
+  background: #fff;
+  /* 可选：固定背景色 */
+  border-top: 1px solid #e8e8e8;
+  /* 可选：分隔线 */
+}
+
+.input-form-torque {
+  height: 100vh;
+  padding-top: 0px !important;
+  border: 1px solid var(--color-neutral-3);
+  border-radius: 5px;
+  display: inline-block;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
 }
 
 .input-form {
-    height: calc(100vh - 200px);
-    padding-top: 0px  !important;
-    border: 1px solid var(--color-neutral-3);
-    border-radius: 5px;
-    display: inline-block;
-    border-right: 0px;
-    border-top: 0px;
-    border-bottom: 0px;
+  height: calc(100vh - 200px);
+  padding-top: 0px !important;
+  border: 1px solid var(--color-neutral-3);
+  border-radius: 5px;
+  display: inline-block;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
 }
 
 /* drill -> MSE RESULT DIV */
 .mse-result-page {
-    height: 100% !important;
-    padding: 0px !important;
-    border: 0px !important;
+  height: 100% !important;
+  padding: 0px !important;
+  border: 0px !important;
 }
 
 .mse-result-card .arco-card-body {
@@ -252,8 +271,12 @@
 }
 
 /* Make sure the form is visible */
-.arco-input, .arco-select, .arco-checkbox,
-.arco-input-wrapper, .arco-select-view, .arco-checkbox-wrapper {
+.arco-input,
+.arco-select,
+.arco-checkbox,
+.arco-input-wrapper,
+.arco-select-view,
+.arco-checkbox-wrapper {
   opacity: 1 !important;
   visibility: visible !important;
   z-index: 10;
@@ -261,7 +284,9 @@
 }
 
 /* Fix input visibility issues */
-.arco-input, .arco-select, .arco-checkbox {
+.arco-input,
+.arco-select,
+.arco-checkbox {
   opacity: 1 !important;
   visibility: visible !important;
 }
@@ -276,12 +301,13 @@
 
 /* Ensure inputs don't overflow on smaller screens */
 @media (max-width: 768px) {
+
   .fixed-position-form-item .arco-form-item-control,
   .fixed-position-form-item .arco-form-item-control-wrapper {
     left: 200px;
     width: 200px;
   }
-  
+
   .fixed-position-form-item .arco-form-item-label,
   .fixed-position-form-item .arco-form-label-item {
     min-width: 180px;
@@ -289,7 +315,7 @@
 }
 
 .mse-tabs-container {
-    margin-left: 20px;
+  margin-left: 1px;
 }
 
 /* 淡出动画 */
@@ -336,16 +362,14 @@
 
 /* 添加到 style.css 中 */
 /* 防止按钮重复显示的样式 */
-.main-content.transitioning .input-page > div:last-child {
+.main-content.transitioning .input-page>div:last-child {
   opacity: 0;
   visibility: hidden;
 }
 
 /* 确保按钮容器的绝对定位 */
-.input-page > div:last-child {
+.input-page>div:last-child {
   position: relative;
   z-index: 10;
   padding: 15px 0;
 }
-
-

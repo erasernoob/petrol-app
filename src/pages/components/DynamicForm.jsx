@@ -16,7 +16,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
   const FormItem = Form.Item;
 
   const [form] = Form.useForm();
-  console.log( datas[datas.length - 1].flag)
 
   return (
     <div className="form-wrapper">

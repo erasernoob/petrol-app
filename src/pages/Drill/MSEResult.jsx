@@ -47,7 +47,6 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         }
     ], [
         {
-            name: 'MSE (kN)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'MSE', y: 'Sk' },
@@ -85,7 +84,6 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         }
     ], [
         {
-            name: '钻压 (kN)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'wob', y: 'Sk' },
@@ -123,7 +121,6 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         }
     ], [
         {
-            name: '转速 (RPM)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rpm', y: 'Sk' },
@@ -161,7 +158,6 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         }
     ], [
         {
-            name: '机械转速 (m/h)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rop', y: 'Sk' },

@@ -142,8 +142,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
      {chartData.length > 0 && loading === false && waiting === false ? (
       <>
     <Row justify="center" align="start" style={{ height: '2vh' }}>
-        {/* <Col span={6} style={{ height: 90, lineHeight: '90px' }}> */}
-        <Col span={8}>
+        <Col span={4}>
         <RadioGroup
         type='button'
         size='large'
@@ -160,9 +159,10 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
       </RadioGroup>
         </Col>
         {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
-        <Col span={16}>
+        <Col span={20}>
         <div style={{
           display: 'flex',
+          marginLeft: "30px",
           justifyContent: 'center',
           alignItems: 'center',
           gap: "20px",
@@ -173,7 +173,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
     </Row>
           <ReactECharts
             option={option}
-            style={{ height: '78%', width: '100%' }}
+            style={{ height: '81%', width: '100%' }}
             opts={{ renderer: 'canvas' }} // 强制使用Canvas
             notMerge={true}
           />
@@ -188,7 +188,7 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
           </div>
         </>
       ) : (
-        <div style={{ height: '70%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
+        <div style={{ height: '80%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
           {waiting == true ? 
           // <Empty description="输入参数开始计算"></Empty> 
           "输入参数开始计算"

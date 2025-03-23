@@ -291,6 +291,9 @@ const drill_vibration = [
       Dt: { name: "时间步长 (s)", value: 0.01 },
     },
   },
+  {
+    "flag": '1'
+  }
 ];
 
 export {

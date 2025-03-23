@@ -399,7 +399,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                     </div>
                 </>
             ) : (
-                <div style={{ height: '70%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div style={{ height: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {waiting == true ? 
                     // <Empty description="输入参数开始计算"></Empty> 
                     "输入参数开始计算"

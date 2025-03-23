@@ -37,7 +37,11 @@ export default function FileUploader({
         ))}
     {params !== "default" && 
       (!params ? (
-        <Button type="primary" onClick={() => handleUpload(3)}>
+        <Button 
+        type="primary" 
+        onClick={() => handleUpload(3)}
+        style={{width:"150px"}}
+        >
           导入计算参数
         </Button>
       ) : (
