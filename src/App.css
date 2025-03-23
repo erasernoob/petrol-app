@@ -1,30 +1,36 @@
 body {
-    margin: 0px;
-  }
-  .arco-menu-inner {
-    padding: 2px !important;
-  }
-  
-  html, body, #root {
-    /* padding: 20px; */
-    margin: 0px;
-    padding: 0px;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    /* background-color: black; */
-    /* font-size: 30px; */
-    
+  margin: 0px;
+}
+
+.arco-menu-inner {
+  padding: 2px !important;
+}
+
+html,
+body,
+#root {
+  /* padding: 20px; */
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* background-color: black; */
+  /* font-size: 30px; */
+
 }
 
 .arco-menu-item {
   font-size: large;
-  border-left: 1.5px solid #e8e8e8; /* 可选：分隔线 */
-  border-right: 1.5px solid #e8e8e8; /* 可选：分隔线 */
+  border-left: 1.5px solid #e8e8e8;
+  /* 可选：分隔线 */
+  border-right: 1.5px solid #e8e8e8;
+  /* 可选：分隔线 */
   /* padding-left: 10px !important; */
   /* padding-right: 10px !important; */
   margin-left: 0px !important;
 }
+
 .arco-menu-selected {
   background-color: var(--color-fill-2) !important;
 }
@@ -37,19 +43,31 @@ body {
 
 /* 主题色定义 */
 :root {
-  --primary-blue: #1A3C6E !important; /* 专业深蓝色 */
-  --secondary-blue: #4D99CC !important; /* 中蓝色 */
-  --accent-orange: #FF8C00 !important; /* 鲜明橙色 */
-  --accent-green: #4CAF50 !important; /* 状态绿色 */
-  --accent-red: #E63946 !important; /* 警告红色 */
-  --chart-purple: #8A4FFF !important; /* 图表紫色 */
-  --light-bg: #EBEEF2 !important; /* 浅灰背景色 - 更改为灰色 */
-  --lighter-bg: #F3F5F7 !important; /* 更浅的灰色背景 */
-  --font-color: #2C3E50 !important; /* 默认字体颜色 */
-  --font-light: #6C757D !important; /* 浅色字体 */
+  --primary-blue: #1A3C6E !important;
+  /* 专业深蓝色 */
+  --secondary-blue: #4D99CC !important;
+  /* 中蓝色 */
+  --accent-orange: #FF8C00 !important;
+  /* 鲜明橙色 */
+  --accent-green: #4CAF50 !important;
+  /* 状态绿色 */
+  --accent-red: #E63946 !important;
+  /* 警告红色 */
+  --chart-purple: #8A4FFF !important;
+  /* 图表紫色 */
+  --light-bg: #EBEEF2 !important;
+  /* 浅灰背景色 - 更改为灰色 */
+  --lighter-bg: #F3F5F7 !important;
+  /* 更浅的灰色背景 */
+  --font-color: #2C3E50 !important;
+  /* 默认字体颜色 */
+  --font-light: #6C757D !important;
+  /* 浅色字体 */
   --font-weight-bold: 500 !important;
-  --bg-gray: #E5E9EF !important; /* 主灰色背景 */
-  --border-gray: #D8DDE5 !important; /* 边框灰色 */
+  --bg-gray: #E5E9EF !important;
+  /* 主灰色背景 */
+  --border-gray: #D8DDE5 !important;
+  /* 边框灰色 */
 }
 
 /* 基础按钮样式 */
@@ -176,11 +194,14 @@ body {
 }
 
 .arco-menu-selected {
-  background-color: rgba(44, 62, 80, 0.15) !important; /* 更深的灰色背景 */
+  background-color: rgba(44, 62, 80, 0.15) !important;
+  /* 更深的灰色背景 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
-  color: #033c74 !important; /* 深灰色文字 */
+  color: #033c74 !important;
+  /* 深灰色文字 */
   font-weight: 600 !important;
-  border-bottom: 2px solid #0974df !important; /* 左侧边框作为指示器 */
+  border-bottom: 2px solid #0974df !important;
+  /* 左侧边框作为指示器 */
 }
 
 .arco-menu-submenu-title:hover {
@@ -194,7 +215,8 @@ body {
 
 .arco-card-header {
   background: var(--light-bg) !important;
-  color: #0a5ad2 !important; /* 已有的蓝色 */
+  color: #0a5ad2 !important;
+  /* 已有的蓝色 */
   font-weight: 600 !important;
   border-bottom: 2px solid var(--secondary-blue) !important;
   /* border-radius: 10px !important; */
@@ -202,7 +224,7 @@ body {
   letter-spacing: 0.5px !important;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
   position: relative !important;
-  
+
   color: transparent !important;
 }
 
@@ -213,28 +235,29 @@ body {
   font-weight: 600 !important;
   font-size: 16px !important;
   letter-spacing: 0.3px !important;
-  
+
   /* 颜色与效果 */
   color: var(--primary-blue) !important;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) !important;
-  
+
   /* 文本溢出处理 */
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   white-space: nowrap !important;
-  
+
   /* 间距与对齐 */
   padding: 2px 0 !important;
   display: flex !important;
   align-items: center !important;
-  
+
   /* 交互效果 */
   transition: color 0.3s ease !important;
 }
 
 /* 悬停效果 */
 .arco-card:hover .arco-card-header-title {
-  color: #004d9f !important; /* 深蓝色 */
+  color: #004d9f !important;
+  /* 深蓝色 */
 }
 
 /* 统一字体样式 */
@@ -248,9 +271,11 @@ body {
 .success-state {
   color: var(--accent-green) !important;
 }
+
 .warning-state {
   color: var(--accent-orange) !important;
 }
+
 .error-state {
   color: var(--accent-red) !important;
 }
@@ -285,7 +310,8 @@ body {
   position: relative;
   transition: all 0.3s ease !important;
   overflow: hidden !important;
-  text-align: center !important; /* 确保整个按钮文本居中 */
+  text-align: center !important;
+  /* 确保整个按钮文本居中 */
 }
 
 /* 默认状态下的样式提升 */
@@ -294,17 +320,19 @@ body {
   text-align: center !important;
   width: 100% !important;
   padding-left: 0px !important;
+  padding-right: 0px !important;
   /* padding-right: 100px !important; */
   color: var(--font-color) !important;
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important; /* 水平居中对齐 */
+  justify-content: center !important;
+  /* 水平居中对齐 */
   position: relative;
   z-index: 1;
 }
 
 /* 确保内部元素也居中 */
-.arco-radio-button-inner > * {
+.arco-radio-button-inner>* {
   margin: 0 auto !important;
   text-align: center !important;
 }
@@ -337,6 +365,7 @@ body {
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -356,7 +385,8 @@ body {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
-    padding: 0 2px !important; /* 在小尺寸下添加轻微内边距 */
+    padding: 0 2px !important;
+    /* 在小尺寸下添加轻微内边距 */
   }
 }
 
@@ -370,5 +400,3 @@ body {
   border-width: 1.5px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
 }
-
-
