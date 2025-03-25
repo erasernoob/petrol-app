@@ -19,12 +19,12 @@ export const routeList = [
         element: <LoginPage />
     },
     {
-        name: '水力学',
+        name: '水力计算',
         path: '/hydro',
         element: <HydroPage />
     },
     {
-        name: '摩阻扭矩',
+        name: '摩阻扭矩计算',
         path: '/torque',
         element: <TorquePage />
     },

@@ -3,10 +3,10 @@ import Papa from 'papaparse';
 import { useEffect, useState } from "react";
 import { post } from "../../components/axios";
 import {
-    limit_curve,
-    limit_eye,
-    limit_hydro,
-    limit_mechanism,
+  limit_curve,
+  limit_eye,
+  limit_hydro,
+  limit_mechanism,
 } from "../../data/Params";
 import DynamicForm from "../components/DynamicForm";
 import MyForm from "../Torque/MyForm";
@@ -44,13 +44,13 @@ export default function LimitPage() {
   const [file, setFile] = useState({ name: '', path: '' })
 
   useEffect(() => {
-      setWaiting(true)
-      setLoading(false)
-      setChartData([])
-      setFile({name: '', path: ''})
-      setFileList(defaultFileList)
-    }, [activeRoute])
-  
+    setWaiting(true)
+    setLoading(false)
+    setChartData([])
+    setFile({ name: '', path: '' })
+    setFileList(defaultFileList)
+  }, [activeRoute])
+
 
   const handleSubmit = async (data) => {
     try {
@@ -63,10 +63,10 @@ export default function LimitPage() {
       setWaiting(false)
       setLoading(true)
 
-      if (activeRoute == 3 &&  data.wc != 1 && data.wc != 5) {
-                data.v = 0
-                data.omega = 0
-        }
+      if (activeRoute == 3 && data.wc != 1 && data.wc != 5) {
+        data.v = 0
+        data.omega = 0
+      }
 
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
@@ -80,12 +80,12 @@ export default function LimitPage() {
       Message.error('计算内部出现错误，请检查输入参数！')
     }
   }
-  
+
   const formList = [
-    <DynamicForm key={1}  handleSubmit={handleSubmit} datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
+    <DynamicForm key={1} handleSubmit={handleSubmit} datas={limit_eye} tabs={tabs[0]} file={file}></DynamicForm>,
     <DynamicForm key={2} handleSubmit={handleSubmit} datas={limit_hydro} tabs={tabs[1]} file={file}></DynamicForm>,
-    <MyForm key={3}   handleSubmit={handleSubmit} datas={limit_mechanism} fileList={fileList} />,
-    <MyForm  key={4} handleSubmit={handleSubmit} datas={limit_curve} fileList={fileList} />,
+    <MyForm key={3} handleSubmit={handleSubmit} datas={limit_mechanism} fileList={fileList} limit={true} />,
+    <MyForm key={4} handleSubmit={handleSubmit} datas={limit_curve} fileList={fileList} limit={true} />,
   ];
 
 
