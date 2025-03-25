@@ -48,7 +48,7 @@ export default function DrillPage() {
     }
   };
 
-  const handleExport = () => {};
+  const handleExport = () => { };
 
   const handleSubmit = async (data) => {
     try {
@@ -112,6 +112,7 @@ export default function DrillPage() {
                 handleSubmit={handleSubmit}
                 tabs={tabs}
                 file={{ name: "for-vibration", path: "" }}
+                drill={true}
               />
             ) : (
               "default"
@@ -125,9 +126,8 @@ export default function DrillPage() {
           title="计算结果"
           style={{ flex: "1", marginLeft: "5px" }}
           bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
-          className={`result-card ${
-            resultCardVisible ? "result-card-visible" : "result-card-entering"
-          }`}
+          className={`result-card ${resultCardVisible ? "result-card-visible" : "result-card-entering"
+            }`}
         >
           <ResultPage
             typeOptions={typeOptions}

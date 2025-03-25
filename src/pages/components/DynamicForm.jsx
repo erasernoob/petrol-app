@@ -8,7 +8,7 @@ import {
 } from "@arco-design/web-react";
 import { useState } from "react";
 
-const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
+const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
   const [tabTime, setTabTime] = useState(0);
 
   const tabsName = tabs;
@@ -117,7 +117,13 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file }) => {
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: "3px"}}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "30px",
+              marginTop: !drill ? "3px" : "12px"
+            }}
           >
             <Button
               type="primary"
