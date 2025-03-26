@@ -137,7 +137,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "24px" : "16px", paddingLeft: "0px !important" }}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "15px" : "16px", paddingLeft: "0px !important" }}
           >
             <Button
               type="primary"

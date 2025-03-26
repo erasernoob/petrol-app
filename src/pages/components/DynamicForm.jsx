@@ -8,7 +8,7 @@ import {
 } from "@arco-design/web-react";
 import { useState } from "react";
 
-const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
+const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = false }) => {
   const [tabTime, setTabTime] = useState(0);
   // 默认宾汉流体
   const [selectValue, setSelectValue] = useState(1)
@@ -38,7 +38,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
         <Tabs
           type="card"
           tabPosition="left"
-          className="custom-tabs"
+          className={!limit ? "custom-tabs" : "custom-tabs-limit"}
           size="large"
           lazyload={false}
           onChange={() => setTabTime(() => tabTime + 1)}
@@ -60,7 +60,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
                     gap: "2vh",
                     alignItems: "center",
                     paddingTop: "10px",
-                    paddingRight: "4vw",
+                    paddingRight: "7vw",
                     boxSizing: "border-box",
                   }}
                 >
@@ -97,7 +97,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
                           className="input-component"
                           // placeholder={`请输入${field.name}`}
                           disabled={
-                            categoryKey == "fluid" && (
+                            categoryKey == "fluid" && key != "fluidden" && (
                               selectValue == 1
                               && (key != "miu" && key != "taof")
                               ||
@@ -132,7 +132,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
           className="button-wrapper"
           style={{
             borderTop: "1px solid #e8e8e8",
-            height: datas[datas.length - 1].flag === "1" ? "1%" : "",
+            height: datas[datas.length - 1].flag === "1" ? "2%" : "",
             display: "flex",
             justifyContent: "center",
             width: "100%",

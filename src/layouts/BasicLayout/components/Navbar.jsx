@@ -35,7 +35,11 @@ export default function NavBar() {
             alignItems: "center",
           }}>
             {icons[idx]}
-            {route.name}
+            <span
+              style={{ whiteSpace: "nowrap", margin: "0px", marginLeft: idx === 4 ? "2px" : "0px" }}
+            >
+              {route.name}
+            </span>
           </span>
         </MenuItem>
 
@@ -50,12 +54,17 @@ export default function NavBar() {
         }}
       >
         <span style={{
-          display: "flex",
-          justifyContent: "space-between",
+          display: "inline-flex",
+          justifyContent: "center",
           alignItems: "center",
+          whiteSpace: "nowrap" // 防止换行
         }}>
           {icons[idx]}
-          {`${route.name}`}
+          <span
+            style={{ whiteSpace: "nowrap", margin: "0px" }}
+          >
+            {route.name}
+          </span>
         </span>
       </MenuItem>
     );

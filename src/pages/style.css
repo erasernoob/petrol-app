@@ -94,6 +94,7 @@
 
 /* 选项卡内容区域 */
 .arco-tabs-content-vertical {
+  height: 100%;
   border-bottom: 0px !important;
   color: var(--font-color) !important;
 }
@@ -102,7 +103,11 @@
 .custom-tabs {
   height: 100%;
   color: var(--font-color) !important;
+}
 
+.custom-tabs-limit {
+  height: 90%;
+  color: var(--font-color) !important;
 }
 
 .full-width-radio-group {
@@ -165,7 +170,7 @@
 
 .input-component {
   /* margin-left: 40px; */
-  width: 200px;
+  width: 210px;
 }
 
 .form-wrapper {
@@ -189,7 +194,7 @@
 }
 
 .my-custom-form-limit {
-  height: calc(100vh - 294.5px) !important;
+  height: calc(100vh - 312px) !important;
   border-top: 1px solid var(--color-neutral-3);
   border-bottom: 1px solid var(--color-neutral-3);
   display: flex;

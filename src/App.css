@@ -22,17 +22,18 @@ body,
 
 .arco-menu-item {
   font-size: large;
+  /* max-height: 50px !important; */
   border-left: 1.5px solid #e8e8e8;
-  /* 可选：分隔线 */
   border-right: 1.5px solid #e8e8e8;
-  /* 可选：分隔线 */
-  /* padding-left: 10px !important; */
-  /* padding-right: 10px !important; */
   margin-left: 0px !important;
 }
 
 .arco-menu-selected {
   background-color: var(--color-fill-2) !important;
+}
+
+.arco-menu-selected-label {
+  /* display: none !important; */
 }
 
 .arco-menu-overflow-wrap {
@@ -102,6 +103,7 @@ body,
   font-size: 14px !important;
   color: var(--font-color) !important;
   border-color: var(--secondary-blue) !important;
+  background-color: var(--color-bg-2);
 }
 
 .arco-input:not(#username_input, #password_input):disabled {
@@ -110,7 +112,8 @@ body,
   transition: all 0.3s ease !important;
   font-size: 14px !important;
   color: var(--font-color) !important;
-  border: none
+  background-color: var(--color-fill-3);
+  border: none;
 }
 
 .arco-input:hover:not(#username_input, #password_input) {
@@ -206,7 +209,6 @@ body,
   /* 深灰色文字 */
   font-weight: 600 !important;
   border-bottom: 2px solid #0974df !important;
-  /* 左侧边框作为指示器 */
 }
 
 .arco-menu-submenu-title:hover {
