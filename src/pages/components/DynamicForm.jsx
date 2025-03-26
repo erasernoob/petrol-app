@@ -10,6 +10,10 @@ import { useState } from "react";
 
 const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
   const [tabTime, setTabTime] = useState(0);
+  // 默认宾汉流体
+  const [selectValue, setSelectValue] = useState(1)
+  // 默认不勾选岩屑
+  const [checked, setChecked] = useState(false)
 
   const tabsName = tabs;
   const TabPane = Tabs.TabPane;
@@ -84,18 +88,36 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
                         <Select
                           options={field.option}
                           className="input-component"
-                          placeholder={`请选择${field.name}`}
+                          placeholder={`宾汉流体`}
+                          onChange={setSelectValue}
                         />
+                        // 判断是否是岩屑
                       ) : key != "yx" && key != "y" ? (
                         <Input
                           className="input-component"
-                          placeholder={`请输入${field.name}`}
+                          // placeholder={`请输入${field.name}`}
+                          disabled={
+                            categoryKey == "fluid" && (
+                              selectValue == 1
+                              && (key != "miu" && key != "taof")
+                              ||
+                              selectValue == 2
+                              && (key != "n" && key != "K")
+                              ||
+                              selectValue == 3
+                              && (key != "n" && key != "K" && key != "taof"))
+                            ||
+                            categoryKey == "rock_cuttings" && !checked
+                          }
                         ></Input>
                       ) : (
                         <Checkbox
-                          onChange={(checked) =>
-                            form.setFieldValue(key, checked ? 1 : 0)
-                          }
+                          checked={checked}
+                          onChange={(check) => {
+                            form.setFieldValue(key, check ? 1 : 0)
+                            console.log(check)
+                            setChecked(check)
+                          }}
                         ></Checkbox>
                       )}
                     </FormItem>

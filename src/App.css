@@ -95,17 +95,22 @@ body,
   background: #005691 !important;
 }
 
-.arco-input {
+.arco-input:not(#username_input, #password_input) {
   border-radius: 3px !important;
   padding: 8px 12px !important;
   transition: all 0.3s ease !important;
   font-size: 14px !important;
   color: var(--font-color) !important;
+  border-color: var(--secondary-blue) !important;
 }
 
-/* 输入框样式 */
-.arco-input:not(#username_input, #password_input) {
-  border: 1.4px solid var(--border-gray) !important;
+.arco-input:not(#username_input, #password_input):disabled {
+  border-radius: 3px !important;
+  padding: 8px 12px !important;
+  transition: all 0.3s ease !important;
+  font-size: 14px !important;
+  color: var(--font-color) !important;
+  border: none
 }
 
 .arco-input:hover:not(#username_input, #password_input) {
