@@ -18,6 +18,7 @@
     "@tauri-apps/plugin-opener": "^2",
     "@tauri-apps/plugin-shell": "~2",
     "axios": "^1.7.9",
+    "big.js": "^6.2.2",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",
     "echarts-gl": "^2.0.9",
