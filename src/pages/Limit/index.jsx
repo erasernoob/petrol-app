@@ -1,7 +1,7 @@
 import { Card, Message } from "@arco-design/web-react";
 import Papa from 'papaparse';
 import { useEffect, useState } from "react";
-import { post } from "../../components/axios";
+import { del, post } from "../../components/axios";
 import {
   limit_curve,
   limit_eye,
@@ -12,6 +12,7 @@ import DynamicForm from "../components/DynamicForm";
 import MyForm from "../Torque/MyForm";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
+import { dealWithTheDataUnit } from "../utils/utils";
 
 const tabs = [
   ["基本参数", "钻井液", "岩屑床"],
@@ -56,6 +57,7 @@ export default function LimitPage() {
     try {
       if (activeRoute <= 2) {
         data.file_path = file.path
+        dealWithTheDataUnit(data, 1)
       } else {
         data.file_path1 = fileList.orbit.path
         data.file_path2 = fileList.drill.path
@@ -67,6 +69,15 @@ export default function LimitPage() {
         data.v = 0
         data.omega = 0
       }
+
+      if (activeRoute == 3) {
+        dealWithTheDataUnit(data, 2)
+      } else if (activeRoute == 4) {
+        dealWithTheDataUnit(data, 3)
+      }
+
+
+      console.log(data)
 
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data

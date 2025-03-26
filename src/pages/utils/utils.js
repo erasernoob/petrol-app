@@ -93,6 +93,24 @@ const dealWithTheDataUnit = (data, idx) => {
     data.Rzt = new Big(data.Rzt).div(1000).toNumber()
     data.rzt = new Big(data.rzt).div(1000).toNumber()
     data.miu = new Big(data.miu).div(1000).toNumber()
+  } else if (idx == 2) {
+    data.v = new Big(data.v).div(3600).toNumber()
+    data.omega = new Big(data.omega).div(30).mul(Math.PI).toNumber()
+    data.T0 = new Big(data.T0).mul(1000).toNumber()
+    data.Dw = new Big(data.Dw).div(1000).toNumber()
+  } else if (idx == 3) {
+    // curve 
+    data.Holedia = new Big(data.Holedia).div(1000).toNumber()
+  } else if (idx == 4) {
+    // vibration
+    data.Db = new Big(data.Db).div(1000).toNumber()
+    data.Dp = new Big(data.Dp).div(1000).toNumber()
+    data.dp = new Big(data.dp).div(1000).toNumber()
+    data.Dpw = new Big(data.Dpw).div(1000).toNumber()
+    data.dc = new Big(data.dc).div(1000).toNumber()
+    data.Dc = new Big(data.Dc).div(1000).toNumber()
+    data.dpw = new Big(data.dpw).div(1000).toNumber()
+
   }
 
 }

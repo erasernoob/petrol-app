@@ -6,6 +6,7 @@ import { drill_vibration } from "../../data/Params";
 import Sider from "../Limit/Sider";
 import DynamicForm from "../components/DynamicForm";
 import ResultPage from "./ResultPage";
+import { dealWithTheDataUnit } from "../utils/utils";
 
 const subRoutesOptions = [
   { label: "MSE", value: 1 },
@@ -54,6 +55,7 @@ export default function DrillPage() {
     try {
       setWaiting(false);
       setLoading(true);
+      dealWithTheDataUnit(data, 4)
       const response = await post("/drill/vibration", JSON.stringify(data));
       const res = Papa.parse(response, {
         header: true,
