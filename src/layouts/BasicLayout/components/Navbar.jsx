@@ -1,12 +1,11 @@
 import { Menu } from '@arco-design/web-react';
 import { openUrl } from '@tauri-apps/plugin-opener';
 import { useState } from 'react';
-import IconHydra from "../../../assets/hydra.svg?react";
-import IconTorque from "../../../assets/torque.svg?react";
-import IconDrill from "../../../assets/drill.svg?react";
-import IconLimit from "../../../assets/limit.svg?react";
 import IconData from "../../../assets/database.svg?react";
-import styled from "styled-components";
+import IconDrill from "../../../assets/drill.svg?react";
+import IconHydra from "../../../assets/hydra.svg?react";
+import IconLimit from "../../../assets/limit.svg?react";
+import IconTorque from "../../../assets/torque.svg?react";
 import { routeList } from "../../../routers";
 
 
@@ -16,11 +15,6 @@ const myNavigate = (item) => {
 }
 
 const icons = [<IconData />, "", <IconHydra />, <IconTorque />, <IconLimit />, <IconDrill />]
-
-// 自定义样式
-const StyledMenu = styled(Menu)`
- }
-`;
 
 export default function NavBar() {
   const [selectedKeys, setSelectedKeys] = useState(["/hydro"]);
@@ -57,11 +51,11 @@ export default function NavBar() {
       >
         <span style={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "space-between",
           alignItems: "center",
         }}>
           {icons[idx]}
-          {route.name}
+          {`${route.name}`}
         </span>
       </MenuItem>
     );
@@ -69,7 +63,7 @@ export default function NavBar() {
 
   return (
     <>
-      <StyledMenu
+      <Menu
         mode="horizontal"
         selectedKeys={selectedKeys} // 受控模式，确保选中状态生效
         style={{
@@ -77,7 +71,7 @@ export default function NavBar() {
         }}
       >
         {tabList}
-      </StyledMenu>
+      </Menu>
 
     </>
   );
