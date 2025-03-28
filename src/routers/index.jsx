@@ -19,7 +19,7 @@ export const routeList = [
         element: <LoginPage />
     },
     {
-        name: '水力计算',
+        name: '水力学计算',
         path: '/hydro',
         element: <HydroPage />
     },

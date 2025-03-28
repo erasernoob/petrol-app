@@ -1,6 +1,6 @@
 [package]
 name = "petrol-app"
-version = "0.7.3"
+version = "0.8.0"
 description = "大位移井钻井关键参数联动分析软件"
 authors = ["erasernoob"]
 edition = "2021"
@@ -25,4 +25,3 @@ serde_json = "1"
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-shell = "2"
-
