@@ -10,7 +10,7 @@ export const routeList = [
     {
         name: '数据管理系统',
         // TODO: change to the database system url
-        path: 'http://www.baidu.com',
+        path: 'http://47.108.223.152:5173/petroleum-data-storage/',
         element: <></>
     },
     {
