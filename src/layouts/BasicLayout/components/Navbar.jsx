@@ -54,7 +54,7 @@ export default function NavBar() {
         }}
       >
         <span style={{
-          display: "inline-flex",
+          display: "flex",
           justifyContent: "center",
           alignItems: "center",
           whiteSpace: "nowrap" // 防止换行
