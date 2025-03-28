@@ -42,7 +42,7 @@
 }
 
 .arco-tabs-content-inner {
-  height: 100%;
+  /* height: 100%; */
   color: var(--font-color) !important;
 }
 
@@ -96,17 +96,19 @@
 .arco-tabs-content-vertical {
   height: 100%;
   border-bottom: 0px !important;
+  overflow-y: auto;
   color: var(--font-color) !important;
 }
 
 /* 选项卡整体 */
 .custom-tabs {
-  height: 100%;
+  height: calc(100vh - 250.5px) !important;
   color: var(--font-color) !important;
 }
 
 .custom-tabs-limit {
-  height: 90%;
+  /* height: 90%; */
+  height: calc(100vh - 291.5px) !important;
   color: var(--font-color) !important;
 }
 
@@ -314,7 +316,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-top: 15px !important;
+  /* padding-top: 15px !important; */
 }
 
 /* Ensure inputs don't overflow on smaller screens */

@@ -58,6 +58,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                     display: "flex",
                     flexDirection: "column",
                     gap: "2vh",
+                    overflowY: "auto",
                     alignItems: "center",
                     paddingTop: "10px",
                     paddingRight: "7vw",
@@ -144,7 +145,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
               justifyContent: "center",
               alignItems: "center",
               gap: "30px",
-              marginTop: !drill ? "3px" : "12px"
+              marginTop: !drill ? "14.8px" : "12px"
             }}
           >
             <Button
