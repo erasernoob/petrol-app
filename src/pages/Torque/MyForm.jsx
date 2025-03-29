@@ -62,9 +62,9 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                       return key === "v" || key === "omega" ? <></> : res;
                     } else {
                       if (values.wc === 5 && key === "v") {
-                        field.name = "上提速度(m/s)";
+                        field.name = "上提速度(m/h)";
                       } else if (values.wc === 1 && key === "v") {
-                        field.name = "钻进速度(m/s)";
+                        field.name = "钻进速度(m/h)";
                       }
                       return (
                         <FormItem
