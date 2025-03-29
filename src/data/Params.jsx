@@ -23,7 +23,7 @@ const hydro = [
           { label: "赫巴流体", value: 3 },
         ],
       },
-      fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
+      fluidden: { name: "钻井液密度 (kg/m³)", value: 1200 },
       n: { name: "流性指数", value: 0.48 },
       K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },
       miu: { name: "塑性粘度 (mPa·s)", value: 21 },
@@ -91,7 +91,7 @@ const torque = {
     v: { name: "钻进速度 (m/h)", value: 25.704 },
     omega: { name: "转速 (r/min)", value: 50 },
     T0: { name: "钻压 (kN)", value: 58.9 },
-    rhoi: { name: "钻井液密度 (kg/m³)", value: 1170 },
+    rhoi: { name: "钻井液密度 (kg/m³)", value: 1200 },
     Dw: { name: "井眼直径 (mm)", value: 215.9 },
     tgxs: { name: "套管下深 (m)", value: 3500 },
     miua11: { name: "套管段摩阻系数", value: 0.15 },
@@ -125,7 +125,7 @@ const limit_eye = [
           { label: "赫巴流体", value: 3 },
         ],
       },
-      fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
+      fluidden: { name: "钻井液密度 (kg/m³)", value: 1200 },
       n: { name: "流性指数", value: 0.48 },
       K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },
       miu: { name: "塑性粘度 (mPa·s)", value: 21 },
@@ -170,7 +170,7 @@ const limit_hydro = [
           { label: "赫巴流体", value: 3 },
         ],
       },
-      fluidden: { name: "钻井液密度 (kg/m³)", value: 1170 },
+      fluidden: { name: "钻井液密度 (kg/m³)", value: 1200 },
       n: { name: "幂律指数", value: 0.48 },
       K: { name: "稠度系数 (Pa·s^n)", value: 1.09 },
       miu: { name: "塑性粘度 (mPa·s)", value: 21 },
@@ -236,7 +236,7 @@ const limit_mechanism = {
     v: { name: "钻进速度 (m/h)", value: 25.704 },
     omega: { name: "转速 (r/min)", value: 50 },
     T0: { name: "钻压 (kN)", value: 58.9 },
-    rhoi: { name: "钻井液密度 (kg/m³)", value: 1170 },
+    rhoi: { name: "钻井液密度 (kg/m³)", value: 1200 },
     Dw: { name: "井眼直径 (mm)", value: 215.9 },
     tgxs: { name: "套管下深 (m)", value: 3500 },
     miua11: { name: "套管段摩阻系数", value: 0.15 },
@@ -249,7 +249,7 @@ const limit_mechanism = {
 const limit_curve = {
   Holedia: { name: "井眼直径 (mm)", value: 215.9 },
   ml: { name: "钻柱弹性模量 (MPa)", value: 2.1e5 },
-  js: { name: "计算井深 (m)", value: 6000 },
+  js: { name: "计算井深 (m)", value: 4200 },
 };
 
 const drill_vibration = [
@@ -297,11 +297,7 @@ const drill_vibration = [
 ];
 
 export {
-  hydro,
-  torque,
-  limit_curve,
-  limit_eye,
-  limit_mechanism,
-  limit_hydro,
-  drill_vibration,
+  drill_vibration, hydro, limit_curve,
+  limit_eye, limit_hydro, limit_mechanism, torque
 };
+
