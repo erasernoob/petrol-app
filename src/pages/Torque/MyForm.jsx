@@ -1,5 +1,4 @@
-import { Form, Button, Input, Select, Message } from "@arco-design/web-react";
-import { useEffect, useRef, useState } from "react";
+import { Button, Form, Input, Select } from "@arco-design/web-react";
 
 const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const FormItem = Form.Item;
@@ -63,9 +62,9 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                       return key === "v" || key === "omega" ? <></> : res;
                     } else {
                       if (values.wc === 5 && key === "v") {
-                        field.name = "上提速度(m/s)";
+                        field.name = "上提速度(m/h)";
                       } else if (values.wc === 1 && key === "v") {
-                        field.name = "钻进速度(m/s)";
+                        field.name = "钻进速度(m/h)";
                       }
                       return (
                         <FormItem
@@ -130,14 +129,14 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
         <FormItem
           className="button-wrapper"
           style={{
-            borderTop: "1px solid #e8e8e8",
+            // borderTop: "1px solid #e8e8e8",
             display: "flex",
             justifyContent: "center",
             width: "100%",
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "24px" : "16px", paddingLeft: "0px !important" }}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "16px" : "13px", paddingLeft: "0px !important" }}
           >
             <Button
               type="primary"

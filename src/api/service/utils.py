@@ -294,12 +294,22 @@ def hydro_limit_eye(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, r
 
     if yx == 0:
         # 当 yx == 0 时，直接计算 ECD 与 ECDyx
-        if wc == 3: 
-            ccc = 1.05
-        elif wc == 2:
-            ccc = 1
-        elif wc == 1:
-            ccc = 0.9
+
+        if Dw <= 0.3:
+            if wc == 1:
+                ccc = 0.89
+            elif wc == 2:
+                ccc = 1.06
+            elif wc == 3:
+                ccc = 1.4
+        elif Dw > 0.3:
+            if wc == 1:
+                ccc = 0.91
+            elif wc == 2:
+                ccc = 1.06
+            elif wc == 3:
+                ccc = 1.16
+
 
         ECD = ccc * Pa * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
         ECDyx = 0
@@ -336,12 +346,21 @@ def hydro_limit_eye(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, r
         # TODO注意这里是
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
 
-        if wc == 3:  
-            ccc = 1.05
-        elif wc == 2:
-            ccc = 1
-        elif wc == 1:
-            ccc = 0.9
+        
+        if Dw <= 0.3:
+            if wc == 1:
+                ccc = 0.89
+            elif wc == 2:
+                ccc = 1.06
+            elif wc == 3:
+                ccc = 1.4
+        elif Dw > 0.3:
+            if wc == 1:
+                ccc = 0.91
+            elif wc == 2:
+                ccc = 1.06
+            elif wc == 3:
+                ccc = 1.16
 
         # 考虑岩屑的 ECD（同样保证逐元素运算）
         ECDyx = ccc * Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
@@ -973,24 +992,41 @@ def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, 
 
         if y == 0:
             # 环空循环压力
-
-            if wc == 3:
-                aaa = 1.05
-            elif wc == 2:
-                aaa = 1
-            elif wc == 1:
-                aaa = 0.9
+        
+            if Dw <= 0.3:
+                if wc == 1:
+                    aaa = 0.89
+                elif wc == 2:
+                    aaa = 1.06
+                elif wc == 3:
+                    aaa = 1.4
+            elif Dw > 0.3:
+                if wc == 1:
+                    aaa = 0.91
+                elif wc == 2:
+                    aaa = 1.06
+                elif wc == 3:
+                    aaa = 1.16
 
 
             Phk = PO2.flatten() + Pa * aaa
 
             # 管内循环压力
-            if wc == 3:
-                nnnn = 0.69
-            elif wc == 2:
-                nnnn = 1.05
-            elif wc == 1:
-                nnnn = 1.45
+        
+            if Dw <= 0.3:
+                if wc == 1:
+                    nnnn = 1.68
+                elif wc == 2:
+                    nnnn = 1.43
+                elif wc == 3:
+                    nnnn = 0.78
+            elif Dw > 0.3:
+                if wc == 1:
+                    nnnn = 1.44
+                elif wc == 2:
+                    nnnn = 1.087
+                elif wc == 3:
+                    nnnn = 0.685
 
 
             nn = ntrans  # ntrans 应该是一个正整数
@@ -1054,23 +1090,39 @@ def hydro_limit_hydro(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, A1, 
             # TODO注意这里是
             Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
 
-            if wc == 3:
-                aaa = 1.05
-            elif wc == 2:
-                aaa = 1
-            elif wc == 1:
-                aaa = 0.9
+            if Dw <= 0.3:
+                if wc == 1:
+                    aaa = 0.89
+                elif wc == 2:
+                    aaa = 1.06
+                elif wc == 3:
+                    aaa = 1.4
+            elif Dw > 0.3:
+                if wc == 1:
+                    aaa = 0.91
+                elif wc == 2:
+                    aaa = 1.06
+                elif wc == 3:
+                    aaa = 1.16
 
             # 考虑岩屑的环空循环压力
             Phkyx = PO2.flatten() + Payx  ** aaa
 
             # 考虑岩屑的管内循环压力
-            if wc == 3:
-                nnnn = 0.69
-            elif wc == 2:
-                nnnn = 1.05
-            elif wc == 1:
-                nnnn = 1.45
+            if Dw <= 0.3:
+                if wc == 1:
+                    nnnn = 1.68
+                elif wc == 2:
+                    nnnn = 1.43
+                elif wc == 3:
+                    nnnn = 0.78
+            elif Dw > 0.3:
+                if wc == 1:
+                    nnnn = 1.44
+                elif wc == 2:
+                    nnnn = 1.087
+                elif wc == 3:
+                    nnnn = 0.685
 
             nn = ntrans  # ntrans 是正整数
             # 创建一个长度为 nn 的一维数组（与 MATLAB 中的 zeros(nn,1) 等价）

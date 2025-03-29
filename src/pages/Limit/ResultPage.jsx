@@ -90,7 +90,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: true
         }
-    ],)
+    ], "", 1)
     const option5 = Option(chartData,
         {
             type: 'value',
@@ -118,7 +118,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         }
     ], [
         {
-            name: '立管压力（MPa）',
+            name: '井口扭矩（kN·m）',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'Sk', y: 'M' },
@@ -127,7 +127,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: true
         }
-    ],)
+    ], "", 1)
     const option6 = Option(chartData,
         {
             type: 'value',
@@ -164,7 +164,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: true
         }
-    ],)
+    ], "", 1)
     const option7 = Option(chartData,
         {
             type: 'value',
@@ -194,7 +194,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: false
         }
-    ],)
+    ], "", 1)
     const option8 = Option(chartData,
         {
             type: 'value',
@@ -224,7 +224,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: false
         }
-    ],)
+    ], "", 1)
     const option3 = Option(chartData,
         {
             type: 'value',
@@ -256,7 +256,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: true
         }
-    ],)
+    ], "", 1) // show the y value
     const option2 = Option(chartData,
         {
             type: 'value',
@@ -288,13 +288,13 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             lineStyle: { width: 1.5 },
             showSymbol: true
         }
-    ],)
+    ], "", 1) // show the y value
 
     const [option, setOption] = useState(option1)
     const [curType, setCurType] = useState(typeOptions[0])
 
     useEffect(() => {
-        setCurType(typeOptions[0]) 
+        setCurType(typeOptions[0])
     }, [activeRoute])
 
     useEffect(() => {
@@ -323,7 +323,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         if (typeOptions.length === 0) setOption(option1)
     }, [chartData, curType, activeRoute])
 
-        const handleExport = async () => {
+    const handleExport = async () => {
         // 机械延伸
         const index = typeOptions.findIndex((item) => curType === item)
         if (activeRoute === 2) {
@@ -349,7 +349,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         } else if (activeRoute == 1) {
             await saveAtFrontend(chartData.map(value => value.ECD), `ECD`)
         }
-   }
+    }
 
     const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
 
@@ -363,23 +363,23 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
     }))
     return (
         <>
-           {chartData.length > 0 && loading === false && waiting === false ? (
+            {chartData.length > 0 && loading === false && waiting === false ? (
                 <>
-            <RadioGroup
-                type='button'
-                size='large'
-                style={{
-                  marginLeft: '20px'
-                }}
-                name='chart'
-                value={curType}
-                defaultValue={curType}
-                onChange={(value) => {
-                    setCurType(value)
-                }}
-                options={typeOptions}
-            >
-            </RadioGroup>
+                    <RadioGroup
+                        type='button'
+                        size='large'
+                        style={{
+                            marginLeft: '20px'
+                        }}
+                        name='chart'
+                        value={curType}
+                        defaultValue={curType}
+                        onChange={(value) => {
+                            setCurType(value)
+                        }}
+                        options={typeOptions}
+                    >
+                    </RadioGroup>
                     <ReactECharts
                         option={option}
                         style={{ height: '78%', width: '100%' }}
@@ -400,11 +400,11 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 </>
             ) : (
                 <div style={{ height: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {waiting == true ? 
-                    // <Empty description="输入参数开始计算"></Empty> 
-                    "输入参数开始计算"
-                    : 
-                    <Spin size="30" tip='正在计算中......' /> 
+                    {waiting == true ?
+                        // <Empty description="输入参数开始计算"></Empty> 
+                        "输入参数开始计算"
+                        :
+                        <Spin size="30" tip='正在计算中......' />
                     }
                 </div>
             )}

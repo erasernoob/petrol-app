@@ -10,7 +10,7 @@ export const routeList = [
     {
         name: '数据管理系统',
         // TODO: change to the database system url
-        path: 'http://www.baidu.com',
+        path: 'http://47.108.223.152:5173/petroleum-data-storage/',
         element: <></>
     },
     {
@@ -19,7 +19,7 @@ export const routeList = [
         element: <LoginPage />
     },
     {
-        name: '水力计算',
+        name: '水力学计算',
         path: '/hydro',
         element: <HydroPage />
     },
@@ -29,12 +29,12 @@ export const routeList = [
         element: <TorquePage />
     },
     {
-        name: '延伸极限',
+        name: '延伸极限预测',
         path: '/limit',
         element: <LimitPage />
     },
     {
-        name: '钻头状态',
+        name: '钻头状态监测',
         path: '/drill',
         element: <DrillPage />
     },

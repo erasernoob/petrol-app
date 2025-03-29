@@ -1,4 +1,3 @@
-import { useMemo } from "react"
 
 /**
  * 
@@ -9,7 +8,9 @@ import { useMemo } from "react"
  */
 
 
-export default function Option(chartData, yAxis, xAxis, series, legend = "", tooltip = "") {
+// showTheAXIS: 0 -> x 1 -> y 2 -> both
+// tootip for the special one
+export default function Option(chartData, yAxis, xAxis, series, legend = "", showTheAxis = 0, tooltip = "") {
     return {
         animation: true,
         animationThreshold: 20000, // ✅ 调高动画适用的数据量
@@ -22,12 +23,19 @@ export default function Option(chartData, yAxis, xAxis, series, legend = "", too
         yAxis,
         xAxis,
         series,
-        tooltip: {
+        tooltip: !tooltip ? {
             trigger: 'axis', // 使 tooltip 响应 x 轴
             axisPointer: {
-                type: 'line' // 显示垂直指示线
+                type: 'cross', // 显示垂直指示线
+                axis: !showTheAxis ? 'x' : 'y',
             },
-        },
+            formatter: function (params) {
+                return params.map(item => {
+                    // item.marker 是标记，item.seriesName 是系列名称，item.value[0] 是 x 轴数据
+                    return `${item.marker}${item.seriesName}: ${item.axisValue}`;
+                }).join('<br/>');
+            }
+        } : tooltip,
         legend: !legend ? {
             show: true,
             orient: 'vertical',
@@ -284,6 +292,6 @@ const getOptionm = (dataSet) => {
 };
 
 
-export { getOptionM }
+export { getOptionM };
 
 

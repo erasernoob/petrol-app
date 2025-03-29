@@ -6,6 +6,7 @@ import { torque } from '../../data/Params'
 import MyForm from "./MyForm"
 import ResultPage from "./ResultPage"
 import Sider from "./Sider"
+import { dealWithTheDataUnit } from "../utils/utils"
 
 const options = ['轴向力', '扭矩']
 const work_conditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
@@ -30,12 +31,13 @@ export default function TorquePage() {
                 data.v = 0
                 data.omega = 0
             }
+            dealWithTheDataUnit(data, 2)
             const response = await post('/torque', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
             // TODO: DEV FIX CHARTDATA
 
-            setChartData(res.map(({Sk, T, M}) => ({Sk, T, M})))
-            setHeatData(res.map(({M, T, N, E, TCS}) => ({M, T, N, E, TCS})))
+            setChartData(res.map(({ Sk, T, M }) => ({ Sk, T, M })))
+            setHeatData(res.map(({ M, T, N, E, TCS }) => ({ M, T, N, E, TCS })))
             setCondition(work_conditions[data.wc - 1])
             setLoading(false)
         } catch (error) {
@@ -45,7 +47,7 @@ export default function TorquePage() {
             setWaiting(true)
             Message.error('计算内部出现错误，请检查输入参数！')
         }
-        
+
     }
 
     return (

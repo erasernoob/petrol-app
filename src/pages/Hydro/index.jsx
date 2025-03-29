@@ -7,6 +7,7 @@ import DynamicForm from "../components/DynamicForm";
 import '../style.css';
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
+import { dealWithTheDataUnit } from "../utils/utils";
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 export default function HydroPage() {
@@ -22,6 +23,9 @@ export default function HydroPage() {
             data.file_path = file.path ? file.path : ''
             setWaiting(false)
             setLoading(true)
+            // 单位换算
+            dealWithTheDataUnit(data, 1)
+
             const response = await post('/hydro', JSON.stringify(data))
             const res = Papa.parse(response, { header: true, dynamicTyping: true })
 

@@ -8,8 +8,12 @@ import {
 } from "@arco-design/web-react";
 import { useState } from "react";
 
-const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
+const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = false }) => {
   const [tabTime, setTabTime] = useState(0);
+  // 默认宾汉流体
+  const [selectValue, setSelectValue] = useState(1)
+  // 默认不勾选岩屑
+  const [checked, setChecked] = useState(false)
 
   const tabsName = tabs;
   const TabPane = Tabs.TabPane;
@@ -34,7 +38,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
         <Tabs
           type="card"
           tabPosition="left"
-          className="custom-tabs"
+          className={!limit ? "custom-tabs" : "custom-tabs-limit"}
           size="large"
           lazyload={false}
           onChange={() => setTabTime(() => tabTime + 1)}
@@ -54,9 +58,10 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
                     display: "flex",
                     flexDirection: "column",
                     gap: "2vh",
+                    overflowY: "auto",
                     alignItems: "center",
                     paddingTop: "10px",
-                    paddingRight: "4vw",
+                    paddingRight: "7vw",
                     boxSizing: "border-box",
                   }}
                 >
@@ -84,18 +89,36 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
                         <Select
                           options={field.option}
                           className="input-component"
-                          placeholder={`请选择${field.name}`}
+                          placeholder={`宾汉流体`}
+                          onChange={setSelectValue}
                         />
+                        // 判断是否是岩屑
                       ) : key != "yx" && key != "y" ? (
                         <Input
                           className="input-component"
-                          placeholder={`请输入${field.name}`}
+                          // placeholder={`请输入${field.name}`}
+                          disabled={
+                            categoryKey == "fluid" && key != "fluidden" && (
+                              selectValue == 1
+                              && (key != "miu" && key != "taof")
+                              ||
+                              selectValue == 2
+                              && (key != "n" && key != "K")
+                              ||
+                              selectValue == 3
+                              && (key != "n" && key != "K" && key != "taof"))
+                            ||
+                            categoryKey == "rock_cuttings" && !checked
+                          }
                         ></Input>
                       ) : (
                         <Checkbox
-                          onChange={(checked) =>
-                            form.setFieldValue(key, checked ? 1 : 0)
-                          }
+                          checked={checked}
+                          onChange={(check) => {
+                            form.setFieldValue(key, check ? 1 : 0)
+                            console.log(check)
+                            setChecked(check)
+                          }}
                         ></Checkbox>
                       )}
                     </FormItem>
@@ -110,7 +133,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
           className="button-wrapper"
           style={{
             borderTop: "1px solid #e8e8e8",
-            height: datas[datas.length - 1].flag === "1" ? "1%" : "",
+            height: datas[datas.length - 1].flag === "1" ? "2%" : "",
             display: "flex",
             justifyContent: "center",
             width: "100%",
@@ -122,7 +145,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false }) => {
               justifyContent: "center",
               alignItems: "center",
               gap: "30px",
-              marginTop: !drill ? "3px" : "12px"
+              marginTop: !drill ? "14.8px" : "12px"
             }}
           >
             <Button
