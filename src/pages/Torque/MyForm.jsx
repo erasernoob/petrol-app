@@ -129,14 +129,14 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
         <FormItem
           className="button-wrapper"
           style={{
-            borderTop: "1px solid #e8e8e8",
+            // borderTop: "1px solid #e8e8e8",
             display: "flex",
             justifyContent: "center",
             width: "100%",
           }}
         >
           <div
-            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "15px" : "13px", paddingLeft: "0px !important" }}
+            style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "30px", marginTop: datas.work_condition && (datas.work_condition.hasOwnProperty("js")) && Object.keys(datas.work_condition).length > 4 ? "16px" : "13px", paddingLeft: "0px !important" }}
           >
             <Button
               type="primary"
