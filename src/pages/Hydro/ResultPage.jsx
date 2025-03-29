@@ -1,26 +1,23 @@
-import { Radio, Button, Grid, Space} from '@arco-design/web-react'
-import { Empty } from '@arco-design/web-react';
-import ReactECharts from 'echarts-for-react'
-import { useSelector } from 'react-redux'
-import { useEffect, useMemo, useState } from 'react'
-import { Tag } from '@arco-design/web-react'
-import Option from '../option'
-import { Spin } from '@arco-design/web-react'
-import { save2Data, saveAtFrontend, saveData } from '../utils/utils'
+import { Button, Grid, Radio, Spin, Tag } from '@arco-design/web-react';
+import ReactECharts from 'echarts-for-react';
+import { useEffect, useMemo, useState } from 'react';
+import Option from '../option';
+import { saveAtFrontend } from '../utils/utils';
 
 const RadioGroup = Radio.Group
 const { Row, Col } = Grid;
 
-export default function ResultPage({chartData=[], data, loading, waiting}) {
+export default function ResultPage({ chartData = [], data, loading, waiting }) {
 
 
   const ecd = chartData.map((item) => item.ecd ? item.ecd : 10000)
   const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
 
-    // 使用 useMemo 让 option1 和 option2 在 chartData 变化时重新计算
+  // 使用 useMemo 让 option1 和 option2 在 chartData 变化时重新计算
   const option1 = useMemo(() => Option(
     chartData,
-    { type: 'value', name: '井深 (m)', inverse: true, 
+    {
+      type: 'value', name: '井深 (m)', inverse: true,
       axisLine: { onZero: false },
       position: 'left',
     },
@@ -116,15 +113,15 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
     }
   }
 
-  const exportButton = <Button type='primary' onClick={handleExport} style={{marginLeft: '22px'}}>导出数据</Button>
+  const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
 
 
   useEffect(() => {
-  const newOption = curValue === '循环压力' ? option1 : option2
-  // 只有 option 真正发生变化时才更新
-  if (JSON.stringify(option) !== JSON.stringify(newOption)) {
-    setOption(newOption)
-  }
+    const newOption = curValue === '循环压力' ? option1 : option2
+    // 只有 option 真正发生变化时才更新
+    if (JSON.stringify(option) !== JSON.stringify(newOption)) {
+      setOption(newOption)
+    }
 
   }, [chartData, curValue])
 
@@ -139,38 +136,38 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
 
   return (
     <>
-     {chartData.length > 0 && loading === false && waiting === false ? (
-      <>
-    <Row justify="center" align="start" style={{ height: '2vh' }}>
-        <Col span={4}>
-        <RadioGroup
-        type='button'
-        size='large'
-        name='chart'
-        defaultValue={curValue}
-        onChange={(value) => {
-          setCurValue(value)
-        }}
-        style={{
-          marginLeft: '20px'
-        }}
-        options={['循环压力', 'ECD']}
-        >
-      </RadioGroup>
-        </Col>
-        {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
-        <Col span={20}>
-        <div style={{
-          display: 'flex',
-          marginLeft: "30px",
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: "20px",
-        }}>
-          {tagList} 
-        </div>
-        </Col>
-    </Row>
+      {chartData.length > 0 && loading === false && waiting === false ? (
+        <>
+          <Row justify="center" align="start" style={{ height: '2vh' }}>
+            <Col span={4}>
+              <RadioGroup
+                type='button'
+                size='large'
+                name='chart'
+                defaultValue={curValue}
+                onChange={(value) => {
+                  setCurValue(value)
+                }}
+                style={{
+                  marginLeft: '20px'
+                }}
+                options={['循环压力', 'ECD']}
+              >
+              </RadioGroup>
+            </Col>
+            {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
+            <Col span={20}>
+              <div style={{
+                display: 'flex',
+                marginLeft: "30px",
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: "20px",
+              }}>
+                {tagList}
+              </div>
+            </Col>
+          </Row>
           <ReactECharts
             option={option}
             style={{ height: '81%', width: '100%' }}
@@ -188,11 +185,11 @@ export default function ResultPage({chartData=[], data, loading, waiting}) {
           </div>
         </>
       ) : (
-        <div style={{ height: '80%', display: 'flex', alignItems:'center' ,justifyContent: 'center' }}>
-          {waiting == true ? 
-          // <Empty description="输入参数开始计算"></Empty> 
-          "输入参数开始计算"
-          :  <Spin size="30" tip='正在计算中......' /> }
+        <div style={{ height: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {waiting == true ?
+            // <Empty description="输入参数开始计算"></Empty> 
+            "输入参数开始计算"
+            : <Spin size="30" tip='正在计算中......' />}
         </div>
       )}
 

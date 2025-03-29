@@ -1,5 +1,4 @@
-import { Button, Radio, Spin, Tag, Grid } from "@arco-design/web-react";
-import { Empty } from "@arco-design/web-react";
+import { Button, Grid, Radio, Spin, Tag } from "@arco-design/web-react";
 import ReactECharts from "echarts-for-react";
 import "echarts-gl";
 import { useEffect, useState } from "react";
@@ -166,7 +165,7 @@ export default function ResultPage({
     chartData,
     {
       type: "value",
-      name: "相对角速度 (rad/s)",
+      name: "相对角速度(rad/s)",
       axisLine: {
         onZero: false,
       },
@@ -187,7 +186,7 @@ export default function ResultPage({
     ],
     [
       {
-        name: "相轨迹",
+        name: "相对角速度(rad/s)",
         type: "line",
         yAxisIndex: 0,
         encode: { x: "relativex", y: "relativey" },
@@ -196,7 +195,24 @@ export default function ResultPage({
         lineStyle: { width: 1.5 },
         showSymbol: false,
       },
-    ]
+    ], "", 0, {
+    trigger: 'axis', // 使 tooltip 响应 x 轴
+    axisPointer: {
+      type: 'cross', // 显示垂直指示线
+    },
+
+    // 创建一个 Map，key 为 y 轴的数值，value 存储对应的 series
+    formatter: function (params) {
+      return params.map(item => {
+        // item.marker 是标记，item.seriesName 是系列名称，item.value[0] 是 x 轴数据
+        return `
+        ${item.marker}${"相对角位移(rad)"}: ${item.value.relativex}
+        <br/>
+        ${item.marker}${item.seriesName}: ${item.value.relativey}
+        `;
+      }).join('<br/>');
+    }
+  }
   );
 
   const [option, setOption] = useState(option1);
@@ -300,17 +316,17 @@ export default function ResultPage({
 
   const tagList = (
     <>
-    <span>
-      <span style={{ marginLeft: "" }}>粘滑振动等级（SSI）</span>
-      <Tag size="large">{SSI}</Tag>
-    </span>
-    <span>
-     <span style={{ marginLeft: "80px", marginRight: "10px" }}>风险等级</span>
-      <Tag size="large" style={{ color: riskLevel.color }}>
-        {riskLevel.level}
-      </Tag>
-    </span>
-   </>
+      <span>
+        <span style={{ marginLeft: "" }}>粘滑振动等级（SSI）</span>
+        <Tag size="large">{SSI}</Tag>
+      </span>
+      <span>
+        <span style={{ marginLeft: "80px", marginRight: "10px" }}>风险等级</span>
+        <Tag size="large" style={{ color: riskLevel.color }}>
+          {riskLevel.level}
+        </Tag>
+      </span>
+    </>
   );
 
   return (
@@ -327,40 +343,40 @@ export default function ResultPage({
       {chartData.length > 0 && loading === false && waiting === false ? (
         <>
 
-        <Row justify="center" align="start" style={{ height: '2vh' }}>
-        {/* <Col span={6} style={{ height: 90, lineHeight: '90px' }}> */}
-        <Col span={8}>
-         <RadioGroup
-            type="button"
-            style={{
-              marginLeft: "20px",
-            }}
-            size="large"
-            name="chart"
-            value={curType}
-            onChange={(value) => {
-              setCurType(value);
-            }}
-            options={typeOptions}
-          ></RadioGroup>
-        </Col>
-        {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
-        <Col span={16}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: "20px",
-        }}>
-        {chartData.length > 0 &&
-            loading === false &&
-            waiting === false &&
-            tagList}
-        </div>
-        </Col>
-    </Row>
+          <Row justify="center" align="start" style={{ height: '2vh' }}>
+            {/* <Col span={6} style={{ height: 90, lineHeight: '90px' }}> */}
+            <Col span={8}>
+              <RadioGroup
+                type="button"
+                style={{
+                  marginLeft: "20px",
+                }}
+                size="large"
+                name="chart"
+                value={curType}
+                onChange={(value) => {
+                  setCurType(value);
+                }}
+                options={typeOptions}
+              ></RadioGroup>
+            </Col>
+            {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
+            <Col span={16}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                gap: "20px",
+              }}>
+                {chartData.length > 0 &&
+                  loading === false &&
+                  waiting === false &&
+                  tagList}
+              </div>
+            </Col>
+          </Row>
 
-         <ReactECharts
+          <ReactECharts
             option={option}
             style={{ height: "78%", width: "100%" }}
             opts={{ renderer: "canvas" }} // 强制使用Canvas
