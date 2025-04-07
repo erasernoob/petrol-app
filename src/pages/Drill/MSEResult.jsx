@@ -1,15 +1,8 @@
-import { Radio, Button, Message } from '@arco-design/web-react'
-import { Empty } from '@arco-design/web-react'
+import { Button, Radio, Spin } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
-import { useSelector } from 'react-redux'
-import { useEffect, useMemo, useState } from 'react'
-import { Tag } from '@arco-design/web-react'
-import 'echarts-gl';
-import { Spin } from '@arco-design/web-react'
-import { saveData, save2Data } from '../utils/utils'
+import 'echarts-gl'
 import Option from '../option'
 import { saveAtFrontend } from '../utils/utils'
-import { color } from 'echarts'
 
 const RadioGroup = Radio.Group
 
@@ -151,7 +144,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             inverse: true
         }, [
         {
-            name: '机械转速 (m/h)',
+            name: '机械钻速 (m/h)',
             nameLocation: 'center',
             nameGap: 25, // 轴名称与坐标轴的距离
             type: 'value',
@@ -161,7 +154,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         }
     ], [
         {
-            name: '机械转速 (m/h)',
+            name: '机械钻速 (m/h)',
             type: 'line',
             yAxisIndex: 0,
             encode: { x: 'rop', y: 'Sk' },
