@@ -187,7 +187,9 @@ const getOptionM = (dataSet) => {
     return {
         title: { text: '扭矩分布云图' },
         animation: true,
-        tooltip: {},
+        tooltip: {
+            show: false,
+        },
         visualMap: {
             show: true,
             dimension: 3,   // 第四个维度 (M) 决定颜色
@@ -247,7 +249,7 @@ const getOptionm = (dataSet) => {
         animation: true,
         // 自定义 tooltip
         tooltip: {
-
+            show: false,
         },
         visualMap: {
             show: true,

@@ -42,7 +42,7 @@ export default function ResultPage({
     ],
     [
       {
-        name: "角位移",
+        name: "角位移 (rad)",
         type: "line",
         yAxisIndex: 0,
         encode: { x: "time", y: "angle_x" },
