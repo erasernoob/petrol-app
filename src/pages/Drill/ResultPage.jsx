@@ -57,7 +57,7 @@ export default function ResultPage({
     chartData,
     {
       type: "value",
-      name: "角加速度 (rad/s^2)",
+      name: "角加速度 (rad/s²)",
       nameLocation: "start",
       axisLine: {
         onZero: false,
@@ -78,7 +78,7 @@ export default function ResultPage({
     ],
     [
       {
-        name: "角加速度 (rad/s^2)",
+        name: "角加速度 (rad/s²)",
         type: "line",
         yAxisIndex: 0,
         encode: { x: "time", y: "angle_a" },

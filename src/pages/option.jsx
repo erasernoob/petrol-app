@@ -97,6 +97,7 @@ export const getOptionT = (dataSet) => {
         animation: true,
         // 自定义 tooltip
         tooltip: {
+            show: false
         },
         visualMap: {
             show: true,

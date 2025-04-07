@@ -1,11 +1,10 @@
 // import { open } from '@tauri-apps/plugin-shell';
-import { open as openNer } from '@tauri-apps/plugin-dialog';
-import { Message } from '@arco-design/web-react'
-import * as XLSX from "xlsx";
-import { writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { Message } from '@arco-design/web-react';
 import * as path from '@tauri-apps/api/path';
-import { save } from '@tauri-apps/plugin-dialog';
+import { open as openNer, save } from '@tauri-apps/plugin-dialog';
+import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
 import Big from 'big.js';
+import * as XLSX from "xlsx";
 
 const saveData = async (data = [], name) => {
   data = data.map((value, index) => ({ value }))
@@ -115,5 +114,8 @@ const dealWithTheDataUnit = (data, idx) => {
 
 }
 
+const useTheInitialValue = false
 
-export { saveData, save2Data, saveAtFrontend, handleUpload, dealWithTheDataUnit }
+
+export { dealWithTheDataUnit, handleUpload, save2Data, saveAtFrontend, saveData, useTheInitialValue };
+
