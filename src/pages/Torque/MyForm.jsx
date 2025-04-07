@@ -1,4 +1,5 @@
 import { Button, Form, Input, Select } from "@arco-design/web-react";
+import { useTheInitialValue } from "../utils/utils";
 
 const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const FormItem = Form.Item;
@@ -28,7 +29,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                   field={key}
                   key={key}
                   label={field.name}
-                  // TODO: For TEST
                   initialValue={1}
                   rules={[
                     { required: true, message: `${field.name} 不能为空` },
@@ -47,7 +47,8 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                         field={key}
                         key={key}
                         label={field.name}
-                        initialValue={field.value}
+                        initialValue={useTheInitialValue ? field.value : ""}
+
                         rules={[
                           {
                             required: true,
@@ -71,7 +72,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                           field={key}
                           key={key}
                           label={field.name}
-                          initialValue={field.value}
+                          initialValue={useTheInitialValue ? field.value : ""}
                           rules={[
                             {
                               required: true,
@@ -93,7 +94,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                   field={key}
                   key={key}
                   label={field.name}
-                  initialValue={field.value}
+                  initialValue={useTheInitialValue ? field.value : ""}
                   rules={[
                     { required: true, message: `${field.name} 不能为空` },
                   ]}
@@ -149,7 +150,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
             <Button
               type="primary"
               className="button reset-button"
-              disabled={!form.validate()}
               onClick={() => {
                 form.resetFields();
               }}

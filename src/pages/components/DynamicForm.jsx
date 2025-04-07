@@ -7,6 +7,7 @@ import {
   Tabs,
 } from "@arco-design/web-react";
 import { useState } from "react";
+import { useTheInitialValue } from "../utils/utils";
 
 const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = false }) => {
   const [tabTime, setTabTime] = useState(0);
@@ -70,9 +71,24 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                       key={key}
                       label={field.name}
                       field={key}
-                      initialValue={field.value}
+                      initialValue={useTheInitialValue || key === 'lbmx' ? field.value : ""}
                       rules={[
-                        { required: true, message: `${field.name} 不能为空` },
+                        {
+                          required:
+                            !(categoryKey == "fluid" && key != "fluidden" && (
+                              selectValue == 1
+                              && (key != "miu" && key != "taof")
+                              ||
+                              selectValue == 2
+                              && (key != "n" && key != "K")
+                              ||
+                              selectValue == 3
+                              && (key != "n" && key != "K" && key != "taof"))
+                              ||
+                              categoryKey == "rock_cuttings" && !checked)
+
+                          , message: `${field.name} 不能为空`
+                        },
                       ]}
                       className="fixed-position-form-item"
                       labelCol={{ span: 11 }}
@@ -88,6 +104,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                       {key === "lbmx" ? (
                         <Select
                           options={field.option}
+                          value={1}
                           className="input-component"
                           placeholder={`宾汉流体`}
                           onChange={setSelectValue}
@@ -159,7 +176,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
             <Button
               type="primary"
               className="button reset-button"
-              disabled={!form.validate()}
               onClick={() => {
                 form.resetFields();
               }}
