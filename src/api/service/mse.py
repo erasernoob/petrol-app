@@ -13,6 +13,9 @@ def calcu_mse(file_path):
     Db = canshu[:, 2]     # 直径
     RPM = canshu[:, 3]    # 转速
     ROP = canshu[:, 4]    # 机械钻速
+    
+    wob = WOB
+    rpm = RPM
 
     # 计算变量
     u = 0.5
@@ -26,8 +29,5 @@ def calcu_mse(file_path):
     # 直接计算MSE（允许除零产生Inf/NaN）
     MSE = (WOB / Ab) + (120 * np.pi * RPM * T) / (Ab * rop)
     MSE *= 0.0068947  # 单位转换
-
-    wob = WOB
-    rpm = RPM
 
     return Depth, wob, ROP, RPM, MSE
