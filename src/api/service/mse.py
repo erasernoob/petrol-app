@@ -21,14 +21,13 @@ def calcu_mse(file_path):
     Db = Db.astype(np.float64) / 25.4
     Ab = np.pi * (Db ** 2) / 4
     T = (1 / 36) * u * WOB * Db
-    ROP = ROP.astype(np.float64) / 0.3048
+    rop = ROP.astype(np.float64) / 0.3048
 
     # 直接计算MSE（允许除零产生Inf/NaN）
-    MSE = (WOB / Ab) + (120 * np.pi * RPM * T) / (Ab * ROP)
+    MSE = (WOB / Ab) + (120 * np.pi * RPM * T) / (Ab * rop)
     MSE *= 0.0068947  # 单位转换
 
     wob = WOB
     rpm = RPM
-    rop = ROP
 
     return Depth, wob, ROP, RPM, MSE
