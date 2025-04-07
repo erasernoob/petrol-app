@@ -1,5 +1,5 @@
 import { Button, Form, Input, Select } from "@arco-design/web-react";
-import { useTheInitialValue } from "../utils/utils";
+import { useSelector } from "react-redux";
 
 const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const FormItem = Form.Item;
@@ -8,6 +8,9 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const handleDisabled = () => {
     return fileList.orbit.path === "" || fileList.drill.path === ""
   }
+
+  const useTheInitialValue = useSelector((state) => state.data.useTheInitialValue)
+
   return (
     <div className="form-wrapper-custom">
       <Form

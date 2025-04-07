@@ -7,9 +7,11 @@ import {
   Tabs,
 } from "@arco-design/web-react";
 import { useState } from "react";
-import { useTheInitialValue } from "../utils/utils";
+import { useSelector } from "react-redux";
 
 const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = false }) => {
+  const useTheInitialValue = useSelector((state) => state.data.useTheInitialValue)
+
   const [tabTime, setTabTime] = useState(0);
   // 默认宾汉流体
   const [selectValue, setSelectValue] = useState(1)

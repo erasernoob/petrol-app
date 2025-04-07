@@ -114,7 +114,7 @@ const dealWithTheDataUnit = (data, idx) => {
 
 }
 
-const useTheInitialValue = false
+const useTheInitialValue = true
 
 
 export { dealWithTheDataUnit, handleUpload, save2Data, saveAtFrontend, saveData, useTheInitialValue };
