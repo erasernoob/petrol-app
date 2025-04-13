@@ -75,6 +75,7 @@ const hydro = [
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
 // omega=5*pi/3;            %转速，rad/s（仅用于工况1,5）
+// T0 钻压 仅用于工况12
 const torque = {
   work_condition: {
     wc: {

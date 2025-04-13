@@ -62,6 +62,12 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                         <Input className="input-component" />
                       </FormItem>
                     );
+
+                    // 删掉后三个工况的钻压
+                    if (values.wc !== 1 && values.wc !== 2 && key === "T0") {
+                      return <></>
+                    }
+
                     if (values.wc !== 1 && values.wc !== 5) {
                       return key === "v" || key === "omega" ? <></> : res;
                     } else {
