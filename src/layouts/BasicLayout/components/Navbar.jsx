@@ -5,6 +5,7 @@ import IconData from "../../../assets/database.svg?react";
 import IconDrill from "../../../assets/drill.svg?react";
 import IconHydra from "../../../assets/hydra.svg?react";
 import IconLimit from "../../../assets/limit.svg?react";
+import IconRisk from "../../../assets/risk.svg?react";
 import IconTorque from "../../../assets/torque.svg?react";
 import { routeList } from "../../../routers";
 
@@ -20,6 +21,7 @@ const icons = [
   <IconTorque />,
   <IconLimit />,
   <IconDrill />,
+  <IconRisk />,
 ];
 
 export default function NavBar() {

@@ -3,6 +3,7 @@ import DrillPage from "../pages/Drill"
 import HydroPage from "../pages/Hydro"
 import LimitPage from "../pages/Limit"
 import LoginPage from "../pages/Login/LoginPage"
+import RiskPage from "../pages/Risk"
 import TorquePage from "../pages/Torque"
 
 export const routeList = [
@@ -37,11 +38,11 @@ export const routeList = [
         path: '/drill',
         element: <DrillPage />,
     },
-    // {
-    //     name: '风险预警',
-    //     path: '/risk',
-    //     element: <RiskPage />
-    // },
+    {
+        name: '风险预警',
+        path: '/risk',
+        element: <RiskPage />
+    },
 ]
 
 const routerList = createHashRouter(routeList)
