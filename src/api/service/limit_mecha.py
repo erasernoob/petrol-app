@@ -34,7 +34,7 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
         jsjg = jsjg  # 计算井深间隔，m
 
         # 固定值
-        M0 = abs(T0 * Dw / 3 * 0.5)  # 钻头扭矩
+        M0 = abs(T0 * Dw / 3 * 0.6)  # 钻头扭矩
         v = v  # 钻进速度，m/s
         omega = omega  # 转速，rad/s
         miu = 0.2  # 钻井液塑性粘度，mPa·s

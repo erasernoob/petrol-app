@@ -23,7 +23,7 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, js, v, omega
         miut2 = miua22 * 1.6  # 裸眼段切向摩阻系数
         
         # 固定值
-        M0 = abs(T0 * Dw / 3 * 0.5)  # 钻头扭矩
+        M0 = abs(T0 * Dw / 3 * 0.6)  # 钻头扭矩
         miu = 0.2  # 钻井液塑性粘度，mPa·s
         taof = 14  # 钻井液屈服值，Pa
         sign1 = 1  # 钻柱运动方向：1下入；-1上提
