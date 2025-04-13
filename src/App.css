@@ -20,13 +20,7 @@ body,
 
 }
 
-.arco-menu-item {
-  font-size: large;
-  /* max-height: 50px !important; */
-  border-left: 1.5px solid #e8e8e8;
-  border-right: 1.5px solid #e8e8e8;
-  margin-left: 0px !important;
-}
+
 
 .arco-menu-selected {
   background-color: var(--color-fill-2) !important;
@@ -188,7 +182,23 @@ body,
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
 }
 
-.arco-menu-item {
+.arco-icon-down {
+  display: none;
+}
+
+.arco-menu-item,
+.arco-menu-pop,
+.arco-menu-pop-header {
+  font-size: large;
+  /* max-height: 50px !important; */
+  border-left: 1.5px solid #e8e8e8;
+  border-right: 1.5px solid #e8e8e8;
+  margin-left: 0px !important;
+}
+
+.arco-menu-item,
+.arco-menu-pop,
+.arco-menu-pop-header {
   color: var(--font-color) !important;
   font-weight: var(--font-weight-bold) !important;
   padding: 5px 8px !important;
@@ -406,4 +416,25 @@ body {
   overflow: hidden !important;
   border-width: 1.5px !important;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Popover 悬浮菜单样式 */
+.submenu-popover .arco-popover-content {
+  padding: 0 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #eee !important;
+}
+
+.arco-popover-arrow {
+  display: none !important;
+}
+
+.arco-popover-wrapper {
+  z-index: 1001 !important;
+}
+
+/* 确保Popover内容区域足够宽 */
+.arco-popover-content {
+  min-width: 120px !important;
 }

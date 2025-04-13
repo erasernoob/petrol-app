@@ -1,12 +1,13 @@
 import { Card, Message } from "@arco-design/web-react";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { post } from "../../components/axios";
 import { drill_vibration } from "../../data/Params";
 import Sider from "../Limit/Sider";
 import DynamicForm from "../components/DynamicForm";
-import ResultPage from "./ResultPage";
 import { dealWithTheDataUnit } from "../utils/utils";
+import ResultPage from "./ResultPage";
 
 const subRoutesOptions = [
   { label: "MSE", value: 1 },
@@ -17,7 +18,12 @@ const tabs = ["基本钻具参数", "钻井液", "计算参数"];
 const typeOptions = ["角位移", "角速度", "角加速度", "钻头扭矩", "相轨迹"];
 
 export default function DrillPage() {
-  const [activeRoute, setActiveRoute] = useState(1);
+  // 从localStorage读取保存的选项
+  const storedActiveRoute = localStorage.getItem("drillActiveRoute");
+  const [activeRoute, setActiveRoute] = useState(
+    storedActiveRoute ? parseInt(storedActiveRoute) : 1
+  );
+
   const [loading, setLoading] = useState(false);
   const [extraData, setExtraData] = useState({});
   const [waiting, setWaiting] = useState(true);
@@ -49,13 +55,13 @@ export default function DrillPage() {
     }
   };
 
-  const handleExport = () => { };
+  const handleExport = () => {};
 
   const handleSubmit = async (data) => {
     try {
       setWaiting(false);
       setLoading(true);
-      dealWithTheDataUnit(data, 4)
+      dealWithTheDataUnit(data, 4);
       const response = await post("/drill/vibration", JSON.stringify(data));
       const res = Papa.parse(response, {
         header: true,
@@ -71,6 +77,61 @@ export default function DrillPage() {
     }
   };
 
+  // 添加一个useEffect检查localStorage中的变化
+  useEffect(() => {
+    // 初始检查
+    const stored = localStorage.getItem("drillActiveRoute");
+    console.log(stored);
+
+    const checkStorageValue = () => {
+      const stored = localStorage.getItem("drillActiveRoute");
+
+      if (stored && parseInt(stored) !== activeRoute) {
+        setActiveRoute(parseInt(stored));
+      }
+    };
+
+    // 定义storage事件处理函数
+    const handleStorageChange = (e) => {
+      if (e.key === "drillActiveRoute") {
+        checkStorageValue();
+      }
+    };
+
+    // 添加事件监听
+    window.addEventListener("storage", handleStorageChange);
+
+    // 初始检查
+    checkStorageValue();
+
+    // 清理函数
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  // 单独的useEffect用于监听URL变化
+  const location = useLocation();
+  useEffect(() => {
+    // 检查URL中是否有类型参数
+    const searchParams = new URLSearchParams(location.search);
+    const typeParam = searchParams.get("type");
+
+    if (typeParam) {
+      const newActiveRoute = parseInt(typeParam);
+      if (newActiveRoute !== activeRoute) {
+        setActiveRoute(newActiveRoute);
+        localStorage.setItem("drillActiveRoute", typeParam);
+
+        // 清除状态，准备重新加载
+        setLoading(false);
+        setWaiting(true);
+        setChartData([]);
+      }
+    }
+  }, [location.search, activeRoute]);
+
+  // 原有的useEffect保持不变
   useEffect(() => {
     setLoading(false);
     setWaiting(true);
@@ -84,6 +145,23 @@ export default function DrillPage() {
       setResultCardVisible(false);
     }
   }, [activeRoute]);
+
+  // 处理activeRoute变化的函数
+  const handleActiveRouteChange = (value) => {
+    // 设置状态
+    setActiveRoute(value);
+    // 更新localStorage
+    localStorage.setItem("drillActiveRoute", value.toString());
+
+    // 使用history对象更新URL
+    const newSearch = `?type=${value}&t=${Date.now()}`;
+    window.history.pushState({}, "", `${location.pathname}${newSearch}`);
+
+    // 清除状态，准备重新加载
+    setLoading(false);
+    setWaiting(true);
+    setChartData([]);
+  };
 
   return (
     <div className="main-content">
@@ -101,7 +179,7 @@ export default function DrillPage() {
           waiting={waiting}
           handleExport={handleExport}
           chartData={chartData}
-          setActiveRoute={setActiveRoute}
+          setActiveRoute={handleActiveRouteChange}
           activeRoute={activeRoute}
           handleCalculate={handleCalculate}
           file={file}
@@ -128,8 +206,9 @@ export default function DrillPage() {
           title="计算结果"
           style={{ flex: "1", marginLeft: "5px" }}
           bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
-          className={`result-card ${resultCardVisible ? "result-card-visible" : "result-card-entering"
-            }`}
+          className={`result-card ${
+            resultCardVisible ? "result-card-visible" : "result-card-entering"
+          }`}
         >
           <ResultPage
             typeOptions={typeOptions}

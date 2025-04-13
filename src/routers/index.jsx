@@ -1,10 +1,9 @@
-import { createHashRouter, createBrowserRouter } from "react-router-dom"
-import HydroPage from "../pages/Hydro"
+import { createHashRouter } from "react-router-dom"
 import DrillPage from "../pages/Drill"
-import TorquePage from "../pages/Torque"
-import RiskPage from "../pages/Risk"
+import HydroPage from "../pages/Hydro"
 import LimitPage from "../pages/Limit"
 import LoginPage from "../pages/Login/LoginPage"
+import TorquePage from "../pages/Torque"
 
 export const routeList = [
     {
@@ -36,7 +35,7 @@ export const routeList = [
     {
         name: '钻头状态监测',
         path: '/drill',
-        element: <DrillPage />
+        element: <DrillPage />,
     },
     // {
     //     name: '风险预警',

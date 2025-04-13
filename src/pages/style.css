@@ -134,6 +134,7 @@
 }
 
 .mse-width-radio-group {
+  /* display: none; */
   width: 98% !important;
   /* 减小宽度，不占满100% */
   margin: 0 auto !important;

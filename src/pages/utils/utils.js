@@ -95,7 +95,7 @@ const dealWithTheDataUnit = (data, idx) => {
   } else if (idx == 2) {
     data.v = new Big(data.v).div(3600).toNumber()
     data.omega = new Big(data.omega).div(30).mul(Math.PI).toNumber()
-    data.T0 = new Big(data.T0).mul(1000).toNumber()
+    data.T0 = new Big(data.T0 ? data.T0 : 0).mul(1000).toNumber()
     data.Dw = new Big(data.Dw).div(1000).toNumber()
   } else if (idx == 3) {
     // curve 
