@@ -112,6 +112,7 @@ const limit_eye = [
       Rzt: { name: "钻铤外径 (mm)", value: 158.75 },
       rzt: { name: "钻铤内径 (mm)", value: 71.44 },
       Lzt: { name: "钻铤长度 (m)", value: 10 },
+      jsjg: { name: "井深计算间隔 (m)", value: 500 },
     },
   },
   {

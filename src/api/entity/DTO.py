@@ -69,6 +69,7 @@ class LimitEyeDTO(BaseModel):
     y: int
     yxmd: float
     H: float
+    jsjg: int  # 井深计算间隔 (m)
 
 class LimitHydroDTO(BaseModel):
     file_path: str
