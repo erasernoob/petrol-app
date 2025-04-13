@@ -41,7 +41,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
         <Tabs
           type="card"
           tabPosition="left"
-          className={!limit ? "custom-tabs" : "custom-tabs-limit"}
+          className={!limit ? (!drill ? "custom-tabs" : "custom-drill") : "custom-tabs-limit"}
           size="large"
           lazyload={false}
           onChange={() => setTabTime(() => tabTime + 1)}

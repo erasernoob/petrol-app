@@ -202,7 +202,7 @@ export default function Sider({
               />
             </div>
           )}
-          <div className="input-form">{form}</div>
+          <div className={subRouteOptions.length != 2 ? "input-form" : "input-form-limit"}>{form}</div>
         </>
       )
       }
