@@ -93,7 +93,7 @@ export default function NavBar() {
           position="bottom"
           trigger="hover"
           className="submenu-popover"
-          getPopupContainer={(node) => node.parentNode}
+
         >
           <MenuItem
             key={route.path}
@@ -101,9 +101,8 @@ export default function NavBar() {
               const storedValue =
                 localStorage.getItem("drillActiveRoute") || "1";
               localStorage.setItem("drillActiveRoute", storedValue);
-              const newPath = `${
-                route.path
-              }?type=${storedValue}&t=${Date.now()}`;
+              const newPath = `${route.path
+                }?type=${storedValue}&t=${Date.now()}`;
               myNavigate(newPath);
               setSelectedKeys([route.path]);
             }}
