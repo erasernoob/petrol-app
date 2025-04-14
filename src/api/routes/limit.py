@@ -1,7 +1,7 @@
 # api/routes/torque.py
 from fastapi import Response
 from pathlib import Path
-from service import limit_eye, limit_mecha
+from service import limit_eye, limit_mecha, limit_mecha_curve
 from service import limit_hydra, limit_curve
 import io
 from fastapi import APIRouter
@@ -77,10 +77,26 @@ def get_limit_hydro(limit_hydro_dto: LimitHydroDTO):
     
     return Response(content=csv_data, media_type="text/csv",
                     headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
+    
+@router.post("limit/mechanism/curve")
+async def get_limit_mecanism_curve(dto: LimitMechanismDTO):
+    T_out, X = limit_mecha_curve(dto)
+    df = pd.DataFrame({
+        "T_out": T_out.flatten(), # 井口扭矩
+        "X": X.flatten() # 安全系数
+    })
+
+    # **转换为 CSV 格式**
+    output = io.StringIO()
+    df.to_csv(output, index=False, encoding="utf-8")
+    csv_data = output.getvalue()
+    
+    return Response(content=csv_data, media_type="text/csv",
+                    headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
+    
 
 @router.post("/limit/mechanism")
 async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
-
     T_result, M_reuslt, aq_result, x_coords = limit_mecha.main(limit_mechanism_dto)
 
     df = pd.DataFrame({
