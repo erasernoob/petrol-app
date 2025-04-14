@@ -245,6 +245,8 @@ const limit_mechanism = {
     miua22: { name: "裸眼段摩阻系数", value: 0.2 },
     qfqd: { name: "钻柱屈服强度 (MPa)", value: 931 },
     jsjg: { name: "井深计算间隔 (m)", value: 500 },
+    toggle_curve: { name: "是否计算屈曲临界载荷 ", value: 0 },
+    ml: { name: "钻柱弹性模量 (MPa)", value: 2.1e5 },
   },
 };
 
