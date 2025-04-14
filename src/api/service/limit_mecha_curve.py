@@ -7,13 +7,13 @@ from entity.DTO import LimitMechanismDTO
 
 # 假设必要的变量已经定义，如：
 # guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, jsjg, v, omega
-def limit_mecha_curve(dto: LimitMechanismDTO):
+def main(dto: LimitMechanismDTO):
     guiji = pd.read_excel(dto.file_path1, header=None).values
     zuanju = pd.read_excel(dto.file_path2, header=None).values
     print("屈曲载荷 参数初始化完成，准备进行计算...")
-    return mainfunc(guiji, zuanju, dto.wc, dto.T0, dto.rhoi, dto.Dw, dto.tgxs, dto.miua11, dto.miua22, dto.qfqd, dto.jsjg, dto.v, dto.omega, dto.ml)
+    return calculate(guiji, zuanju, dto.wc, dto.T0, dto.rhoi, dto.Dw, dto.tgxs, dto.miua11, dto.miua22, dto.qfqd, dto.jsjg, dto.v, dto.omega, dto.ml)
 
-def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, jsjg, v, omega, ml):
+def calculate(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, jsjg, v, omega, ml):
         T_all = np.nan * np.ones((10, 0))  # 初始化 T_all，包含 NaN
         # 最终深度
         max_depth = int(guiji[-1, 0])

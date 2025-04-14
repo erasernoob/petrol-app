@@ -78,13 +78,15 @@ def get_limit_hydro(limit_hydro_dto: LimitHydroDTO):
     return Response(content=csv_data, media_type="text/csv",
                     headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
     
-@router.post("limit/mechanism/curve")
+@router.post("/limit/mechanism/curve")
 async def get_limit_mecanism_curve(dto: LimitMechanismDTO):
-    T_out, X = limit_mecha_curve(dto)
+    T_out, X = limit_mecha_curve.main(dto)
+        
     df = pd.DataFrame({
-        "T_out": T_out.flatten(), # 井口扭矩
-        "X": X.flatten() # 安全系数
+        "T_out": pd.Series(T_out.tolist()), # 井口扭矩
+        "X": pd.Series(X), # 井口扭矩
     })
+
 
     # **转换为 CSV 格式**
     output = io.StringIO()

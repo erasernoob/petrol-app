@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 class HydroDTO(BaseModel):
     file_path: str
@@ -138,9 +139,9 @@ class LimitMechanismDTO(BaseModel):
     jsjg: int  # 井深计算间隔 (m)
 
     # 是否计算屈曲 1 yes 0 no
-    clac_curve: int
+
     # 计算屈曲临界载荷
-    ml: int # 钻柱模量
+    ml: Optional[int] = None # 钻柱模量
 
 class LimitCurveDTO(BaseModel):
     file_path1: str
