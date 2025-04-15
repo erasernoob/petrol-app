@@ -14,7 +14,8 @@ def main(dto: LimitMechanismDTO):
     return calculate(guiji, zuanju, dto.wc, dto.T0, dto.rhoi, dto.Dw, dto.tgxs, dto.miua11, dto.miua22, dto.qfqd, dto.jsjg, dto.v, dto.omega, dto.ml)
 
 def calculate(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, jsjg, v, omega, ml):
-        T_all = np.nan * np.ones((10, 0))  # 初始化 T_all，包含 NaN
+
+        T_all = np.nan * np.ones((10, 1))  # 初始化 T_all，包含 NaN
         # 最终深度
         max_depth = int(guiji[-1, 0])
         depth = jsjg
@@ -48,7 +49,6 @@ def calculate(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, 
         js = max_depth  # 井深，单位：米
         fh, fs = abcfunc4(guiji, Holedia, ml, zuanju, js)
 
-        # 合并数据
         T_selected = T_all[:, 1:]
 
         # 确保 fs 和 fh 是列向量
