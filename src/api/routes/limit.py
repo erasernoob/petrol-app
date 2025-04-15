@@ -93,7 +93,7 @@ async def get_limit_mecanism_curve(dto: LimitMechanismDTO):
         for i in range(T_out.shape[1])
     ]
     )
-    df["X"] = X
+    df["井深"] = X
     df["正弦屈曲临界载荷"] = fs
     df["螺旋屈曲临界载荷"] = fh
 

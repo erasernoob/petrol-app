@@ -3,12 +3,12 @@ import ReactECharts from 'echarts-for-react'
 import 'echarts-gl'
 import { useEffect, useState } from 'react'
 import Option, { getCurveOption } from '../option'
-import { saveAtFrontend } from '../utils/utils'
+import { saveAtFrontend, saveCurveFile } from '../utils/utils'
 
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ curCondition, activeRoute, typeOptions = [], curveData = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
+export default function ResultPage({ curCondition, activeRoute, curveFile, typeOptions = [], curveData = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
 
     const ecd = chartData.map((item) => item.ECD ? item.ECD : 10000)
@@ -337,6 +337,9 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_${curType}`)
             } else if (index === 2) {
                 await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_${curType}`)
+                // 直接保存屈曲文件
+            } else if (index === 3) {
+                await saveCurveFile(curveFile, `${curCondition}_${curType}`)
             }
         } else if (activeRoute === 4) {
             if (index === 0) {

@@ -24,6 +24,29 @@ const saveData = async (data = [], name) => {
   }
 }
 
+const saveCurveFile = async (file, name) => {
+  const filePath = await save({
+    title: "导出数据到本地",
+    defaultPath: `${name}.xlsx`,
+    filters: [{ name: "xlsx Files", extensions: ["xlsx"] }]
+  });
+
+  if (!filePath) return
+
+  // 1. 将 CSV 字符串解析为 workbook
+  const workbook = XLSX.read(file, { type: "string" })
+
+  // 2. 将 workbook 写成 xlsx 二进制数据（Uint8Array）
+  const res = XLSX.write(workbook, { bookType: "xlsx", type: "array" })
+  if (filePath) {
+    await writeFile(filePath, res, {
+      baseDir: filePath
+    })
+    Message.success(`${name}数据导出成功！`)
+  }
+
+}
+
 // data as the first column
 const saveAtFrontend = async (data = [], name, data2 = []) => {
   if (data2.length == 0) {
@@ -111,12 +134,11 @@ const dealWithTheDataUnit = (data, idx) => {
     data.dpw = new Big(data.dpw).div(1000).toNumber()
 
   }
-
 }
 
 
 const useTheInitialValue = true
 
 
-export { dealWithTheDataUnit, handleUpload, save2Data, saveAtFrontend, saveData, useTheInitialValue };
+export { dealWithTheDataUnit, handleUpload, save2Data, saveAtFrontend, saveCurveFile, saveData, useTheInitialValue };
 

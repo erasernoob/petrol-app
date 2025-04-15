@@ -235,8 +235,8 @@ const getOptionM = (dataSet) => {
 export function getCurveOption(res) {
     if (res.length === 0) return {}
     const allKeys = Object.keys(res[0]);
-    const yKeys = allKeys.filter(key => key !== 'X');
-    const xAxisData = res.map(item => item.X);
+    const yKeys = allKeys.filter(key => key !== '井深');
+    const xAxisData = res.map(item => item.井深);
     // 屈曲数据集
     const FsValue = res.map((obj, idx) => {
         return obj.螺旋屈曲临界载荷 ? obj.螺旋屈曲临界载荷 : 0
@@ -247,7 +247,7 @@ export function getCurveOption(res) {
     const series = yKeys.map(key => ({
         name: key,
         type: 'line',
-        data: res.map(item => ({ value: [item.X, item[key]] })),
+        data: res.map(item => ({ value: [item.井深, item[key]] })),
         sampling: 'lttb',
         smooth: false,
         lineStyle: { width: 1.5 },

@@ -44,6 +44,7 @@ export default function LimitPage() {
   // 是否计算屈曲
   const [calcCurve, setCalcCurve] = useState(false)
   const [curveData, setCurveData] = useState([])
+  const [curveFile, setCurveFile] = useState(null)
 
   const [activeRoute, setActiveRoute] = useState(1);
   const [fileList, setFileList] = useState(defaultFileList);
@@ -95,6 +96,7 @@ export default function LimitPage() {
 
       if (calcCurve) {
         const response = await post('/limit/mechanism/curve', JSON.stringify(data))
+        setCurveFile(response)
         const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
         setCurveData(res)
         console.log(res)
@@ -147,7 +149,7 @@ export default function LimitPage() {
         style={{ flex: "1", marginLeft: "5px" }}
         bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
       >
-        <ResultPage curCondition={condition} curveData={curveData} activeRoute={activeRoute} chartData={chartData} typeOptions={calcCurve ? typeOptions[typeOptions.length - 1] : typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
+        <ResultPage curCondition={condition} curveFile={curveFile} curveData={curveData} activeRoute={activeRoute} chartData={chartData} typeOptions={calcCurve ? typeOptions[typeOptions.length - 1] : typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
       </Card>
     </div>
   );
