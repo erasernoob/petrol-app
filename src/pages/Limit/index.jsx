@@ -58,9 +58,17 @@ export default function LimitPage() {
     setFileList(defaultFileList)
   }, [activeRoute])
 
+  // 还原之前的计算
+  useEffect(() => {
+    setCalcCurve(false)
+    setCurveData([])
+    setCurveFile(null)
+  }, [])
+
 
   const handleSubmit = async (data) => {
     try {
+
       if (activeRoute <= 2) {
         data.file_path = file.path
         dealWithTheDataUnit(data, 1)
@@ -76,13 +84,6 @@ export default function LimitPage() {
         data.omega = 0
       }
 
-      // 需要计算屈曲载荷
-      console.log(data.calcCurve)
-
-      if (activeRoute === 3 && data.calcCurve === 1) {
-        setCalcCurve(true)
-      }
-
       // 处理单位换算
       if (activeRoute == 3) {
         dealWithTheDataUnit(data, 2)
@@ -90,18 +91,19 @@ export default function LimitPage() {
         dealWithTheDataUnit(data, 3)
       }
 
-
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
 
-      if (calcCurve) {
-        const response = await post('/limit/mechanism/curve', JSON.stringify(data))
-        setCurveFile(response)
-        const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
-        setCurveData(res)
-        console.log(res)
+
+      if (activeRoute === 3 && data.calcCurve === 1) {
+        setCalcCurve(true)
+
+        console.log("进入计算curve逻辑")
+        const response2 = await post('/limit/mechanism/curve', JSON.stringify(data))
+        setCurveFile(response2)
+        const res2 = Papa.parse(response2, { header: true, dynamicTyping: true }).data
+        setCurveData(res2)
       }
-      console.log(curveData)
 
       setChartData(res)
       setLoading(false)
