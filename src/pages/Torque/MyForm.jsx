@@ -79,11 +79,22 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
 
                     if (values.wc === 4 && key === "calcCurve") {
                       return (<>
+                        <hr style={{
+                          display: 'block',
+                          marginTop: '2px',
+                          height: '2px',
+                          backgroundColor: '#000',
+                          width: 'calc(100% + 58px)', // 通过 calc() 来覆盖掉 padding
+                          marginLeft: '-60px' // 向左偏移 60px，覆盖 padding
+                        }}></hr>
+
+
                         <FormItem
                           key={key}
                           label={field.name}
                           field={key}
                         >
+                          {/* 添加一条线作为额外的标签 */}
                           <Checkbox
                             checked={checked}
                             onChange={(check) => {
