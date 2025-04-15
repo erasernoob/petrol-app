@@ -48,9 +48,6 @@ export default function Option(chartData, yAxis, xAxis, series, legend = "", sho
         } : legend
     };
 }
-
-
-
 export const getOptionT = (dataSet) => {
     // 计算 M 值的范围
     const TValues = dataSet
@@ -235,64 +232,54 @@ const getOptionM = (dataSet) => {
 };
 
 
+export function getCurveOption(res) {
+    if (res.length === 0) return {}
+    const allKeys = Object.keys(res[0]);
+    const yKeys = allKeys.filter(key => key !== 'X');
+    const xAxisData = res.map(item => item.X);
+    // 屈曲数据集
+    const FsValue = res.map((obj, idx) => {
+        return obj.螺旋屈曲临界载荷 ? obj.螺旋屈曲临界载荷 : 0
+    })
+    const minY = Math.floor(Math.min(...FsValue) / 10)
 
-const getOptionm = (dataSet) => {
-    // 设置 visualMap 的 M 值范围（这里使用硬编码的 0 到 14）
+    // 生成 series
+    const series = yKeys.map(key => ({
+        name: key,
+        type: 'line',
+        data: res.map(item => ({ value: [item.X, item[key]] })),
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 1.5 },
+        showSymbol: false
+    }));
 
-    const MValue = (
-        dataSet.length === 0 ? [0] :
-            (dataSet.map(item => item.M ? item.M : 0))
-    )
-    const min = Math.min(...MValue)
-    const max = Math.max(...MValue)
     return {
-        title: { text: '扭矩分布云图' },
         animation: true,
-        // 自定义 tooltip
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 100
+        }],
         tooltip: {
-            show: false,
+            trigger: 'axis'
         },
-        visualMap: {
-            show: true,
-            dimension: 3, // 第四个维度 (M) 决定颜色
-            min: min, // 自动获取数据的最小值
-            max: max, // 自动获取数据的最大值
-            inRange: {
-                color: ['blue', 'cyan', 'yellow', 'red']
-            },
-            type: 'continuous', // 连续映射
-            // 显示数值范围
-            calculable: true
+        legend: {
+            data: yKeys
         },
-        grid3D: {
-            // 如需调整 3D 画布大小，可增加 boxWidth、boxDepth 等配置
-            boxWidth: 200,   // x 轴可视长度
-            boxHeight: 80,   // y 轴可视长度 (数值跨度大，就让它小一点)
-            boxDepth: 50,   //  轴可视长度，可根据垂深范围自行调整
-            viewControl: { alpha: 10, beta: 10 }
+        xAxis: {
+            type: 'value',
+            name: '井深（m）',
+            // data: xAxisData
         },
-        xAxis3D: { name: '东/西 (m)' },
-        yAxis3D: { name: '南/北 (m)' },
-        zAxis3D: { name: '垂深 (m)', inverse: false },
-        dataset: {
-            dimensions: ['E', 'N', 'TCS', 'M'],
-            source: dataSet
+        yAxis: {
+            name: '轴向力（kN）',
+            type: 'value',
+            min: minY
         },
-        series: [
-            {
-                name: '扭矩分布',
-                type: 'scatter3D',
-                symbolSize: 6,
-                encode: {
-                    x: 'E',
-                    y: 'N',
-                    z: 'TCS',
-                    tooltip: 'M'  // 显示 M 值用于 tooltip 和 visualMap
-                }
-            }
-        ]
+        series
     }
-};
+}
 
 
 export { getOptionM };

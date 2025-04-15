@@ -71,7 +71,7 @@ def calculate(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, 
 
         # 作图
         z_axis = np.linspace(0, max_depth, n_rows)
-        return T_out, z_axis
+        return T_out, z_axis, max_depth
 
         # plt.figure()
         # for i in range(T_out.shape[1]):
