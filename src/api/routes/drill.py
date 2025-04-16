@@ -12,7 +12,7 @@ from entity.DTO import DrillVibrationDTO, MSEDTO
 router = APIRouter()
 
 # FAST API的全局缓存
-hydro_cache = {}
+mse_cache = {}
 
 @router.post('/drill/vibration')
 def get_limit_hydro(drillVirationDto: DrillVibrationDTO):
@@ -37,11 +37,16 @@ def get_limit_hydro(drillVirationDto: DrillVibrationDTO):
     return Response(content=csv_data, media_type="text/csv",
                     headers={"Content-Disposition": "attachment; filename=torque_data.csv"})
 
+@router.post('/drill/mse/optimized')
+def get_mse_optimized():
+    global mse_cache
+    return mse_cache
+
 @router.post('/drill/mse')
 def get_mse(mse_DTO : MSEDTO):
 
-    Sk, wob, rop, rpm, MSE = mse.calcu_mse(mse_DTO.file_path)
-
+    Sk, wob, rop, rpm, MSE, UCS, wob_res, rpm_res, rop_res = mse.calcu_mse(mse_DTO.file_path)
+    
     data = {
         "MSE": (MSE),
         "rop": (rop),
@@ -51,6 +56,13 @@ def get_mse(mse_DTO : MSEDTO):
     }
     # Creating DataFrame
     df = pd.DataFrame(data)
+
+    if len(UCS) != 0:
+        df["UCS"]  = UCS
+        mse_cache[wob_res] = wob_res
+        mse_cache[rpm_res] = rpm_res
+        mse_cache[rop_res] = rop_res
+
     output = io.StringIO()
     df.to_csv(output, index=False, encoding="utf-8")
     csv_data = output.getvalue()
