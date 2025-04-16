@@ -1,43 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Checkbox, Message } from '@arco-design/web-react';
-import { IconUser, IconLock } from '@arco-design/web-react/icon';
+import { Button, Checkbox, Form, Input, Message } from '@arco-design/web-react';
+import { IconLock, IconUser } from '@arco-design/web-react/icon';
+import React, { useState } from 'react';
+
+import userInfo from './data';
 import './style.css';
-import userInfo from './data'
 
 const FormItem = Form.Item;
-const LoginPage = ({status, setStatus}) => {
+const LoginPage = ({ status, setStatus, setTest }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (values) => {
     setLoading(true);
     try {
-      if (userInfo[0].username === values.username 
+      if (userInfo[0].username === values.username
         && userInfo[0].password === values.password) {
-          setTimeout(() => {
-            setStatus(true)
-            Message.success('登录成功！欢迎进入系统!')
-            location.replace("/#/hydro")
-            setLoading(false);
-            // TODO: FOR TEST
-          // }, 800)
-          }, 0)
-        } else if (userInfo[1].username === values.username 
-          && userInfo[1].password === values.password) {
-          setTimeout(() => {
-            setStatus(true)
-            Message.success('欢迎尊贵的erasernoob')
-            location.replace("/#/hydro")
-            setLoading(false);
-          }, 800)
-          
-        } else {
-          setTimeout(() => {
-            Message.success('认证失败!')
-            setLoading(false);
-          }, 800)
-        }
-      } finally {
+        setTimeout(() => {
+          setStatus(true)
+          Message.success('登录成功！欢迎进入系统!')
+          location.replace("/#/hydro")
+          setLoading(false);
+        }, 0)
+      } else if (userInfo[1].username === values.username
+        && userInfo[1].password === values.password) {
+        setTimeout(() => {
+          setStatus(true)
+          setTest(true)
+
+          Message.success('欢迎进入测试环境')
+          location.replace("/#/hydro")
+          setLoading(false);
+        }, 800)
+
+      } else {
+        setTimeout(() => {
+          Message.success('认证失败!')
+          setLoading(false);
+        }, 800)
+      }
+    } finally {
     }
   };
 
@@ -53,7 +54,7 @@ const LoginPage = ({status, setStatus}) => {
       <div className="form-container">
         <div className="form-box">
           <h2 className="form-title">系统登录</h2>
-          <Form form={form} wrapperCol={{offset: '0.1'}} className='custom-form' onSubmit={handleSubmit} autoComplete="off">
+          <Form form={form} wrapperCol={{ offset: '0.1' }} className='custom-form' onSubmit={handleSubmit} autoComplete="off">
             <FormItem
               field="username"
               rules={[{ required: true, message: '请输入用户名' }]}

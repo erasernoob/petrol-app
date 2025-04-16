@@ -331,28 +331,37 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
 
         if Dw <= 0.3:
             if wc == 1:
-                aaa = 0.89
+                aaa = 0.885
             elif wc == 2:
-                aaa = 1.06
+                aaa = 1.045
             elif wc == 3:
-                aaa = 1.4
+                aaa = 1.382
         elif Dw > 0.3:
             if wc == 1:
-                aaa = 0.91
+                aaa = 0.88
             elif wc == 2:
-                aaa = 1.06
+                aaa = 1.01
             elif wc == 3:
-                aaa = 1.16
+                aaa = 1.1
 
 
-        Phk = PO2.flatten() + Pa * aaa
+        # Phk = PO2.flatten() + Pa * aaa
+        mm = ntrans
+        Phk = np.zeros(mm)
+        Phk[0] = 0
+        PO2 = PO2.flatten()
+
+        for i in range(1, mm):
+            PO2yx = PO2[i] - PO2[i-1]
+            Payx = Pa[i] - Pa[i-1]
+            Phk[i] = Phk[i-1] + PO2yx + aaa * Payx
 
         # 管内循环压力
         if Dw <= 0.3:
             if wc == 1:
-                nnnn = 1.68
+                nnnn = 1.69
             elif wc == 2:
-                nnnn = 1.43
+                nnnn = 1.435
             elif wc == 3:
                 nnnn = 0.78
         elif Dw > 0.3:
@@ -361,7 +370,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             elif wc == 2:
                 nnnn = 1.087
             elif wc == 3:
-                nnnn = 0.685
+                nnnn = 0.69
 
 
         nn = ntrans  # ntrans 应该是一个正整数
@@ -385,18 +394,18 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         
         if Dw <= 0.3:
             if wc == 1:
-                ccc = 0.89
+                ccc = 0.885
             elif wc == 2:
-                ccc = 1.06
+                ccc = 1.045
             elif wc == 3:
-                ccc = 1.4
+                ccc = 1.382
         elif Dw > 0.3:
             if wc == 1:
-                ccc = 0.91
+                ccc = 0.88
             elif wc == 2:
-                ccc = 1.06
+                ccc = 1.01
             elif wc == 3:
-                ccc = 1.16
+                ccc = 1.1
                 
 
         ECD = ccc * Pa * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
@@ -427,6 +436,10 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
                   (term1 ** (-1.25)) +
                   (1 + 0.00581695 * H) * Pazz / 10)
 
+        Payxzz1 = (0.0026068625 * H * Pazz / 10 / fd *
+                  (term1 ** (-1.25)) +
+                  (1 + 0.00581695 * H) * Pazz / 10)
+
         # 钻铤井段
         if Reazt < 2000:
             fdzt = 64 / Reazt
@@ -436,41 +449,54 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         Payxzt = (0.026068625 * H * Pazt / 10 / fdzt *
                   (term2 ** (-1.25)) +
                   (1 + 0.00581695 * H) * Pazt / 10)
+        
+        Payxzt1 = (0.0026068625 * H * Pazz / 10 / fd *
+                  (term1 ** (-1.25)) +
+                  (1 + 0.00581695 * H) * Pazz / 10)
 
         # Payxzz(end) 表示 Payxzz 的最后一个元素，加上 Payxzt 后得到 Payxztt
         Payxztt = Payxzz[-1] + Payxzt
 
         # MATLAB 中 [Payxzz; Payxztt] 是垂直拼接（按行堆叠）
         # 如果 Payxzz 与 Payxztt 均为 1D 数组，则使用 np.vstack 保证维度一致
-        # TODO注意这里是
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
+        Payx1 = np.vstack((Payxzz1.reshape(-1, 1), Payxzt1.reshape(-1, 1))).flatten()
 
         # 考虑岩屑的环空循环压力
     
         if Dw <= 0.3:
             if wc == 1:
-                aaa = 0.89
+                aaa = 0.885
             elif wc == 2:
-                aaa = 1.06
+                aaa = 1.045
             elif wc == 3:
-                aaa = 1.4
+                aaa = 1.382
         elif Dw > 0.3:
             if wc == 1:
-                aaa = 0.91
+                aaa = 0.88
             elif wc == 2:
-                aaa = 1.06
+                aaa = 1.01
             elif wc == 3:
-                aaa = 1.16
+                aaa = 1.1
 
-        Phkyx = PO2.flatten() + Payx * aaa
+        # Phkyx = PO2.flatten() + Payx * aaa
+        mm = ntrans
+        Phkyx = np.zeros(mm)
+        Phkyx[0] = 0
+        PO2 = PO2.flatten()
+
+        for i in range(1, mm):
+            PO2yx = PO2[i] - PO2[i-1]
+            Payxx = Payx[i] - Payx[i-1]
+            Phkyx[i] = Phkyx[i-1] + PO2yx + aaa * Payxx
 
         # 考虑岩屑的管内循环压力
     
         if Dw <= 0.3:
             if wc == 1:
-                nnnn = 1.68
+                nnnn = 1.69
             elif wc == 2:
-                nnnn = 1.43
+                nnnn = 1.435
             elif wc == 3:
                 nnnn = 0.78
         elif Dw > 0.3:
@@ -479,7 +505,7 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
             elif wc == 2:
                 nnnn = 1.087
             elif wc == 3:
-                nnnn = 0.685
+                nnnn = 0.69
 
         nn = ntrans  # ntrans 是正整数
         # 创建一个长度为 nn 的一维数组（与 MATLAB 中的 zeros(nn,1) 等价）
@@ -497,21 +523,21 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         
         if Dw <= 0.3:
             if wc == 1:
-                ccc = 0.89
+                ccc = 0.885
             elif wc == 2:
-                ccc = 1.06
+                ccc = 1.045
             elif wc == 3:
-                ccc = 1.4
+                ccc = 1.382
         elif Dw > 0.3:
             if wc == 1:
-                ccc = 0.91
+                ccc = 0.88
             elif wc == 2:
-                ccc = 1.06
+                ccc = 1.01
             elif wc == 3:
-                ccc = 1.16
+                ccc = 1.1
                     
 
-        ECDyx = ccc * Payx * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
+        ECDyx = ccc * Payx1 * 10 ** 6 / 9.81 / 1000 / Tcs + rhoi / 1000
 
         P = Pgnyx[0] + Pdm
 

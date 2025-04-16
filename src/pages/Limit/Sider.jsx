@@ -1,4 +1,4 @@
-import { Button, Message, Radio, Card } from "@arco-design/web-react";
+import { Button, Card, Message, Radio } from "@arco-design/web-react";
 import { basename } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-dialog";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const RadioGroup = Radio.Group;
 export default function Sider({
   form = "default",
   activeRoute,
+  extraData,
   subRouteOptions,
   setActiveRoute,
   setWaiting,
@@ -29,19 +30,19 @@ export default function Sider({
   const [drillState, setDrillState] = useState(false);
   // FOR MSE
   const [params, setParams] = useState(false);
-  const uploaderStyle = {
-    width: activeRoute === 1 ? "15%" : "100%",
-    marginTop: activeRoute === 1 ? "0" : "100%",
-  };
+
 
   const Tabs = (
     <div
       className={
         subRouteOptions.length != 2 ||
-        (subRouteOptions.length == 2 && activeRoute == 2)
+          (subRouteOptions.length == 2 && activeRoute == 2)
           ? "full-width-radio-group"
           : "mse-width-radio-group"
       }
+      style={{
+        display: window.location.hash.includes("/drill") ? "none" : "block",
+      }}
     >
       <RadioGroup
         type="button"
@@ -50,7 +51,7 @@ export default function Sider({
         defaultValue={activeRoute}
         onChange={(value) => {
           // 在实际更改路由之前，添加一个类来触发过渡动画
-          
+
           // 延迟更新状态，给 CSS 过渡一些时间来开始
           setTimeout(() => {
             setActiveRoute(value);
@@ -136,17 +137,15 @@ export default function Sider({
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
               marginTop: "3px",
             }}
           >
-            <div className="mse-tabs-container">{Tabs}</div>
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: "20px",
-                marginRight: "80px",
+                marginLeft: "20px",
               }}
             >
               <FileUploader
@@ -166,31 +165,31 @@ export default function Sider({
             </div>
           </div>
           <div className="mse-result-page">
-          <Card
-          title="计算结果"
-          className="mse-result-card"
-          bodyStyle={{ height: "100%", flex: 1, border: "0px !important" }}
-        >
-            <MSEResult
-              loading={loading}
-              waiting={waiting}
-              handleExport={handleExport}
-              chartData={chartData}
-            />
-        </Card>
-
-
-         </div>
+            <Card
+              title="计算结果"
+              className="mse-result-card"
+              bodyStyle={{ height: "100%", flex: 1, border: "0px !important" }}
+            >
+              <MSEResult
+                extraData={extraData}
+                loading={loading}
+                waiting={waiting}
+                handleExport={handleExport}
+                chartData={chartData}
+              />
+            </Card>
+          </div>
         </>
       ) : (
         // to distinct the vibration and the limit page
         <>
           {Tabs}
           {subRouteOptions.length >= 3 && (
-            <div className="file-uploader"
-            style={{
-              paddingTop: "0px",
-            }}
+            <div
+              className="file-uploader"
+              style={{
+                paddingTop: "0px",
+              }}
             >
               <FileUploader
                 orbit={orbit}
@@ -202,9 +201,10 @@ export default function Sider({
               />
             </div>
           )}
-          <div className="input-form">{form}</div>
+          <div className={subRouteOptions.length != 2 ? "input-form" : "input-form-limit"}>{form}</div>
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

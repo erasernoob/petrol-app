@@ -48,9 +48,6 @@ export default function Option(chartData, yAxis, xAxis, series, legend = "", sho
         } : legend
     };
 }
-
-
-
 export const getOptionT = (dataSet) => {
     // 计算 M 值的范围
     const TValues = dataSet
@@ -97,6 +94,7 @@ export const getOptionT = (dataSet) => {
         animation: true,
         // 自定义 tooltip
         tooltip: {
+            show: false
         },
         visualMap: {
             show: true,
@@ -187,7 +185,9 @@ const getOptionM = (dataSet) => {
     return {
         title: { text: '扭矩分布云图' },
         animation: true,
-        tooltip: {},
+        tooltip: {
+            show: false,
+        },
         visualMap: {
             show: true,
             dimension: 3,   // 第四个维度 (M) 决定颜色
@@ -231,65 +231,131 @@ const getOptionM = (dataSet) => {
     };
 };
 
+export function getCurveOption(res) {
+    if (res.length === 0) return {};
+    const allKeys = Object.keys(res[0]);
+    const yKeys = allKeys.filter(key => key !== '井深');
+    const xAxisData = res.map(item => item.井深);
 
+    // 获取所有 y 轴数据的实际最小值和最大值
+    const allYValues = yKeys.flatMap(key =>
+        res.map(item => item[key]).filter(val => val !== undefined && val !== null)
+    );
+    const actualMinY = Math.min(...allYValues);
+    const actualMaxY = Math.max(...allYValues);
 
-const getOptionm = (dataSet) => {
-    // 设置 visualMap 的 M 值范围（这里使用硬编码的 0 到 14）
+    // 计算初始显示的 minY（实际最小值的 1/10）
+    const initialMinY = Math.floor(actualMinY / 10);
 
-    const MValue = (
-        dataSet.length === 0 ? [0] :
-            (dataSet.map(item => item.M ? item.M : 0))
-    )
-    const min = Math.min(...MValue)
-    const max = Math.max(...MValue)
+    // 计算初始缩放范围（从 initialMinY 到 actualMaxY）
+    // 计算 startValue 和 endValue 的比例（0-100）
+    const rangeTotal = actualMaxY - actualMinY;
+    const zoomStart = ((initialMinY - actualMinY) / rangeTotal) * 100;
+    const zoomEnd = 100; // 默认显示到最大值
+
+    // 生成 series
+    const series = yKeys.map(key => ({
+        name: key,
+        type: 'line',
+        data: res.map(item => ({ value: [item.井深, item[key]] })),
+        sampling: 'lttb',
+        smooth: false,
+        lineStyle: { width: 1.5 },
+        showSymbol: false
+    }));
+
     return {
-        title: { text: '扭矩分布云图' },
         animation: true,
-        // 自定义 tooltip
-        tooltip: {
-
-        },
-        visualMap: {
+        dataZoom: [{
+            type: 'inside',
+            yAxisIndex: 0, // 确保 y 轴也能缩放
+            start: zoomStart, // 初始缩放范围
+            end: zoomEnd,
+            zoomOnMouseWheel: true, // 允许鼠标滚轮缩放
+            moveOnMouseMove: true, // 允许鼠标拖动
+        }, {
+            type: 'slider', // 添加滑块缩放
+            yAxisIndex: 0,
+            start: zoomStart, // 初始缩放范围
+            end: zoomEnd,
             show: true,
-            dimension: 3, // 第四个维度 (M) 决定颜色
-            min: min, // 自动获取数据的最小值
-            max: max, // 自动获取数据的最大值
-            inRange: {
-                color: ['blue', 'cyan', 'yellow', 'red']
-            },
-            type: 'continuous', // 连续映射
-            // 显示数值范围
-            calculable: true
+            height: 20, // 滑块高度
+            bottom: 10, // 位置调整
+        }],
+        tooltip: {
+            trigger: 'axis'
         },
-        grid3D: {
-            // 如需调整 3D 画布大小，可增加 boxWidth、boxDepth 等配置
-            boxWidth: 200,   // x 轴可视长度
-            boxHeight: 80,   // y 轴可视长度 (数值跨度大，就让它小一点)
-            boxDepth: 50,   //  轴可视长度，可根据垂深范围自行调整
-            viewControl: { alpha: 10, beta: 10 }
+        legend: {
+            data: yKeys
         },
-        xAxis3D: { name: '东/西 (m)' },
-        yAxis3D: { name: '南/北 (m)' },
-        zAxis3D: { name: '垂深 (m)', inverse: false },
-        dataset: {
-            dimensions: ['E', 'N', 'TCS', 'M'],
-            source: dataSet
+        xAxis: {
+            type: 'value',
+            name: '井深（m）',
         },
-        series: [
-            {
-                name: '扭矩分布',
-                type: 'scatter3D',
-                symbolSize: 6,
-                encode: {
-                    x: 'E',
-                    y: 'N',
-                    z: 'TCS',
-                    tooltip: 'M'  // 显示 M 值用于 tooltip 和 visualMap
-                }
-            }
-        ]
-    }
-};
+        yAxis: {
+            name: '轴向力（kN）',
+            type: 'value',
+            // min: actualMinY, // 设置最小值为数据最小值（允许缩放）
+            // max: actualMaxY, // 设置最大值为数据最大值
+            scale: true, // 允许缩放
+        },
+        series
+    };
+}
+
+
+// export function getCurveOption(res) {
+//     if (res.length === 0) return {}
+//     const allKeys = Object.keys(res[0]);
+//     const yKeys = allKeys.filter(key => key !== '井深');
+//     const xAxisData = res.map(item => item.井深);
+//     // 屈曲数据集
+//     const FsValue = res.map((obj, idx) => {
+//         return obj.螺旋屈曲临界载荷 ? obj.螺旋屈曲临界载荷 : 0
+//     })
+//     const minY = Math.floor(Math.min(...FsValue) / 10)
+
+//     // 生成 series
+//     const series = yKeys.map(key => ({
+//         name: key,
+//         type: 'line',
+//         data: res.map(item => ({ value: [item.井深, item[key]] })),
+//         sampling: 'lttb',
+//         smooth: false,
+//         lineStyle: { width: 1.5 },
+//         showSymbol: false
+//     }));
+
+//     return {
+//         animation: true,
+//         dataZoom: [{
+//             type: 'inside',
+//             start: 0,
+//             // yAxisIndex: 0, // 确保y轴也能缩放
+//             end: 100
+//         }],
+//         tooltip: {
+//             trigger: 'axis'
+//         },
+//         legend: {
+//             data: yKeys
+//         },
+//         xAxis: {
+//             type: 'value',
+//             name: '井深（m）',
+//             // data: xAxisData
+//         },
+//         yAxis: {
+//             name: '轴向力（kN）',
+//             type: 'value',
+//             // boundaryGap: [-0.1, -0.1],  // Ensure the values can zoom correctly
+
+//             scale: true,  // Allow dynamic scaling of Y axis
+//             min: minY
+//         },
+//         series
+//     }
+// }
 
 
 export { getOptionM };

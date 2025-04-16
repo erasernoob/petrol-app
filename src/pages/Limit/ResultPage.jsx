@@ -1,26 +1,19 @@
-import { Radio, Button, Message } from '@arco-design/web-react'
-import { Empty } from '@arco-design/web-react'
+import { Button, Radio, Spin, Tag } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
-import { useSelector } from 'react-redux'
-import { useEffect, useMemo, useState } from 'react'
-import { Tag } from '@arco-design/web-react'
-import 'echarts-gl';
-import { Spin } from '@arco-design/web-react'
-import Option from '../option'
-import { saveAtFrontend } from '../utils/utils'
+import 'echarts-gl'
+import { useEffect, useState } from 'react'
+import Option, { getCurveOption } from '../option'
+import { saveAtFrontend, saveCurveFile } from '../utils/utils'
 
 
 const RadioGroup = Radio.Group
 
-export default function ResultPage({ curCondition, activeRoute, typeOptions = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
+export default function ResultPage({ curCondition, activeRoute, curveFile, typeOptions = [], curveData = [], chartOptions = [], chartData = [], extraData = {}, loading, waiting }) {
 
 
     const ecd = chartData.map((item) => item.ECD ? item.ECD : 10000)
     const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
 
-
-
-    console.log(chartData)
     const option1 = Option(chartData,
         {
             type: 'value',
@@ -52,7 +45,7 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
     const option4 = Option(chartData,
@@ -290,6 +283,8 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
         }
     ], "", 1) // show the y value
 
+    const option9 = curveData == [] ? "{}" : getCurveOption(curveData)
+
     const [option, setOption] = useState(option1)
     const [curType, setCurType] = useState(typeOptions[0])
 
@@ -312,6 +307,9 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 setOption(option5);
             } else if (index === 2) {
                 setOption(option6);
+                // 屈曲临界载荷
+            } else if (index == 3) {
+                setOption(option9)
             }
         } else if (activeRoute === 4) {
             if (index === 0) {
@@ -339,6 +337,9 @@ export default function ResultPage({ curCondition, activeRoute, typeOptions = []
                 await saveAtFrontend(chartData.map(value => value.M), `${curCondition}_${curType}`)
             } else if (index === 2) {
                 await saveAtFrontend(chartData.map(value => value.aq), `${curCondition}_${curType}`)
+                // 直接保存屈曲文件
+            } else if (index === 3) {
+                await saveCurveFile(curveFile, `${curCondition}_${curType}`)
             }
         } else if (activeRoute === 4) {
             if (index === 0) {

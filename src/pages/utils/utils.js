@@ -1,11 +1,10 @@
 // import { open } from '@tauri-apps/plugin-shell';
-import { open as openNer } from '@tauri-apps/plugin-dialog';
-import { Message } from '@arco-design/web-react'
-import * as XLSX from "xlsx";
-import { writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+import { Message } from '@arco-design/web-react';
 import * as path from '@tauri-apps/api/path';
-import { save } from '@tauri-apps/plugin-dialog';
+import { open as openNer, save } from '@tauri-apps/plugin-dialog';
+import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
 import Big from 'big.js';
+import * as XLSX from "xlsx";
 
 const saveData = async (data = [], name) => {
   data = data.map((value, index) => ({ value }))
@@ -23,6 +22,29 @@ const saveData = async (data = [], name) => {
     // 打开下载文件夹
     await open(await path.join(downloadPath, ''));
   }
+}
+
+const saveCurveFile = async (file, name) => {
+  const filePath = await save({
+    title: "导出数据到本地",
+    defaultPath: `${name}.xlsx`,
+    filters: [{ name: "xlsx Files", extensions: ["xlsx"] }]
+  });
+
+  if (!filePath) return
+
+  // 1. 将 CSV 字符串解析为 workbook
+  const workbook = XLSX.read(file, { type: "string" })
+
+  // 2. 将 workbook 写成 xlsx 二进制数据（Uint8Array）
+  const res = XLSX.write(workbook, { bookType: "xlsx", type: "array" })
+  if (filePath) {
+    await writeFile(filePath, res, {
+      baseDir: filePath
+    })
+    Message.success(`${name}数据导出成功！`)
+  }
+
 }
 
 // data as the first column
@@ -96,7 +118,7 @@ const dealWithTheDataUnit = (data, idx) => {
   } else if (idx == 2) {
     data.v = new Big(data.v).div(3600).toNumber()
     data.omega = new Big(data.omega).div(30).mul(Math.PI).toNumber()
-    data.T0 = new Big(data.T0).mul(1000).toNumber()
+    data.T0 = new Big(data.T0 ? data.T0 : 0).mul(1000).toNumber()
     data.Dw = new Big(data.Dw).div(1000).toNumber()
   } else if (idx == 3) {
     // curve 
@@ -112,8 +134,11 @@ const dealWithTheDataUnit = (data, idx) => {
     data.dpw = new Big(data.dpw).div(1000).toNumber()
 
   }
-
 }
 
 
-export { saveData, save2Data, saveAtFrontend, handleUpload, dealWithTheDataUnit }
+const useTheInitialValue = true
+
+
+export { dealWithTheDataUnit, handleUpload, save2Data, saveAtFrontend, saveCurveFile, saveData, useTheInitialValue };
+

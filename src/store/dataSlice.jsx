@@ -5,6 +5,7 @@ export const dataSlice = createSlice({
         hydroData: [],
         drillData: [],
         limitData: [],
+        useTheInitialValue: false,
     },
     reducers: {
         setHydro: (state, actions) => {
@@ -15,9 +16,12 @@ export const dataSlice = createSlice({
         },
         setLimit: (state, actions) => {
             state.limitData = actions.payload
+        },
+        setUseInitialOrNot: (state, actions) => {
+            state.useTheInitialValue = actions.payload
         }
     }
 })
 
-export const { setDrill, setHydro, setLimit } = dataSlice.actions
+export const { setDrill, setHydro, setLimit, setUseInitialOrNot } = dataSlice.actions
 export default dataSlice.reducer

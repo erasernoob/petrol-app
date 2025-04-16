@@ -75,6 +75,7 @@ const hydro = [
 
 // v=0.00714;               %钻进速度，m/s（仅用于工况1,5：工况5名为上提速度）
 // omega=5*pi/3;            %转速，rad/s（仅用于工况1,5）
+// T0 钻压 仅用于工况12
 const torque = {
   work_condition: {
     wc: {
@@ -111,6 +112,7 @@ const limit_eye = [
       Rzt: { name: "钻铤外径 (mm)", value: 158.75 },
       rzt: { name: "钻铤内径 (mm)", value: 71.44 },
       Lzt: { name: "钻铤长度 (m)", value: 10 },
+      jsjg: { name: "井深计算间隔 (m)", value: 500 },
     },
   },
   {
@@ -243,6 +245,8 @@ const limit_mechanism = {
     miua22: { name: "裸眼段摩阻系数", value: 0.2 },
     qfqd: { name: "钻柱屈服强度 (MPa)", value: 931 },
     jsjg: { name: "井深计算间隔 (m)", value: 500 },
+    calcCurve: { name: "是否计算屈曲临界载荷 ", value: 0 },
+    ml: { name: "钻柱弹性模量 (MPa)", value: 2.1e5 },
   },
 };
 

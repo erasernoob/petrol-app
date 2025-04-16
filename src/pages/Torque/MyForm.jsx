@@ -1,4 +1,6 @@
-import { Button, Form, Input, Select } from "@arco-design/web-react";
+import { Button, Checkbox, Form, Input, Select } from "@arco-design/web-react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const FormItem = Form.Item;
@@ -7,6 +9,11 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const handleDisabled = () => {
     return fileList.orbit.path === "" || fileList.drill.path === ""
   }
+
+  const useTheInitialValue = useSelector((state) => state.data.useTheInitialValue)
+  // 是否勾选计算屈曲
+  const [checked, setChecked] = useState(false)
+
   return (
     <div className="form-wrapper-custom">
       <Form
@@ -28,7 +35,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                   field={key}
                   key={key}
                   label={field.name}
-                  // TODO: For TEST
                   initialValue={1}
                   rules={[
                     { required: true, message: `${field.name} 不能为空` },
@@ -46,8 +52,12 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                       <FormItem
                         field={key}
                         key={key}
+                        disabled={
+                          !checked && key === "ml"
+                        }
                         label={field.name}
-                        initialValue={field.value}
+                        initialValue={useTheInitialValue ? field.value : ""}
+
                         rules={[
                           {
                             required: true,
@@ -58,6 +68,45 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                         <Input className="input-component" />
                       </FormItem>
                     );
+
+                    // 删掉后三个工况的钻压 以及除了下钻工况的屈曲
+                    if (values.wc !== 1 && values.wc !== 2 && key === "T0"
+                      ||
+                      values.wc !== 4 && key === "calcCurve" || values.wc !== 4 && key === "ml"
+                    ) {
+                      return <></>
+                    }
+
+                    if (values.wc === 4 && key === "calcCurve") {
+                      return (<>
+                        <hr style={{
+                          display: 'block',
+                          marginTop: '2px',
+                          height: '1px',
+                          backgroundColor: '#000',
+                          width: 'calc(100% + 58px)', // 通过 calc() 来覆盖掉 padding
+                          marginLeft: '-60px' // 向左偏移 60px，覆盖 padding
+                        }}></hr>
+
+
+                        <FormItem
+                          key={key}
+                          label={field.name}
+                          field={key}
+                        >
+                          {/* 添加一条线作为额外的标签 */}
+                          <Checkbox
+                            checked={checked}
+                            onChange={(check) => {
+                              form.setFieldValue(key, check ? 1 : 0)
+                              setChecked(check)
+                              console.log(check)
+                            }}
+                          ></Checkbox>
+                        </FormItem >
+                      </>)
+                    }
+
                     if (values.wc !== 1 && values.wc !== 5) {
                       return key === "v" || key === "omega" ? <></> : res;
                     } else {
@@ -71,7 +120,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                           field={key}
                           key={key}
                           label={field.name}
-                          initialValue={field.value}
+                          initialValue={useTheInitialValue ? field.value : ""}
                           rules={[
                             {
                               required: true,
@@ -93,7 +142,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                   field={key}
                   key={key}
                   label={field.name}
-                  initialValue={field.value}
+                  initialValue={useTheInitialValue ? field.value : ""}
                   rules={[
                     { required: true, message: `${field.name} 不能为空` },
                   ]}
@@ -149,7 +198,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
             <Button
               type="primary"
               className="button reset-button"
-              disabled={!form.validate()}
               onClick={() => {
                 form.resetFields();
               }}
@@ -159,9 +207,9 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
           </div>
         </FormItem>
 
-      </Form>
+      </Form >
 
-    </div>
+    </div >
   );
 };
 

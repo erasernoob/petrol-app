@@ -7,8 +7,11 @@ import {
   Tabs,
 } from "@arco-design/web-react";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = false }) => {
+  const useTheInitialValue = useSelector((state) => state.data.useTheInitialValue)
+
   const [tabTime, setTabTime] = useState(0);
   // 默认宾汉流体
   const [selectValue, setSelectValue] = useState(1)
@@ -38,7 +41,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
         <Tabs
           type="card"
           tabPosition="left"
-          className={!limit ? "custom-tabs" : "custom-tabs-limit"}
+          className={!limit ? (!drill ? "custom-tabs" : "custom-drill") : "custom-tabs-limit"}
           size="large"
           lazyload={false}
           onChange={() => setTabTime(() => tabTime + 1)}
@@ -70,9 +73,24 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                       key={key}
                       label={field.name}
                       field={key}
-                      initialValue={field.value}
+                      initialValue={useTheInitialValue || key === 'lbmx' ? field.value : ""}
                       rules={[
-                        { required: true, message: `${field.name} 不能为空` },
+                        {
+                          required:
+                            !(categoryKey == "fluid" && key != "fluidden" && (
+                              selectValue == 1
+                              && (key != "miu" && key != "taof")
+                              ||
+                              selectValue == 2
+                              && (key != "n" && key != "K")
+                              ||
+                              selectValue == 3
+                              && (key != "n" && key != "K" && key != "taof"))
+                              ||
+                              categoryKey == "rock_cuttings" && !checked)
+
+                          , message: `${field.name} 不能为空`
+                        },
                       ]}
                       className="fixed-position-form-item"
                       labelCol={{ span: 11 }}
@@ -88,6 +106,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                       {key === "lbmx" ? (
                         <Select
                           options={field.option}
+                          value={1}
                           className="input-component"
                           placeholder={`宾汉流体`}
                           onChange={setSelectValue}
@@ -159,7 +178,6 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
             <Button
               type="primary"
               className="button reset-button"
-              disabled={!form.validate()}
               onClick={() => {
                 form.resetFields();
               }}

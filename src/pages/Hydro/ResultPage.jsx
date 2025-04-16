@@ -33,7 +33,7 @@ export default function ResultPage({ chartData = [], data, loading, waiting }) {
     ],
     [
       {
-        name: '钻柱压力',
+        name: '钻柱压力(MPa)',
         type: 'line',
         yAxisIndex: 0,
         encode: { x: 'drillPressure', y: 'depth' },
@@ -43,7 +43,7 @@ export default function ResultPage({ chartData = [], data, loading, waiting }) {
         showSymbol: false
       },
       {
-        name: '环空压力',
+        name: '环空压力(MPa)',
         type: 'line',
         yAxisIndex: 0,
         encode: { x: 'annularPressure', y: 'depth' },
@@ -82,7 +82,7 @@ export default function ResultPage({ chartData = [], data, loading, waiting }) {
     ],
     [
       {
-        name: 'ECD',
+        name: 'ECD (g/cm³)',
         type: 'line',
         yAxisIndex: 0,
         encode: { x: 'ecd', y: 'depth' },

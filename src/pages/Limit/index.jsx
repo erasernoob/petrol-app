@@ -1,7 +1,7 @@
 import { Card, Message } from "@arco-design/web-react";
 import Papa from 'papaparse';
 import { useEffect, useState } from "react";
-import { del, post } from "../../components/axios";
+import { post } from "../../components/axios";
 import {
   limit_curve,
   limit_eye,
@@ -10,9 +10,9 @@ import {
 } from "../../data/Params";
 import DynamicForm from "../components/DynamicForm";
 import MyForm from "../Torque/MyForm";
+import { dealWithTheDataUnit } from "../utils/utils";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
-import { dealWithTheDataUnit } from "../utils/utils";
 
 const tabs = [
   ["基本参数", "钻井液", "岩屑床"],
@@ -23,7 +23,7 @@ const subRoutesOptions = [
   { label: "裸眼延伸极限", value: 1 },
   { label: "水力延伸极限", value: 2 },
   { label: "机械延伸极限", value: 3 },
-  { label: "屈曲临界载荷", value: 4 },
+  // { label: "屈曲临界载荷", value: 4 },
 ];
 
 export const defaultFileList = { orbit: { name: '', path: '' }, drill: { name: '', path: '' } }
@@ -32,7 +32,7 @@ const typeOptions = [
   [],
   ['总循环压耗', '立管压力'],
   ['井口轴向力', '井口扭矩', '安全系数'],
-  ['正弦屈曲临界载荷', '螺旋屈曲临界载荷'],
+  ['井口轴向力', '井口扭矩', '安全系数', '屈曲临界载荷'],
 ]
 
 export default function LimitPage() {
@@ -40,6 +40,12 @@ export default function LimitPage() {
   const [waiting, setWaiting] = useState(true)
   const [chartData, setChartData] = useState([])
   const [condition, setCondition] = useState(workConditions[0])
+
+  // 是否计算屈曲
+  const [calcCurve, setCalcCurve] = useState(false)
+  const [curveData, setCurveData] = useState([])
+  const [curveFile, setCurveFile] = useState(null)
+
   const [activeRoute, setActiveRoute] = useState(1);
   const [fileList, setFileList] = useState(defaultFileList);
   const [file, setFile] = useState({ name: '', path: '' })
@@ -52,9 +58,17 @@ export default function LimitPage() {
     setFileList(defaultFileList)
   }, [activeRoute])
 
+  // 还原之前的计算
+  useEffect(() => {
+    setCalcCurve(false)
+    setCurveData([])
+    setCurveFile(null)
+  }, [])
+
 
   const handleSubmit = async (data) => {
     try {
+
       if (activeRoute <= 2) {
         data.file_path = file.path
         dealWithTheDataUnit(data, 1)
@@ -70,17 +84,27 @@ export default function LimitPage() {
         data.omega = 0
       }
 
+      // 处理单位换算
       if (activeRoute == 3) {
         dealWithTheDataUnit(data, 2)
       } else if (activeRoute == 4) {
         dealWithTheDataUnit(data, 3)
       }
 
-
-      console.log(data)
-
       const response = await post(postPath[activeRoute - 1], JSON.stringify(data))
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
+
+
+      if (activeRoute === 3 && data.calcCurve === 1) {
+        setCalcCurve(true)
+
+        console.log("进入计算curve逻辑")
+        const response2 = await post('/limit/mechanism/curve', JSON.stringify(data))
+        setCurveFile(response2)
+        const res2 = Papa.parse(response2, { header: true, dynamicTyping: true }).data
+        setCurveData(res2)
+      }
+
       setChartData(res)
       setLoading(false)
       setCondition(workConditions[data.wc - 1])
@@ -127,7 +151,7 @@ export default function LimitPage() {
         style={{ flex: "1", marginLeft: "5px" }}
         bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
       >
-        <ResultPage curCondition={condition} activeRoute={activeRoute} chartData={chartData} typeOptions={typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
+        <ResultPage curCondition={condition} curveFile={curveFile} curveData={curveData} activeRoute={activeRoute} chartData={chartData} typeOptions={calcCurve ? typeOptions[typeOptions.length - 1] : typeOptions[activeRoute - 1]} loading={loading} waiting={waiting} />
       </Card>
     </div>
   );
