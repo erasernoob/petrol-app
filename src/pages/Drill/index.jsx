@@ -45,6 +45,13 @@ export default function DrillPage() {
         header: true,
         dynamicTyping: true,
       }).data;
+      // 判断是否需要优化 
+      if (res[0].UCS) {
+        const r = await post("/drill/mse/optimized")
+        // 得到优化建议
+        setExtraData(r)
+      }
+
       setChartData(res);
       setLoading(false);
     } catch (error) {
@@ -55,7 +62,7 @@ export default function DrillPage() {
     }
   };
 
-  const handleExport = () => {};
+  const handleExport = () => { };
 
   const handleSubmit = async (data) => {
     try {
@@ -181,6 +188,7 @@ export default function DrillPage() {
           chartData={chartData}
           setActiveRoute={handleActiveRouteChange}
           activeRoute={activeRoute}
+          extraData={extraData}
           handleCalculate={handleCalculate}
           file={file}
           setFile={setFile}
@@ -206,9 +214,8 @@ export default function DrillPage() {
           title="计算结果"
           style={{ flex: "1", marginLeft: "5px" }}
           bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
-          className={`result-card ${
-            resultCardVisible ? "result-card-visible" : "result-card-entering"
-          }`}
+          className={`result-card ${resultCardVisible ? "result-card-visible" : "result-card-entering"
+            }`}
         >
           <ResultPage
             typeOptions={typeOptions}

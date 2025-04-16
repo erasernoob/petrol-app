@@ -1,4 +1,4 @@
-import { Button, Radio, Spin } from '@arco-design/web-react'
+import { Button, Radio, Spin, Tag } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
 import 'echarts-gl'
 import Option from '../option'
@@ -12,7 +12,7 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         await saveAtFrontend(chartData.map(value => value.MSE), `MSE`)
     }
 
-    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
+    const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出MSE数据</Button>
 
     const option1 = Option(chartData,
         {
@@ -33,6 +33,9 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
             nameLocation: 'center',
             nameGap: 25, // 轴名称与坐标轴的距离
             min: 'dataMin',
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
             type: 'value',
             offset: 0,
             alignTicks: true,
@@ -167,14 +170,56 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
         {
             show: false,
         })
+    const option5 = Option(chartData,
+        {
+            type: 'value',
+            name: '井深 (m)',
+            min: 'dataMin',
+            axisLine: {
+                onZero: false
+            },
+            axisLabel: {
+                formatter: (value) => value.toFixed(0), // 保留一位小数
+            },
+            position: 'left',
+            inverse: true
+        }, [
+        {
+            name: '岩石抗压强度(MPa)',
+            nameLocation: 'center',
+            nameGap: 25, // 轴名称与坐标轴的距离
+            type: 'value',
+            offset: 0,
+            alignTicks: true,
+            position: 'top',
+        }
+    ], [
+        {
+            name: '岩石抗压强度(MPa)',
+            type: 'line',
+            yAxisIndex: 0,
+            encode: { x: 'UCS', y: 'Sk' },
+            sampling: 'none',
+            smooth: false,
+            lineStyle: { width: 1, color: 'rgb(127, 162, 50)' },
+            showSymbol: false
+        }
+    ],
+        {
+            show: false,
+        })
 
     chartOptions = [option1, option2, option3, option4]
+    if (Object.keys(extraData).length != 0) {
+        chartOptions = [option5, option1, option2, option3, option4]
+    }
+
     return (
         <>
 
             {chartData.length > 0 && loading === false && waiting === false ? (
                 <>
-                    <div style={{ height: '71vh', width: '100%', display: 'flex', alignItems: 'center', gap: "5px", justifyContent: 'space-between' }}>
+                    <div style={{ height: '71vh', width: '100%', display: 'flex', alignItems: 'center', gap: "0px", justifyContent: 'space-between' }}>
                         {
                             chartOptions.map((option, index) => {
                                 return (
@@ -182,15 +227,38 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
                                         <ReactECharts
                                             key={index}
                                             option={option}
-                                            style={{ height: '100%', width: '40%' }}
-                                            opts={{ renderer: 'canvas' }} // 强制使用Canvas
+                                            style={{ height: '100%', width: '220%' }}
+                                            opts={{ renderer: 'svg' }} // 强制使用Canvas
                                         />
                                     </>)
                             })
                         }
                     </div>
-                    <div style={{ display: 'flex', marginBottom: "0px", alignItems: 'center', justifyContent: 'center' }}>
-                        {exportButton}
+                    <div style={{ display: 'flex', marginBottom: "0px", alignItems: 'center', justifyContent: Object.keys(extraData).length === 0 ? 'center' : 'space-around' }}>
+                        {Object.keys(extraData).length === 0 ? exportButton : (
+                            <>
+                                <span style={{ marginLeft: "" }}>
+                                    {exportButton}
+                                </span>
+                                <span>
+                                    <span style={{ marginRight: "10px" }}>最优钻压：</span>
+                                    <Tag size="large">{extraData.wob_res}</Tag>
+                                </span>
+                                <span>
+                                    <span style={{ marginLeft: "80px", marginRight: "10px" }}>最优转速：</span>
+                                    <Tag size="large" style={{}}>
+                                        {extraData.rpm_res}
+                                    </Tag>
+                                </span>
+                                <span>
+                                    <span style={{ marginLeft: "80px", marginRight: "10px" }}>最优机械钻速：</span>
+                                    <Tag size="large" style={{}}>
+                                        {extraData.rop_res}
+                                    </Tag>
+                                </span>
+                            </>
+
+                        )}
                     </div>
 
                 </>

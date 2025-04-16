@@ -12,6 +12,7 @@ const RadioGroup = Radio.Group;
 export default function Sider({
   form = "default",
   activeRoute,
+  extraData,
   subRouteOptions,
   setActiveRoute,
   setWaiting,
@@ -29,10 +30,7 @@ export default function Sider({
   const [drillState, setDrillState] = useState(false);
   // FOR MSE
   const [params, setParams] = useState(false);
-  const uploaderStyle = {
-    width: activeRoute === 1 ? "15%" : "100%",
-    marginTop: activeRoute === 1 ? "0" : "100%",
-  };
+
 
   const Tabs = (
     <div
@@ -173,6 +171,7 @@ export default function Sider({
               bodyStyle={{ height: "100%", flex: 1, border: "0px !important" }}
             >
               <MSEResult
+                extraData={extraData}
                 loading={loading}
                 waiting={waiting}
                 handleExport={handleExport}

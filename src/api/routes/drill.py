@@ -57,11 +57,15 @@ def get_mse(mse_DTO : MSEDTO):
     # Creating DataFrame
     df = pd.DataFrame(data)
 
-    if len(UCS) != 0:
+    if wob_res != "":
         df["UCS"]  = UCS
-        mse_cache[wob_res] = wob_res
-        mse_cache[rpm_res] = rpm_res
-        mse_cache[rop_res] = rop_res
+        global mse_cache
+        mse_cache = {
+            "wob_res": wob_res,
+            "rpm_res": rpm_res,
+            "rop_res": rop_res,
+            
+        }
 
     output = io.StringIO()
     df.to_csv(output, index=False, encoding="utf-8")
