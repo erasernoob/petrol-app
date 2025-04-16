@@ -33,6 +33,9 @@ export default function DrillPage() {
   const [resultCardVisible, setResultCardVisible] = useState(false);
 
   const handleCalculate = async () => {
+    // 初始化
+    setExtraData({})
+
     if (!file.path) return;
     try {
       setWaiting(false);
