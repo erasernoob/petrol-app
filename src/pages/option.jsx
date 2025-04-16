@@ -231,17 +231,27 @@ const getOptionM = (dataSet) => {
     };
 };
 
-
 export function getCurveOption(res) {
-    if (res.length === 0) return {}
+    if (res.length === 0) return {};
     const allKeys = Object.keys(res[0]);
     const yKeys = allKeys.filter(key => key !== '井深');
     const xAxisData = res.map(item => item.井深);
-    // 屈曲数据集
-    const FsValue = res.map((obj, idx) => {
-        return obj.螺旋屈曲临界载荷 ? obj.螺旋屈曲临界载荷 : 0
-    })
-    const minY = Math.floor(Math.min(...FsValue) / 10)
+
+    // 获取所有 y 轴数据的实际最小值和最大值
+    const allYValues = yKeys.flatMap(key =>
+        res.map(item => item[key]).filter(val => val !== undefined && val !== null)
+    );
+    const actualMinY = Math.min(...allYValues);
+    const actualMaxY = Math.max(...allYValues);
+
+    // 计算初始显示的 minY（实际最小值的 1/10）
+    const initialMinY = Math.floor(actualMinY / 10);
+
+    // 计算初始缩放范围（从 initialMinY 到 actualMaxY）
+    // 计算 startValue 和 endValue 的比例（0-100）
+    const rangeTotal = actualMaxY - actualMinY;
+    const zoomStart = ((initialMinY - actualMinY) / rangeTotal) * 100;
+    const zoomEnd = 100; // 默认显示到最大值
 
     // 生成 series
     const series = yKeys.map(key => ({
@@ -258,8 +268,19 @@ export function getCurveOption(res) {
         animation: true,
         dataZoom: [{
             type: 'inside',
-            start: 0,
-            end: 100
+            yAxisIndex: 0, // 确保 y 轴也能缩放
+            start: zoomStart, // 初始缩放范围
+            end: zoomEnd,
+            zoomOnMouseWheel: true, // 允许鼠标滚轮缩放
+            moveOnMouseMove: true, // 允许鼠标拖动
+        }, {
+            type: 'slider', // 添加滑块缩放
+            yAxisIndex: 0,
+            start: zoomStart, // 初始缩放范围
+            end: zoomEnd,
+            show: true,
+            height: 20, // 滑块高度
+            bottom: 10, // 位置调整
         }],
         tooltip: {
             trigger: 'axis'
@@ -270,16 +291,71 @@ export function getCurveOption(res) {
         xAxis: {
             type: 'value',
             name: '井深（m）',
-            // data: xAxisData
         },
         yAxis: {
             name: '轴向力（kN）',
             type: 'value',
-            min: minY
+            // min: actualMinY, // 设置最小值为数据最小值（允许缩放）
+            // max: actualMaxY, // 设置最大值为数据最大值
+            scale: true, // 允许缩放
         },
         series
-    }
+    };
 }
+
+
+// export function getCurveOption(res) {
+//     if (res.length === 0) return {}
+//     const allKeys = Object.keys(res[0]);
+//     const yKeys = allKeys.filter(key => key !== '井深');
+//     const xAxisData = res.map(item => item.井深);
+//     // 屈曲数据集
+//     const FsValue = res.map((obj, idx) => {
+//         return obj.螺旋屈曲临界载荷 ? obj.螺旋屈曲临界载荷 : 0
+//     })
+//     const minY = Math.floor(Math.min(...FsValue) / 10)
+
+//     // 生成 series
+//     const series = yKeys.map(key => ({
+//         name: key,
+//         type: 'line',
+//         data: res.map(item => ({ value: [item.井深, item[key]] })),
+//         sampling: 'lttb',
+//         smooth: false,
+//         lineStyle: { width: 1.5 },
+//         showSymbol: false
+//     }));
+
+//     return {
+//         animation: true,
+//         dataZoom: [{
+//             type: 'inside',
+//             start: 0,
+//             // yAxisIndex: 0, // 确保y轴也能缩放
+//             end: 100
+//         }],
+//         tooltip: {
+//             trigger: 'axis'
+//         },
+//         legend: {
+//             data: yKeys
+//         },
+//         xAxis: {
+//             type: 'value',
+//             name: '井深（m）',
+//             // data: xAxisData
+//         },
+//         yAxis: {
+//             name: '轴向力（kN）',
+//             type: 'value',
+//             // boundaryGap: [-0.1, -0.1],  // Ensure the values can zoom correctly
+
+//             scale: true,  // Allow dynamic scaling of Y axis
+//             min: minY
+//         },
+//         series
+//     }
+// }
 
 
 export { getOptionM };

@@ -38,12 +38,23 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     H = limit_eye_dto.H
 
     ECD, Sk = limit_eye.main(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt, y, yxmd, H)
+    interval = limit_eye_dto.jsjg
+
+    ECD_values = ECD[::interval].tolist()  # 从 ECD 中提取间隔为 interval 的元素
+    Sk_values = Sk[::interval].tolist()  # 从 Sk 中提取间隔为 interval 的元素
+    
+    # 确保最后一个元素在结果中
+    if ECD_values[-1] != ECD[-1]:
+        ECD_values.append(ECD[-1])  # 如果最后一个元素没有包含在内，添加到列表中
+    if Sk_values[-1] != Sk[-1]:
+        Sk_values.append(Sk[-1])  # 如果最后一个元素没有包含在内，添加到列表中
+    
 
 
     # 将数据保存为 CSV 文件
     df = pd.DataFrame({
-        "Sk": pd.Series(Sk),
-        "ECD": pd.Series(ECD),
+        "Sk": pd.Series(Sk_values),
+        "ECD": pd.Series(ECD_values),
     })
 
     # **转换为 CSV 格式**

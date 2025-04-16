@@ -39,7 +39,7 @@ export const routeList = [
         element: <DrillPage />,
     },
     {
-        name: '风险预警',
+        name: '井漏风险预警',
         path: '/risk',
         element: <RiskPage />
     },

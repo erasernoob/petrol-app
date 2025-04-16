@@ -45,7 +45,7 @@ export default function ResultPage({ curCondition, activeRoute, curveFile, typeO
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
-            showSymbol: false
+            showSymbol: true
         }
     ],)
     const option4 = Option(chartData,

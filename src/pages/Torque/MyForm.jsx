@@ -82,7 +82,7 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                         <hr style={{
                           display: 'block',
                           marginTop: '2px',
-                          height: '2px',
+                          height: '1px',
                           backgroundColor: '#000',
                           width: 'calc(100% + 58px)', // 通过 calc() 来覆盖掉 padding
                           marginLeft: '-60px' // 向左偏移 60px，覆盖 padding
