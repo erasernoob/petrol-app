@@ -299,9 +299,35 @@ const drill_vibration = [
     "flag": '1'
   }
 ];
+const modelHyperParams = {
+  "LSTM个数": {
+    value: "1",
+    field: "lstmLayers",
+  },
+  "LSTM层数": {
+    value: "1",
+    field: "lstmUnits",
+  },
+  "神经元个数": {
+    value: "1",
+    field: "neuronCount",
+  },
+  "滑动窗口大小": {
+    value: "2",
+    field: "windowSize",
+  },
+  "学习率": {
+    value: "3",
+    field: "learningRate",
+  },
+  "训练批次": {
+    value: "4",
+    field: "epochs",
+  },
+};
 
 export {
   drill_vibration, hydro, limit_curve,
-  limit_eye, limit_hydro, limit_mechanism, torque
+  limit_eye, limit_hydro, limit_mechanism, modelHyperParams, torque
 };
 
