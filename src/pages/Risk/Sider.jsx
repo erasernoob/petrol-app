@@ -12,7 +12,6 @@ import ParamsForm from "./ParamsForm";
 export default function Sider({
   form,
   tabsName,
-  handleSubmit,
   datas,
   file = { name: "" },
   setFile,
@@ -44,7 +43,7 @@ export default function Sider({
         const workbook = XLSX.read(fileBytes, { type: "buffer" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const jsonData = XLSX.utils.sheet_to_json(sheet);
-        setJsonData(jsonData.length >= 1000 ? jsonData.slice(0, 1000) : jsonData)
+        setJsonData(jsonData.length >= 500 ? jsonData.slice(0, 500) : jsonData)
       }
       else {
         setpredictFile(() => ({ name: filename, path: filePath }));
@@ -57,6 +56,17 @@ export default function Sider({
     }
   };
 
+  const handleSubmit = async (e) => {
+    // 输出预测值
+    if (e) {
+
+    } else {
+      // 开始训练
+
+    }
+
+
+  }
 
 
   const handleCancel = (id) => {
@@ -79,7 +89,7 @@ export default function Sider({
           handleUpload={handleUpload}
           id={0}
         />
-        <Button type="primary">模型训练</Button>
+        <Button type="primary" disabled={!historyData} onClick={() => handleSubmit()}>模型训练</Button>
       </div>
       <ParamsForm
         data={modelHyperParams}
@@ -87,7 +97,7 @@ export default function Sider({
         historyData={historyData}
         handleUpload={handleUpload}
         handleCancel={handleCancel}
-        handleSubmit={{}}
+        handleSubmit={handleSubmit}
         jsonData={jsonData}
       />
     </>

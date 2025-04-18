@@ -179,6 +179,7 @@ export default function ParamsForm({
                             size="large"
                             style={{ width: "95%" }}
                             htmlType="submit"
+                            disabled={!predictData}
                         >
                             输出预测值
                         </Button>
