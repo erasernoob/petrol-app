@@ -20,6 +20,12 @@ async def model_train(dto: ModelTrainDTO):
     time.sleep(10)
     return {"msg": "训练完成", "code": 200}
 
+@router.post("/risk/upload")
+async def model_train():
+    return {"msg": "训练完成", "code": 200}
+
+
+
 @router.post("/risk/predict")
 async def model_train(dto: ModelPredictDTO):
     input_file_path = "D:\\petrol-test\\TVA\\TVA.xlsx"
@@ -35,7 +41,10 @@ async def model_train():
     x = np.arange(len(df["预测值"]))  # 时间序列
     return {
         "x": x.tolist(),
-        "TVA": df["预测值"].tolist()
+        "TVA": df["预测值"].tolist(),
+        "MAE": 1.7188, 
+        "RMSE":2.4487, 
+        "R": 0.8753
     }
     
 

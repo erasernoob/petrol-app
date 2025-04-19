@@ -241,12 +241,6 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
     };
   };
 
-
-  const option1 = getOption1()
-  const option2 = getOption2()
-
-
-
   // Initialize with empty option
   const [option, setOption] = useState({});
 

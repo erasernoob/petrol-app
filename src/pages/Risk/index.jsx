@@ -11,6 +11,7 @@ export default function DrillPage() {
     const [predictFile, setpredictFile] = useState({ name: "", filePath: "" });
     const [predictResData, setpredictResData] = useState({});
     const [warningData, setWarningData] = useState({});
+    const [extraData, setExtraData] = useState({});
 
 
     const handleSubmit = async (e) => {
@@ -21,6 +22,7 @@ export default function DrillPage() {
                 e.file_path = historyFile.filePath
                 let response = await post("/risk/warning")
                 setWarningData(response)
+                setExtraData({ MAE: response.MAE, RMSE: response.RMSE, R: response.R })
 
                 response = await post("/risk/predict", e)
                 let res = response.data
@@ -58,6 +60,7 @@ export default function DrillPage() {
                 <Sider
                     handleSubmit={handleSubmit}
                     setHistoryFile={setHistoryFile}
+                    extraData={extraData}
                     setpredictFile={setpredictFile}
                 />
             </Card>

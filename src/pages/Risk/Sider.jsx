@@ -1,23 +1,18 @@
-import { Button, Message } from "@arco-design/web-react";
+import { Message } from "@arco-design/web-react";
 import { basename } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-dialog";
 import { readFile } from "@tauri-apps/plugin-fs";
 import { useState } from "react";
 import * as XLSX from "xlsx";
 import { modelHyperParams } from "../../data/Params";
-import FileUpLoaderBtn from "../components/FileUploadBtn";
 import "../style.css";
 import ParamsForm from "./ParamsForm";
 
 export default function Sider({
-  form,
   handleSubmit,
   setHistoryFile,
+  extraData,
   setpredictFile,
-  tabsName,
-  datas,
-  file = { name: "" },
-  setFile,
 }) {
   const [historyData, setHistoryData] = useState(false);
   const [predictData, setpredictData] = useState(false);
@@ -58,8 +53,6 @@ export default function Sider({
   };
 
 
-
-
   const handleCancel = (id) => {
     if (id === 0) {
       setHistoryData(false);
@@ -72,16 +65,6 @@ export default function Sider({
 
   return (
     <>
-      <div className="file-uploader">
-        <FileUpLoaderBtn
-          uploadStat={historyData}
-          uploadText={"导入历史样本集"}
-          handleCancel={handleCancel}
-          handleUpload={handleUpload}
-          id={0}
-        />
-        <Button type="primary" disabled={!historyData} onClick={() => handleSubmit()}>模型训练</Button>
-      </div>
       <ParamsForm
         data={modelHyperParams}
         predictData={predictData}
@@ -89,6 +72,7 @@ export default function Sider({
         handleUpload={handleUpload}
         handleCancel={handleCancel}
         handleSubmit={handleSubmit}
+        extraData={extraData}
         jsonData={jsonData}
       />
     </>
