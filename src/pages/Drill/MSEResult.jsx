@@ -1,11 +1,11 @@
-import { Button, Radio, Spin, Tag } from '@arco-design/web-react'
+import { Button, Grid, Radio, Spin, Tag } from '@arco-design/web-react'
 import ReactECharts from 'echarts-for-react'
 import 'echarts-gl'
 import Option from '../option'
 import { saveAtFrontend } from '../utils/utils'
 
 const RadioGroup = Radio.Group
-
+const { Row, Col } = Grid
 export default function MSEResult({ chartOptions = [], options = [], chartData = [], extraData = {}, loading, waiting }) {
 
     const handleExport = async () => {
@@ -234,33 +234,50 @@ export default function MSEResult({ chartOptions = [], options = [], chartData =
                             })
                         }
                     </div>
-                    <div style={{ display: 'flex', marginBottom: "0px", alignItems: 'center', justifyContent: Object.keys(extraData).length === 0 ? 'center' : 'space-around' }}>
+                    <div style={{
+                        marginBottom: "10px",
+                        width: '100%'
+                    }}>
                         {Object.keys(extraData).length === 0 ? exportButton : (
-                            <>
-                                <span style={{ marginLeft: "" }}>
+                            <Row gutter={16} style={{ width: '100%' }}>
+                                <Col span={5}>
+                                    {/* 空列，用于左侧占位 */}
+                                </Col>
+                                <Col span={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                     {exportButton}
-                                </span>
-                                <span>
-                                    <span style={{ marginRight: "10px" }}>最优钻压：</span>
-                                    <Tag size="large">{extraData.wob_res}</Tag>
-                                </span>
-                                <span>
-                                    <span style={{ marginLeft: "80px", marginRight: "10px" }}>最优转速：</span>
-                                    <Tag size="large" style={{}}>
-                                        {extraData.rpm_res}
-                                    </Tag>
-                                </span>
-                                <span>
-                                    <span style={{ marginLeft: "80px", marginRight: "10px" }}>最优机械钻速：</span>
-                                    <Tag size="large" style={{}}>
-                                        {extraData.rop_res}
-                                    </Tag>
-                                </span>
-                            </>
+                                </Col>
 
+
+                                <Col span={5} style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ marginRight: "10px" }}>钻压推荐值：</span>
+                                        <Tag size="large" style={{ minWidth: '60px', textAlign: 'center' }}>
+                                            {extraData.wob_res}
+                                        </Tag>
+                                    </div>
+                                </Col>
+
+                                <Col span={5} style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ marginRight: "10px" }}>转速推荐值：</span>
+                                        <Tag size="large" style={{ minWidth: '60px', textAlign: 'center' }}>
+                                            {extraData.rpm_res}
+                                        </Tag>
+                                    </div>
+                                </Col>
+
+                                <Col span={5} style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ marginRight: "10px" }}>机械钻速推荐值：</span>
+                                        <Tag size="large" style={{ minWidth: '60px', textAlign: 'center' }}>
+                                            {extraData.rop_res}
+                                        </Tag>
+                                    </div>
+                                </Col>
+
+                            </Row>
                         )}
                     </div>
-
                 </>
             )
                 :
