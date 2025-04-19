@@ -30,7 +30,8 @@ export const defaultFileList = { orbit: { name: '', path: '' }, drill: { name: '
 const postPath = ['/limit/eye', '/limit/hydro', '/limit/mechanism', '/limit/curve']
 const typeOptions = [
   [],
-  ['总循环压耗', '立管压力'],
+  // ['总循环压耗', '立管压力'],
+  ['总循环压耗'],
   ['井口轴向力', '井口扭矩', '安全系数'],
   ['井口轴向力', '井口扭矩', '安全系数', '屈曲临界载荷'],
 ]

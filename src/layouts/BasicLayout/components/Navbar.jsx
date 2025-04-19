@@ -26,6 +26,7 @@ const icons = [
 
 export default function NavBar() {
   const [selectedKeys, setSelectedKeys] = useState(["/hydro"]);
+  const [popupVisible, setPopupVisible] = useState(false);
   const tabList = routeList.map((route, idx) => {
     if (idx === 1) {
       return <></>;
@@ -34,57 +35,86 @@ export default function NavBar() {
     // 钻头状态监测菜单（最后一个）
     if (idx === 5) {
       const popoverContent = (
-        <div style={{ padding: "8px 0" }}>
+        <div
+          style={{
+            padding: "10px",
+            borderRadius: "4px",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+            backgroundColor: "white",
+          }}
+        >
           <div
             style={{
-              padding: "8px 16px",
-              cursor: "pointer",
-              minWidth: "100px",
-              borderBottom: "1px solid #eee",
-              fontSize: "14px",
-            }}
-            onClick={() => {
-              localStorage.setItem("drillActiveRoute", "1");
-              const newPath = `${route.path}?type=1&t=${Date.now()}`;
-              myNavigate(newPath);
-              setSelectedKeys([route.path]);
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "rgba(77, 153, 204, 0.15)";
-              e.currentTarget.style.color = "#0066B3";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "inherit";
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: "8px",
             }}
           >
-            MSE
-          </div>
-          <div
-            style={{
-              padding: "8px 16px",
-              cursor: "pointer",
-              minWidth: "100px",
-              fontSize: "14px",
-            }}
-            onClick={() => {
-              localStorage.setItem("drillActiveRoute", "2");
-              const newPath = `${route.path}?type=2&t=${Date.now()}`;
-              myNavigate(newPath);
-              setSelectedKeys([route.path]);
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                "rgba(77, 153, 204, 0.15)";
-              e.currentTarget.style.color = "#0066B3";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "inherit";
-            }}
-          >
-            粘滑振动
+            <div
+              style={{
+                padding: "10px 10px",
+                cursor: "pointer",
+                borderRadius: "4px",
+                textAlign: "center",
+                transition: "all 0.3s",
+                border: "1px solid #e5e6eb",
+                flex: 1,
+              }}
+              onClick={() => {
+                localStorage.setItem("drillActiveRoute", "1");
+                const newPath = `${route.path}?type=1&t=${Date.now()}`;
+                myNavigate(newPath);
+                setSelectedKeys([route.path]);
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor =
+                  "rgba(77, 153, 204, 0.15)";
+                e.currentTarget.style.color = "#0066B3";
+                e.currentTarget.style.border = "1px solid #0066B3";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "inherit";
+                e.currentTarget.style.border = "1px solid #e5e6eb";
+              }}
+            >
+              <div style={{ fontWeight: "500", fontSize: "15px" }}>MSE</div>
+            </div>
+
+            <div
+              style={{
+                padding: "10px 10px",
+                cursor: "pointer",
+                borderRadius: "4px",
+                textAlign: "center",
+                transition: "all 0.3s",
+                border: "1px solid #e5e6eb",
+                flex: 1,
+                width: "100px"
+              }}
+              onClick={() => {
+                localStorage.setItem("drillActiveRoute", "2");
+                const newPath = `${route.path}?type=2&t=${Date.now()}`;
+                myNavigate(newPath);
+                setSelectedKeys([route.path]);
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor =
+                  "rgba(77, 153, 204, 0.15)";
+                e.currentTarget.style.color = "#0066B3";
+                e.currentTarget.style.border = "1px solid #0066B3";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "inherit";
+                e.currentTarget.style.border = "1px solid #e5e6eb";
+              }}
+            >
+              <div style={{ fontWeight: "500", fontSize: "15px" }}>
+                粘滑振动
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -95,7 +125,8 @@ export default function NavBar() {
           position="bottom"
           trigger="hover"
           className="submenu-popover"
-
+          popupVisible={popupVisible}
+          onVisibleChange={(visible) => setPopupVisible(visible)}
         >
           <MenuItem
             key={route.path}
