@@ -11,6 +11,9 @@ import ParamsForm from "./ParamsForm";
 
 export default function Sider({
   form,
+  handleSubmit,
+  setHistoryFile,
+  setpredictFile,
   tabsName,
   datas,
   file = { name: "" },
@@ -18,8 +21,6 @@ export default function Sider({
 }) {
   const [historyData, setHistoryData] = useState(false);
   const [predictData, setpredictData] = useState(false);
-  const [historyFile, setHistoryFile] = useState({ name: "", filePath: "" });
-  const [predictFile, setpredictFile] = useState({ name: "", filePath: "" });
   const [jsonData, setJsonData] = useState({})
 
   const handleUpload = async (id) => {
@@ -56,17 +57,7 @@ export default function Sider({
     }
   };
 
-  const handleSubmit = async (e) => {
-    // 输出预测值
-    if (e) {
 
-    } else {
-      // 开始训练
-
-    }
-
-
-  }
 
 
   const handleCancel = (id) => {

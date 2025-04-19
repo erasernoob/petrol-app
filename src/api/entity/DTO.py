@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import List, Optional
 
 class HydroDTO(BaseModel):
     file_path: str
@@ -182,4 +182,11 @@ class DrillVibrationDTO(BaseModel):
 
 class MSEDTO(BaseModel):
     file_path: str
+
+class ModelTrainDTO(BaseModel):
+    file_path_list: List[str]
+
+class ModelPredictDTO(BaseModel):
+    file_path: str
+
 

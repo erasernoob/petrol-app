@@ -1,144 +1,282 @@
-import { Button, Grid, Radio, Spin, Tag } from '@arco-design/web-react';
+import { Button, Grid, Radio, Spin } from '@arco-design/web-react';
 import ReactECharts from 'echarts-for-react';
-import { useEffect, useMemo, useState } from 'react';
-import Option from '../option';
-import { saveAtFrontend } from '../utils/utils';
+import { useEffect, useState } from 'react';
 
 const RadioGroup = Radio.Group
 const { Row, Col } = Grid;
 
-export default function ResultPage({ chartData = [], data = {}, loading = false, waiting = true }) {
+export default function ResultPage({ chartData = [], data = {}, loading = false, waiting = true, warningData = {}, predictData = {} }) {
+
+  const [curValue, setCurValue] = useState('泥浆池体积预测')
 
 
-  const ecd = chartData.map((item) => item.ecd ? item.ecd : 10000)
-  const ecdMinVal = (Math.min(...ecd) * 0.99).toFixed(2)
+  const getOption1 = () => {
+    if (Object.keys(predictData).length == 0) {
+      return {}
+    }
+    const { x, tva_data, peaks, valleys, danger_zones } = predictData;
 
-  // 使用 useMemo 让 option1 和 option2 在 chartData 变化时重新计算
-  const option1 = useMemo(() => Option(
-    chartData,
-    {
-      type: 'value', name: '井深 (m)', inverse: true,
-      axisLine: { onZero: false },
-      position: 'left',
-    },
-    [
-      {
-        name: '压力 (MPa)',
-        type: 'value',
-        position: 'top',
-        axisLabel: {
-          formatter: (value) => (value === 0 ? '' : value)
+    // Create mark points for peaks and valleys
+    const markPoints = [];
+    peaks.forEach(idx => {
+      markPoints.push({
+        coord: [x[idx], tva_data[idx]],
+        symbol: "triangle",
+        symbolSize: 14,
+        itemStyle: { color: "red" },
+        label: { show: true, formatter: `阈值: ${tva_data[idx].toFixed(2)}`, position: "top" }
+      });
+    });
+
+    valleys.forEach(idx => {
+      markPoints.push({
+        coord: [x[idx], tva_data[idx]],
+        symbol: "triangle",
+        symbolRotate: 180,
+        symbolSize: 14,
+        itemStyle: { color: "green" },
+        label: { show: false }
+      });
+    });
+
+    // Create separate series for each danger zone to get proper legend items
+    const dangerSeries = [];
+    const dangerLegendName = []
+    const dangerLegendItems = new Set(); // To track unique legend items
+
+    danger_zones.forEach(zone => {
+      const legendName = `危险等级 ${zone.level}`;
+      if (!dangerLegendName.includes(legendName)) {
+        dangerLegendName.push(legendName)
+      }
+      dangerLegendItems.add(legendName);
+
+      // Create a separate series for each danger zone
+      dangerSeries.push({
+        name: legendName,
+        type: 'line',
+        data: Array.from({ length: zone.end - zone.start + 1 }, (_, i) => {
+          const idx = zone.start + i;
+          return [x[idx], tva_data[idx]];
+        }),
+        symbol: 'none',
+        lineStyle: { opacity: 0 },
+        areaStyle: {
+          color: zone.color,
+          opacity: 0.3
+        },
+        stack: 'danger'
+      });
+
+      // Add annotation for threshold
+      const midPoint = Math.floor((zone.start + zone.end) / 2);
+      const maxValue = Math.max(...tva_data.slice(zone.start, zone.end + 1));
+      markPoints.push({
+        coord: [x[midPoint], maxValue + 5],
+        symbol: 'pin',
+        symbolSize: 0,
+        label: {
+          show: true,
+          formatter: `阈值: ${zone.threshold.toFixed(2)}`,
+          backgroundColor: '#fff',
+          padding: 5,
+          borderRadius: 3,
+          position: 'top'
+        }
+      });
+    });
+
+    // Ensure fixed legend items for both danger levels
+    const legendData = ["TVA值", ...dangerLegendName, "波峰", "波谷"];
+
+    return {
+      title: { text: "TVA 趋势分析图", left: "center" },
+      tooltip: { trigger: "axis" },
+      legend: {
+        data: legendData,
+        top: 25,
+        itemGap: 10,
+        textStyle: { fontSize: 12 }
+      },
+      grid: {
+        left: '5%',
+        right: '5%',
+        bottom: '10%',
+        top: '15%',
+        containLabel: true
+      },
+      xAxis: {
+        type: "category",
+        data: x,
+        name: "时间(s)",
+        nameLocation: "middle",
+        nameGap: 30,
+        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+      },
+      yAxis: {
+        type: "value",
+        name: "TVA (m³)",
+        nameLocation: "middle",
+        nameGap: 50,
+        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+      },
+      dataZoom: [{ type: "slider", start: 0, end: 100 }],
+      series: [
+        {
+          name: "TVA值",
+          type: "line",
+          data: tva_data,
+          smooth: true,
+          symbol: 'none',
+          lineStyle: { color: 'blue', width: 2 },
+          markPoint: {
+            symbolSize: 0,
+            data: markPoints,
+            label: {
+              position: 'top'
+            }
+          }
+        },
+        ...dangerSeries,
+        {
+          name: "波峰",
+          type: "scatter",
+          data: peaks.map(idx => [x[idx], tva_data[idx]]),
+          symbol: 'triangle',
+          symbolSize: 14,
+          itemStyle: { color: 'red' }
+        },
+        {
+          name: "波谷",
+          type: "scatter",
+          data: valleys.map(idx => [x[idx], tva_data[idx]]),
+          symbol: 'triangle',
+          symbolRotate: 180,
+          symbolSize: 14,
+          itemStyle: { color: 'green' }
+        }
+      ]
+    };
+
+  }
+
+  const getOption2 = () => {
+    // 检查 warningData 是否存在并且包含所需字段
+    console.log(warningData)
+    if (Object.keys(warningData).length === 0) {
+      return {
+        title: {
+          text: "TVA预测值 (无数据)",
+          left: "center"
+        },
+        xAxis: { type: "category", data: [] },
+        yAxis: { type: "value" },
+        series: [{ type: "line", data: [] }]
+      };
+    }
+
+    const { x, TVA } = warningData;
+
+    // 确保数据格式正确
+    const safeX = Array.isArray(x) ? x : [];
+    const safeTVA = Array.isArray(TVA) ? TVA : [];
+
+    return {
+      title: {
+        text: "TVA预测值",
+        left: "center"
+      },
+      tooltip: {
+        trigger: "axis",
+        formatter: function (params) {
+          if (params[0] && params[0].value !== undefined) {
+            const value = typeof params[0].value === 'number'
+              ? params[0].value.toFixed(2)
+              : Array.isArray(params[0].value) && params[0].value[1] !== undefined
+                ? params[0].value[1].toFixed(2)
+                : '未知';
+            return `时间: ${params[0].dataIndex}<br/>TVA: ${value} m³`;
+          }
+          return '';
         }
       },
-    ],
-    [
-      {
-        name: '钻柱压力(MPa)',
-        type: 'line',
-        yAxisIndex: 0,
-        encode: { x: 'drillPressure', y: 'depth' },
-        sampling: 'lttb',
-        smooth: true,
-        lineStyle: { width: 2 },
-        showSymbol: false
+      grid: {
+        left: '5%',
+        right: '5%',
+        bottom: '10%',
+        top: '10%',
+        containLabel: true
       },
-      {
-        name: '环空压力(MPa)',
-        type: 'line',
-        yAxisIndex: 0,
-        encode: { x: 'annularPressure', y: 'depth' },
-        sampling: 'lttb',
-        smooth: false,
-        lineStyle: { width: 2 },
-        showSymbol: false
+      xAxis: {
+        type: "category",
+        data: safeX,
+        name: "时间(s)",
+        nameLocation: "middle",
+        nameGap: 30,
+        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
       },
-    ]
-  ), [chartData]); // 依赖于 chartData
-
-  const option2 = useMemo(() => Option(
-    chartData,
-    {
-      type: 'value',
-      name: '井深 (m)',
-      axisLine: { onZero: false },
-      position: 'left',
-      inverse: true
-    },
-    [
-      {
-        name: 'ECD (g/cm³)',
-        type: 'value',
-        axisLine: {
-          onZero: false
-        },
-        axisLabel: {
-          formatter: (value) => value.toFixed(2), // 保留一位小数
-        },
-        min: ecdMinVal,
-        offset: 0,
-        alignTicks: true,
-        position: 'top'
+      yAxis: {
+        type: "value",
+        name: "TVA (m³)",
+        nameLocation: "middle",
+        nameGap: 50,
+        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+      },
+      dataZoom: [{ type: "slider", start: 0, end: 100 }],
+      series: [
+        {
+          name: "TVA预测曲线",
+          type: "line",
+          data: safeTVA,
+          smooth: true,
+          symbol: 'none',
+          lineStyle: { color: 'red', width: 2 },
+        }
+      ],
+      legend: {
+        data: ["TVA预测曲线"],
+        top: 25,
+        textStyle: { fontSize: 12 }
       }
-    ],
-    [
-      {
-        name: 'ECD (g/cm³)',
-        type: 'line',
-        yAxisIndex: 0,
-        encode: { x: 'ecd', y: 'depth' },
-        sampling: 'lttb',
-        smooth: false,
-        lineStyle: { width: 1 },
-        showSymbol: false
-      }
-    ]
-  ), [chartData]); // 依赖于 chartData
+    };
+  };
 
-  const [option, setOption] = useState({})
-  const [curValue, setCurValue] = useState('循环压力')
+
+  const option1 = getOption1()
+  const option2 = getOption2()
+
+
+
+  // Initialize with empty option
+  const [option, setOption] = useState({});
+
+  // Initial load and data update handler
+  useEffect(() => {
+    // Reset to first chart whenever predictData or warningData changes
+    setCurValue('泥浆池体积预测');
+    const newOption = getOption1();
+    setOption(newOption);
+  }, [predictData, warningData]);
+
+  // Handle tab switching
+  useEffect(() => {
+    const newOption = curValue === '泥浆池体积预测' ? getOption1() : getOption2();
+    setOption(newOption);
+  }, [curValue]);
 
   const handleExport = async () => {
-    const drillData = chartData.map((value) => {
-      return value.drillPressure
-    })
-    const annularData = chartData.map(value => {
-      return value.annularPressure
-    })
-    if (option === option1) {
-      await saveAtFrontend(drillData, '钻柱循环压力表')
-      await saveAtFrontend(annularData, '环空循环压力表')
-    } else {
-      await saveAtFrontend(chartData.map((value) => value.ecd), "ECD")
-    }
+
   }
 
   const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
 
 
-  useEffect(() => {
-    const newOption = curValue === '循环压力' ? option1 : option2
-    // 只有 option 真正发生变化时才更新
-    if (JSON.stringify(option) !== JSON.stringify(newOption)) {
-      setOption(newOption)
-    }
-
-  }, [chartData, curValue])
-
-  const tagList = (Object.entries(data).map(([key, value]) => {
-    return (
-      <span>
-        <span>{key}</span>
-        <Tag size='large'>{value.toFixed(3)}</Tag>
-      </span>
-    )
-  }))
-
   return (
     <>
-      {chartData.length > 0 && loading === false && waiting === false ? (
+      {Object.keys(warningData).length > 0 && loading === false && waiting === false ? (
         <>
           <Row justify="center" align="start" style={{ height: '2vh' }}>
-            <Col span={4}>
+            <Col span={24}>
               <RadioGroup
                 type='button'
                 size='large'
@@ -150,21 +288,9 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
                 style={{
                   marginLeft: '20px'
                 }}
-                options={['循环压力', 'ECD']}
+                options={['泥浆池体积预测', '井漏风险预警结果']}
               >
               </RadioGroup>
-            </Col>
-            {/* <Col span={6} style={{ height: 48, lineHeight: '48px' }}> */}
-            <Col span={20}>
-              <div style={{
-                display: 'flex',
-                marginLeft: "30px",
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: "20px",
-              }}>
-                {tagList}
-              </div>
             </Col>
           </Row>
           <ReactECharts

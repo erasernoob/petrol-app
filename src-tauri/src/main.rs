@@ -48,7 +48,7 @@ fn main() {
         .setup(|app| {
             // Determine the backend executable name based on the OS
             let is_dev = true;
-            if is_dev {
+            if !is_dev {
                 let file_name = format!("backend{}", env::consts::EXE_SUFFIX); // Automatically adds .exe on Windows
 
                 let backend_name = PathBuf::from("bin").join(file_name);
