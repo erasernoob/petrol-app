@@ -40,8 +40,8 @@ def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     ECD, Sk = limit_eye.main(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt, y, yxmd, H)
     interval = limit_eye_dto.jsjg
 
-    ECD_values = ECD[::interval].tolist()  # 从 ECD 中提取间隔为 interval 的元素
-    Sk_values = Sk[::interval].tolist()  # 从 Sk 中提取间隔为 interval 的元素
+    ECD_values = ECD[interval::interval].tolist()  # 从 ECD 中提取间隔为 interval 的元素
+    Sk_values = Sk[interval::interval].tolist()  # 从 Sk 中提取间隔为 interval 的元素
     
     # 确保最后一个元素在结果中
     if ECD_values[-1] != ECD[-1]:
