@@ -69,7 +69,7 @@ export default function ResultPage({
     return Math.min(Math.round((elapsedTime / totalTrainingTime) * 100), 100);
   };
 
-  const getOption1 = () => {
+  const getOption2 = () => {
     if (Object.keys(predictData).length == 0) {
       return {};
     }
@@ -222,7 +222,7 @@ export default function ResultPage({
     };
   };
 
-  const getOption2 = () => {
+  const getOption1 = () => {
     // 检查 warningData 是否存在并且包含所需字段
     console.log(warningData);
     if (Object.keys(warningData).length === 0) {
