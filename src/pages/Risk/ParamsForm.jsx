@@ -17,6 +17,9 @@ export default function ParamsForm({
   historyData = true,
   setHistoryData,
   historyFile,
+  setShowWarnRes,
+  warningData,
+  handleRiskResult,
   handleUpload,
   predictData,
   handleCancel,
@@ -291,10 +294,10 @@ export default function ParamsForm({
 
         <div>
           <Row gutter={16} style={{ marginTop: "20px" }}>
-            <Col span={12} style={{ textAlign: "center" }}>
+            <Col span={8} style={{ textAlign: "center" }}>
               <FileUpLoaderBtn
                 uploadStat={predictData}
-                uploadText={"导入预测数据"}
+                uploadText={"导入预测井"}
                 handleCancel={handleCancel}
                 handleUpload={handleUpload}
                 id={1}
@@ -303,7 +306,7 @@ export default function ParamsForm({
                 }}
               />
             </Col>
-            <Col span={12} style={{ textAlign: "center" }}>
+            <Col span={8} style={{ textAlign: "center" }}>
               <Button
                 type="primary"
                 size="large"
@@ -311,9 +314,21 @@ export default function ParamsForm({
                 htmlType="submit"
                 disabled={!predictData}
               >
-                输出预测值
+                输出预测结果
               </Button>
             </Col>
+            <Col span={8} style={{ textAlign: "center" }}>
+              <Button
+                type="primary"
+                size="large"
+                style={{ width: "95%" }}
+                onClick={() => setShowWarnRes(true)}
+                disabled={!predictData && Object.keys(warningData).length !== 0}
+              >
+                输出预警结果
+              </Button>
+            </Col>
+
           </Row>
         </div>
       </Form>

@@ -19,7 +19,15 @@ export default function DrillPage() {
     const [extraData, setExtraData] = useState({});
     const [jsonData, setJsonData] = useState({});
 
+    // 区分是否展示预警结果
+    const [showWarnRes, setShowWarnRes] = useState(false)
+    console.log(showWarnRes)
+
     const totalTrainingTime = 72005;
+
+    const handleTrain = async () => {
+
+    }
 
     const handleSubmit = async (e) => {
         try {
@@ -43,6 +51,8 @@ export default function DrillPage() {
                 let res = response.data;
                 // 预测图
                 setpredictResData(res);
+                // 设置不显示预警结果
+                setShowWarnRes(false)
             } else {
                 // 训练
                 setTraning(true);
@@ -74,6 +84,8 @@ export default function DrillPage() {
             >
                 <Sider
                     handleSubmit={handleSubmit}
+                    setShowWarnRes={setShowWarnRes}
+                    warningData={warningData}
                     setHistoryFile={setHistoryFile}
                     historyFile={historyFile}
                     historyData={historyData}
@@ -98,6 +110,7 @@ export default function DrillPage() {
                     totalTrainingTime={totalTrainingTime}
                     warningData={warningData}
                     predictData={predictResData}
+                    showWarnRes={showWarnRes}
                 />
             </Card>
         </div>

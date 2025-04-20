@@ -7,6 +7,7 @@ const RadioGroup = Radio.Group;
 const { Row, Col } = Grid;
 
 export default function ResultPage({
+  showWarnRes,
   chartData = [],
   data = {},
   loading = false,
@@ -320,9 +321,9 @@ export default function ResultPage({
   // Handle tab switching
   useEffect(() => {
     const newOption =
-      curValue === "泥浆池体积预测" ? getOption1() : getOption2();
+      curValue === "泥浆池体积预测" ? getOption1() : showWarnRes ? getOption2() : {};
     setOption(newOption);
-  }, [curValue]);
+  }, [curValue, showWarnRes]);
 
   const handleExport = async () => {
     await saveAtFrontend(warningData.TVA, "TVA预测值")
@@ -337,11 +338,6 @@ export default function ResultPage({
       导出数据
     </Button>
   );
-  console.log(warningData)
-  console.log(Object.keys(warningData).length > 0 &&
-    loading === false &&
-    waiting === false)
-
   return (
     <>
       {Object.keys(warningData).length > 0 &&
@@ -356,6 +352,9 @@ export default function ResultPage({
                 name="chart"
                 defaultValue={curValue}
                 onChange={(value) => {
+                  // if (value === "井漏风险预警结果" && !showWarnRes) {
+                  //   return
+                  // }
                   setCurValue(value);
                 }}
                 style={{
