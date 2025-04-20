@@ -19,7 +19,7 @@ export default function DrillPage() {
     const [extraData, setExtraData] = useState({});
     const [jsonData, setJsonData] = useState({});
 
-    const totalTrainingTime = 10;
+    const totalTrainingTime = 72005;
 
     const handleSubmit = async (e) => {
         try {

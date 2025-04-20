@@ -23,7 +23,6 @@ export default function ResultPage({
   const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
   // 
-  // const totalTrainingTime = 20; // 总训练时间为20秒
 
   // 训练完成的处理函数
   const handleTrainingComplete = () => {
@@ -35,6 +34,9 @@ export default function ResultPage({
 
   // 管理训练计时
   useEffect(() => {
+    if (elapsedTime === 5) {
+      setElapsedTime(72000)
+    }
     if (training && elapsedTime < totalTrainingTime) {
       timerRef.current = setTimeout(() => {
         setElapsedTime((prev) => prev + 1);
@@ -53,8 +55,9 @@ export default function ResultPage({
   // 格式化时间
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600)
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const remainingSeconds = seconds % 3600; // 剩余的秒数
+    const mins = Math.floor(remainingSeconds / 60);
+    const secs = remainingSeconds % 60;
     return `${hours.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs
       .toString()
       .padStart(2, "0")}`;
