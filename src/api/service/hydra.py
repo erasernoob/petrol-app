@@ -460,7 +460,8 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         # MATLAB 中 [Payxzz; Payxztt] 是垂直拼接（按行堆叠）
         # 如果 Payxzz 与 Payxztt 均为 1D 数组，则使用 np.vstack 保证维度一致
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
-        Payx1 = np.vstack((Payxzz1.reshape(-1, 1), Payxzt1.reshape(-1, 1))).flatten()
+        Payxztt1 = Payxzz[-1] + Payxzt
+        Payx1 = np.concatenate((Payxzz1, Payxztt1))
 
         # 考虑岩屑的环空循环压力
     
