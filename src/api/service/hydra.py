@@ -450,9 +450,9 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
                   (term2 ** (-1.25)) +
                   (1 + 0.00581695 * H) * Pazt / 10)
         
-        Payxzt1 = (0.0026068625 * H * Pazz / 10 / fd *
-                  (term1 ** (-1.25)) +
-                  (1 + 0.00581695 * H) * Pazz / 10)
+        Payxzt1 = (0.0026068625 * H * Pazt / 10 / fdzt *
+                  (term2 ** (-1.25)) +
+                  (1 + 0.00581695 * H) * Pazt / 10)
 
         # Payxzz(end) 表示 Payxzz 的最后一个元素，加上 Payxzt 后得到 Payxztt
         Payxztt = Payxzz[-1] + Payxzt
@@ -460,7 +460,8 @@ def Hydro(guiji,lbmx,pailiang,fluidden,n,K,miu,taof,Dw,A1,C1,A2,C2,A3,C3,Rzz,rzz
         # MATLAB 中 [Payxzz; Payxztt] 是垂直拼接（按行堆叠）
         # 如果 Payxzz 与 Payxztt 均为 1D 数组，则使用 np.vstack 保证维度一致
         Payx = np.vstack((Payxzz.reshape(-1, 1), Payxztt.reshape(-1, 1))).flatten()
-        Payxztt1 = Payxzz[-1] + Payxzt
+        Payxztt1 = Payxzz1[-1] + Payxzt1
+
         Payx1 = np.concatenate((Payxzz1, Payxztt1))
 
         # 考虑岩屑的环空循环压力
