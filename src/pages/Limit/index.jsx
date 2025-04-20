@@ -113,6 +113,7 @@ export default function LimitPage() {
       console.log(error)
       setLoading(false)
       setWaiting(true)
+      Message.error(error)
       Message.error('计算内部出现错误，请检查输入参数！')
     }
   }

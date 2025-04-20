@@ -51,7 +51,7 @@ export default function DrillPage() {
             }
         } catch (error) {
             Message.error("计算内部出现错误，请检查输入参数！");
-            console.log(error);
+            Message.error(error)
         } finally {
             setWaiting(false);
             setLoading(false);
