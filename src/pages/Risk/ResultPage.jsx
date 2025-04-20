@@ -18,11 +18,12 @@ export default function ResultPage({
   setTraining,
   totalTrainingTime,
   training = false,
+  elapsedTime,
+  setElapsedTime
 }) {
   const [curValue, setCurValue] = useState("泥浆池体积预测");
 
   // 添加计时状态
-  const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
   // 
 

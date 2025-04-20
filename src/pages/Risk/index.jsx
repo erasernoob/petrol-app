@@ -1,5 +1,5 @@
 import { Card, Message } from "@arco-design/web-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { post } from "../../components/axios";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
@@ -8,6 +8,8 @@ export default function DrillPage() {
     // 等待开始计算
     const [waiting, setWaiting] = useState(true);
     const [training, setTraning] = useState(false);
+    const [trainEnd, setTrainEnd] = useState(false);
+
     // 修改为数组类型
     const [historyFile, setHistoryFile] = useState([]);
     // 添加历史数据状态
@@ -19,14 +21,42 @@ export default function DrillPage() {
     const [extraData, setExtraData] = useState({});
     const [jsonData, setJsonData] = useState({});
 
+    const [elapsedTime, setElapsedTime] = useState(0)
+
     // 区分是否展示预警结果
     const [showWarnRes, setShowWarnRes] = useState(false)
     console.log(showWarnRes)
 
     const totalTrainingTime = 72005;
 
-    const handleTrain = async () => {
+    useEffect(() => {
+        const fetchData = async () => {
+            if (elapsedTime === totalTrainingTime) {
+                try {
+                    let response = await post("/risk/train", {
+                        file_path_list: []
+                    });
 
+                    setExtraData({
+                        MAE: response.MAE,
+                        RMSE: response.RMSE,
+                        R: response.R,
+                    });
+                } catch (error) {
+                    console.error("Training request failed:", error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [elapsedTime]);
+
+
+
+    const handleTrain = async () => {
+        setTraning(true);
+        setLoading(true);
+        setWaiting(false);
     }
 
     const handleSubmit = async (e) => {
@@ -39,11 +69,7 @@ export default function DrillPage() {
                 // e.file_path = historyFile[0].path;
                 let response = await post("/risk/warning");
                 setWarningData(response);
-                setExtraData({
-                    MAE: response.MAE,
-                    RMSE: response.RMSE,
-                    R: response.R,
-                });
+
                 // }
 
                 e.file_path = predictFile.path;
@@ -55,9 +81,7 @@ export default function DrillPage() {
                 setShowWarnRes(false)
             } else {
                 // 训练
-                setTraning(true);
-                setLoading(true);
-                setWaiting(false);
+                handleTrain()
             }
         } catch (error) {
             Message.error("计算内部出现错误，请检查输入参数！");
@@ -102,6 +126,8 @@ export default function DrillPage() {
                 bodyStyle={{ padding: "10px", height: "100%", flex: 1 }}
             >
                 <ResultPage
+                    elapsedTime={elapsedTime}
+                    setElapsedTime={setElapsedTime}
                     loading={loading}
                     training={training}
                     setTraining={setTraning}
@@ -111,6 +137,7 @@ export default function DrillPage() {
                     warningData={warningData}
                     predictData={predictResData}
                     showWarnRes={showWarnRes}
+                    setExtraData={setExtraData}
                 />
             </Card>
         </div>

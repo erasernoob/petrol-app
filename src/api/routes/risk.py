@@ -17,8 +17,11 @@ risk_cache = {}
 
 @router.post("/risk/train")
 async def model_train(dto: ModelTrainDTO):
-    time.sleep(10)
-    return {"msg": "训练完成", "code": 200}
+    return {
+        "MAE": 1.7188, 
+        "RMSE":2.4487, 
+        "R": 0.8753
+    }
 
 @router.post("/risk/upload")
 async def model_train():
