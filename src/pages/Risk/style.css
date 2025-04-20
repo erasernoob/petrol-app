@@ -11,3 +11,8 @@
     height: 100% !important;
     color: #a8b8b4;
 }
+
+.arco-upload-type-text {
+    display: none !important;
+
+}

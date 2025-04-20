@@ -22,6 +22,7 @@ export default function ResultPage({
   // 添加计时状态
   const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
+  // 
   // const totalTrainingTime = 20; // 总训练时间为20秒
 
   // 训练完成的处理函数
@@ -29,6 +30,7 @@ export default function ResultPage({
     Message.success("模型训练完成！");
     setTraining(false);
     setWaiting(true);
+    setElapsedTime(0)
   };
 
   // 管理训练计时
@@ -50,9 +52,10 @@ export default function ResultPage({
 
   // 格式化时间
   const formatTime = (seconds) => {
+    const hours = Math.floor(seconds / 3600)
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs
+    return `${hours.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs
       .toString()
       .padStart(2, "0")}`;
   };
@@ -429,26 +432,7 @@ export default function ResultPage({
                   >
                     模型训练中，请耐心等待...
                   </div>
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "8px",
-                      backgroundColor: "#E5E6EB",
-                      borderRadius: "4px",
-                      overflow: "hidden",
-                      marginTop: "8px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: `${getProgressPercentage()}%`,
-                        height: "100%",
-                        backgroundColor: "#165DFF",
-                        borderRadius: "4px",
-                        transition: "width 0.3s",
-                      }}
-                    />
-                  </div>
+
                   {/* <div
                     style={{
                       fontSize: "14px",
