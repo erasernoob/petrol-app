@@ -297,6 +297,7 @@ export default function ParamsForm({
                 uploadText={"导入预测数据"}
                 handleCancel={handleCancel}
                 handleUpload={handleUpload}
+                id={1}
                 style={{
                   width: "95%",
                 }}

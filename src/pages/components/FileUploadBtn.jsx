@@ -10,7 +10,7 @@ export default function FileUpLoaderBtn({
 }) {
     return (
         !uploadStat ?
-            <Button type="primary" style={style} onClick={() => handleUpload(id)} > {uploadText}</Button > :
+            <Button type="primary" style={style} onClick={() => handleUpload(1)} > {uploadText}</Button > :
             <Button type="secondary" onClick={() => handleCancel(id)}>重新上传</Button>
     )
 }

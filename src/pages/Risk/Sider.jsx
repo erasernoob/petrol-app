@@ -1,9 +1,7 @@
 import { Message } from "@arco-design/web-react";
 import { basename } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/plugin-dialog";
-import { readFile } from "@tauri-apps/plugin-fs";
 import { useState } from "react";
-import * as XLSX from "xlsx";
 import { modelHyperParams } from "../../data/Params";
 import "../style.css";
 import ParamsForm from "./ParamsForm";
@@ -37,20 +35,6 @@ export default function Sider({
         setHistoryFile(fileInfos);
         setHistoryData(true);
 
-        // 读取第一个文件的内容用于预览
-        if (fileInfos.length > 0) {
-          const firstFilePath = fileInfos[0].path;
-          // 读取文件为字节数据
-          const fileBytes = await readFile(firstFilePath);
-
-          // 用 xlsx 解析
-          const workbook = XLSX.read(fileBytes, { type: "buffer" });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(sheet);
-          setJsonData(
-            jsonData.length >= 500 ? jsonData.slice(0, 500) : jsonData
-          );
-        }
 
         Message.success(`已成功上传 ${fileInfos.length} 个文件`);
       } catch (error) {
@@ -60,8 +44,8 @@ export default function Sider({
     }
 
     // 兼容旧代码逻辑 - 处理单文件上传
-    const id = arguments[0];
-    if (typeof id === "number") {
+    if (typeof filePaths === "number") {
+      const id = filePaths
       const filePath = await open({
         name: "导入文件",
         multiple: false,
@@ -75,16 +59,6 @@ export default function Sider({
           setHistoryFile([{ name: filename, path: filePath }]);
           setHistoryData(true);
 
-          // 读取文件为字节数据
-          const fileBytes = await readFile(filePath);
-
-          // 用 xlsx 解析
-          const workbook = XLSX.read(fileBytes, { type: "buffer" });
-          const sheet = workbook.Sheets[workbook.SheetNames[0]];
-          const jsonData = XLSX.utils.sheet_to_json(sheet);
-          setJsonData(
-            jsonData.length >= 500 ? jsonData.slice(0, 500) : jsonData
-          );
         } else {
           setpredictFile({ name: filename, path: filePath });
           setpredictData(true);

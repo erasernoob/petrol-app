@@ -1,6 +1,7 @@
 import { Button, Grid, Message, Radio, Spin } from "@arco-design/web-react";
 import ReactECharts from "echarts-for-react";
 import { useEffect, useRef, useState } from "react";
+import { saveAtFrontend } from '../utils/utils';
 
 const RadioGroup = Radio.Group;
 const { Row, Col } = Grid;
@@ -308,6 +309,7 @@ export default function ResultPage({
   const [option, setOption] = useState({});
 
   // Initial load and data update handler
+
   useEffect(() => {
     // Reset to first chart whenever predictData or warningData changes
     setCurValue("泥浆池体积预测");
@@ -322,7 +324,9 @@ export default function ResultPage({
     setOption(newOption);
   }, [curValue]);
 
-  const handleExport = async () => { };
+  const handleExport = async () => {
+    await saveAtFrontend(warningData.TVA, "TVA预测值")
+  };
 
   const exportButton = (
     <Button
@@ -333,6 +337,10 @@ export default function ResultPage({
       导出数据
     </Button>
   );
+  console.log(warningData)
+  console.log(Object.keys(warningData).length > 0 &&
+    loading === false &&
+    waiting === false)
 
   return (
     <>

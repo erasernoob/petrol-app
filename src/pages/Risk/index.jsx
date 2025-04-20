@@ -27,20 +27,19 @@ export default function DrillPage() {
                 setLoading(true);
                 setWaiting(false);
                 // 修改：使用第一个历史文件的路径
-                if (historyFile.length > 0) {
-                    e.file_path = historyFile[0].path;
-                    let response = await post("/risk/warning");
-                    setWarningData(response);
-                    setExtraData({
-                        MAE: response.MAE,
-                        RMSE: response.RMSE,
-                        R: response.R,
-                    });
-                }
+                // if (historyFile.length > 0) {
+                // e.file_path = historyFile[0].path;
+                let response = await post("/risk/warning");
+                setWarningData(response);
+                setExtraData({
+                    MAE: response.MAE,
+                    RMSE: response.RMSE,
+                    R: response.R,
+                });
+                // }
 
                 e.file_path = predictFile.path;
-                console.log(predictFile);
-                const response = await post("/risk/predict", e);
+                response = await post("/risk/predict", e);
                 let res = response.data;
                 // 预测图
                 setpredictResData(res);
