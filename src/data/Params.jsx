@@ -301,7 +301,7 @@ const drill_vibration = [
 ];
 const modelHyperParams = {
   "LSTM个数": {
-    value: "4",
+    value: "64",
     field: "lstmLayers",
   },
   "LSTM层数": {
@@ -309,7 +309,7 @@ const modelHyperParams = {
     field: "lstmUnits",
   },
   "神经元个数": {
-    value: "64",
+    value: "128",
     field: "neuronCount",
   },
   "滑动窗口大小": {
