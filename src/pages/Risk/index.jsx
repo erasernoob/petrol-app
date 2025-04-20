@@ -7,11 +7,14 @@ export default function DrillPage() {
     const [loading, setLoading] = useState(false)
     // 等待开始计算
     const [waiting, setWaiting] = useState(true)
-    const [historyFile, setHistoryFile] = useState({ name: "", filePath: "" });
-    const [predictFile, setpredictFile] = useState({ name: "", filePath: "" });
+    const [training, setTraning] = useState(false)
+    const [historyFile, setHistoryFile] = useState({ name: "", path: "" });
+    const [predictFile, setpredictFile] = useState({ name: "", path: "" });
     const [predictResData, setpredictResData] = useState({});
     const [warningData, setWarningData] = useState({});
     const [extraData, setExtraData] = useState({});
+
+    const totalTrainingTime = 10
 
 
     const handleSubmit = async (e) => {
@@ -19,17 +22,22 @@ export default function DrillPage() {
             if (e) {
                 setLoading(true)
                 setWaiting(false)
-                e.file_path = historyFile.filePath
+                e.file_path = historyFile.path
                 let response = await post("/risk/warning")
                 setWarningData(response)
                 setExtraData({ MAE: response.MAE, RMSE: response.RMSE, R: response.R })
 
+                e.file_path = predictFile.path
+                console.log(predictFile)
                 response = await post("/risk/predict", e)
                 let res = response.data
                 // 预测图
                 setpredictResData(res)
             } else {
-
+                // 训练
+                setLoading(true)
+                setWaiting(false)
+                setTraning(true)
             }
 
         } catch (error) {
@@ -71,7 +79,11 @@ export default function DrillPage() {
             >
                 <ResultPage
                     loading={loading}
+                    training={training}
+                    setTraining={setTraning}
+                    setWaiting={setWaiting}
                     waiting={waiting}
+                    totalTrainingTime={totalTrainingTime}
                     warningData={warningData}
                     predictData={predictResData}
                 />

@@ -1,71 +1,127 @@
-import { Button, Grid, Radio, Spin } from '@arco-design/web-react';
-import ReactECharts from 'echarts-for-react';
-import { useEffect, useState } from 'react';
+import { Button, Grid, Message, Radio, Spin } from "@arco-design/web-react";
+import ReactECharts from "echarts-for-react";
+import { useEffect, useRef, useState } from "react";
 
-const RadioGroup = Radio.Group
+const RadioGroup = Radio.Group;
 const { Row, Col } = Grid;
 
-export default function ResultPage({ chartData = [], data = {}, loading = false, waiting = true, warningData = {}, predictData = {} }) {
+export default function ResultPage({
+  chartData = [],
+  data = {},
+  loading = false,
+  waiting = true,
+  warningData = {},
+  predictData = {},
+  setWaiting,
+  setTraining,
+  totalTrainingTime,
+  training = false,
+}) {
+  const [curValue, setCurValue] = useState("泥浆池体积预测");
 
-  const [curValue, setCurValue] = useState('泥浆池体积预测')
+  // 添加计时状态
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const timerRef = useRef(null);
+  // const totalTrainingTime = 20; // 总训练时间为20秒
 
+  // 训练完成的处理函数
+  const handleTrainingComplete = () => {
+    Message.success("模型训练完成！");
+    setTraining(false);
+    setWaiting(true);
+  };
+
+  // 管理训练计时
+  useEffect(() => {
+    if (training && elapsedTime < totalTrainingTime) {
+      timerRef.current = setTimeout(() => {
+        setElapsedTime((prev) => prev + 1);
+      }, 1000);
+    } else if (training && elapsedTime >= totalTrainingTime) {
+      handleTrainingComplete();
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [training, elapsedTime]);
+
+  // 格式化时间
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  // 计算训练进度百分比
+  const getProgressPercentage = () => {
+    return Math.min(Math.round((elapsedTime / totalTrainingTime) * 100), 100);
+  };
 
   const getOption1 = () => {
     if (Object.keys(predictData).length == 0) {
-      return {}
+      return {};
     }
     const { x, tva_data, peaks, valleys, danger_zones } = predictData;
 
     // Create mark points for peaks and valleys
     const markPoints = [];
-    peaks.forEach(idx => {
+    peaks.forEach((idx) => {
       markPoints.push({
         coord: [x[idx], tva_data[idx]],
         symbol: "triangle",
         symbolSize: 14,
         itemStyle: { color: "red" },
-        label: { show: true, formatter: `阈值: ${tva_data[idx].toFixed(2)}`, position: "top" }
+        label: {
+          show: true,
+          formatter: `阈值: ${tva_data[idx].toFixed(2)}`,
+          position: "top",
+        },
       });
     });
 
-    valleys.forEach(idx => {
+    valleys.forEach((idx) => {
       markPoints.push({
         coord: [x[idx], tva_data[idx]],
         symbol: "triangle",
         symbolRotate: 180,
         symbolSize: 14,
         itemStyle: { color: "green" },
-        label: { show: false }
+        label: { show: false },
       });
     });
 
     // Create separate series for each danger zone to get proper legend items
     const dangerSeries = [];
-    const dangerLegendName = []
+    const dangerLegendName = [];
     const dangerLegendItems = new Set(); // To track unique legend items
 
-    danger_zones.forEach(zone => {
+    danger_zones.forEach((zone) => {
       const legendName = `危险等级 ${zone.level}`;
       if (!dangerLegendName.includes(legendName)) {
-        dangerLegendName.push(legendName)
+        dangerLegendName.push(legendName);
       }
       dangerLegendItems.add(legendName);
 
       // Create a separate series for each danger zone
       dangerSeries.push({
         name: legendName,
-        type: 'line',
+        type: "line",
         data: Array.from({ length: zone.end - zone.start + 1 }, (_, i) => {
           const idx = zone.start + i;
           return [x[idx], tva_data[idx]];
         }),
-        symbol: 'none',
+        symbol: "none",
         lineStyle: { opacity: 0 },
         areaStyle: {
           color: zone.color,
-          opacity: 0.3
+          opacity: 0.3,
         },
-        stack: 'danger'
+        stack: "danger",
       });
 
       // Add annotation for threshold
@@ -73,16 +129,16 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
       const maxValue = Math.max(...tva_data.slice(zone.start, zone.end + 1));
       markPoints.push({
         coord: [x[midPoint], maxValue + 5],
-        symbol: 'pin',
+        symbol: "pin",
         symbolSize: 0,
         label: {
           show: true,
           formatter: `阈值: ${zone.threshold.toFixed(2)}`,
-          backgroundColor: '#fff',
+          backgroundColor: "#fff",
           padding: 5,
           borderRadius: 3,
-          position: 'top'
-        }
+          position: "top",
+        },
       });
     });
 
@@ -96,14 +152,14 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
         data: legendData,
         top: 25,
         itemGap: 10,
-        textStyle: { fontSize: 12 }
+        textStyle: { fontSize: 12 },
       },
       grid: {
-        left: '5%',
-        right: '5%',
-        bottom: '10%',
-        top: '15%',
-        containLabel: true
+        left: "5%",
+        right: "5%",
+        bottom: "10%",
+        top: "15%",
+        containLabel: true,
       },
       xAxis: {
         type: "category",
@@ -111,14 +167,14 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
         name: "时间(s)",
         nameLocation: "middle",
         nameGap: 30,
-        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+        splitLine: { show: true, lineStyle: { type: "dashed", opacity: 0.5 } },
       },
       yAxis: {
         type: "value",
         name: "TVA (m³)",
         nameLocation: "middle",
         nameGap: 50,
-        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+        splitLine: { show: true, lineStyle: { type: "dashed", opacity: 0.5 } },
       },
       dataZoom: [{ type: "slider", start: 0, end: 100 }],
       series: [
@@ -127,51 +183,50 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
           type: "line",
           data: tva_data,
           smooth: true,
-          symbol: 'none',
-          lineStyle: { color: 'blue', width: 2 },
+          symbol: "none",
+          lineStyle: { color: "blue", width: 2 },
           markPoint: {
             symbolSize: 0,
             data: markPoints,
             label: {
-              position: 'top'
-            }
-          }
+              position: "top",
+            },
+          },
         },
         ...dangerSeries,
         {
           name: "波峰",
           type: "scatter",
-          data: peaks.map(idx => [x[idx], tva_data[idx]]),
-          symbol: 'triangle',
+          data: peaks.map((idx) => [x[idx], tva_data[idx]]),
+          symbol: "triangle",
           symbolSize: 14,
-          itemStyle: { color: 'red' }
+          itemStyle: { color: "red" },
         },
         {
           name: "波谷",
           type: "scatter",
-          data: valleys.map(idx => [x[idx], tva_data[idx]]),
-          symbol: 'triangle',
+          data: valleys.map((idx) => [x[idx], tva_data[idx]]),
+          symbol: "triangle",
           symbolRotate: 180,
           symbolSize: 14,
-          itemStyle: { color: 'green' }
-        }
-      ]
+          itemStyle: { color: "green" },
+        },
+      ],
     };
-
-  }
+  };
 
   const getOption2 = () => {
     // 检查 warningData 是否存在并且包含所需字段
-    console.log(warningData)
+    console.log(warningData);
     if (Object.keys(warningData).length === 0) {
       return {
         title: {
           text: "TVA预测值 (无数据)",
-          left: "center"
+          left: "center",
         },
         xAxis: { type: "category", data: [] },
         yAxis: { type: "value" },
-        series: [{ type: "line", data: [] }]
+        series: [{ type: "line", data: [] }],
       };
     }
 
@@ -184,28 +239,30 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
     return {
       title: {
         text: "TVA预测值",
-        left: "center"
+        left: "center",
       },
       tooltip: {
         trigger: "axis",
         formatter: function (params) {
           if (params[0] && params[0].value !== undefined) {
-            const value = typeof params[0].value === 'number'
-              ? params[0].value.toFixed(2)
-              : Array.isArray(params[0].value) && params[0].value[1] !== undefined
-                ? params[0].value[1].toFixed(2)
-                : '未知';
+            const value =
+              typeof params[0].value === "number"
+                ? params[0].value.toFixed(2)
+                : Array.isArray(params[0].value) &&
+                  params[0].value[1] !== undefined
+                  ? params[0].value[1].toFixed(2)
+                  : "未知";
             return `时间: ${params[0].dataIndex}<br/>TVA: ${value} m³`;
           }
-          return '';
-        }
+          return "";
+        },
       },
       grid: {
-        left: '5%',
-        right: '5%',
-        bottom: '10%',
-        top: '10%',
-        containLabel: true
+        left: "5%",
+        right: "5%",
+        bottom: "10%",
+        top: "10%",
+        containLabel: true,
       },
       xAxis: {
         type: "category",
@@ -213,14 +270,14 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
         name: "时间(s)",
         nameLocation: "middle",
         nameGap: 30,
-        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+        splitLine: { show: true, lineStyle: { type: "dashed", opacity: 0.5 } },
       },
       yAxis: {
         type: "value",
         name: "TVA (m³)",
         nameLocation: "middle",
         nameGap: 50,
-        splitLine: { show: true, lineStyle: { type: 'dashed', opacity: 0.5 } }
+        splitLine: { show: true, lineStyle: { type: "dashed", opacity: 0.5 } },
       },
       dataZoom: [{ type: "slider", start: 0, end: 100 }],
       series: [
@@ -229,15 +286,15 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
           type: "line",
           data: safeTVA,
           smooth: true,
-          symbol: 'none',
-          lineStyle: { color: 'red', width: 2 },
-        }
+          symbol: "none",
+          lineStyle: { color: "red", width: 2 },
+        },
       ],
       legend: {
         data: ["TVA预测曲线"],
         top: 25,
-        textStyle: { fontSize: 12 }
-      }
+        textStyle: { fontSize: 12 },
+      },
     };
   };
 
@@ -247,71 +304,170 @@ export default function ResultPage({ chartData = [], data = {}, loading = false,
   // Initial load and data update handler
   useEffect(() => {
     // Reset to first chart whenever predictData or warningData changes
-    setCurValue('泥浆池体积预测');
+    setCurValue("泥浆池体积预测");
     const newOption = getOption1();
     setOption(newOption);
   }, [predictData, warningData]);
 
   // Handle tab switching
   useEffect(() => {
-    const newOption = curValue === '泥浆池体积预测' ? getOption1() : getOption2();
+    const newOption =
+      curValue === "泥浆池体积预测" ? getOption1() : getOption2();
     setOption(newOption);
   }, [curValue]);
 
-  const handleExport = async () => {
+  const handleExport = async () => { };
 
-  }
-
-  const exportButton = <Button type='primary' onClick={handleExport} style={{ marginLeft: '22px' }}>导出数据</Button>
-
+  const exportButton = (
+    <Button
+      type="primary"
+      onClick={handleExport}
+      style={{ marginLeft: "22px" }}
+    >
+      导出数据
+    </Button>
+  );
 
   return (
     <>
-      {Object.keys(warningData).length > 0 && loading === false && waiting === false ? (
+      {Object.keys(warningData).length > 0 &&
+        loading === false &&
+        waiting === false ? (
         <>
-          <Row justify="center" align="start" style={{ height: '2vh' }}>
+          <Row justify="center" align="start" style={{ height: "2vh" }}>
             <Col span={24}>
               <RadioGroup
-                type='button'
-                size='large'
-                name='chart'
+                type="button"
+                size="large"
+                name="chart"
                 defaultValue={curValue}
                 onChange={(value) => {
-                  setCurValue(value)
+                  setCurValue(value);
                 }}
                 style={{
-                  marginLeft: '20px'
+                  marginLeft: "20px",
                 }}
-                options={['泥浆池体积预测', '井漏风险预警结果']}
-              >
-              </RadioGroup>
+                options={["泥浆池体积预测", "井漏风险预警结果"]}
+              ></RadioGroup>
             </Col>
           </Row>
           <ReactECharts
             option={option}
-            style={{ height: '81%', width: '100%' }}
-            opts={{ renderer: 'canvas' }} // 强制使用Canvas
+            style={{ height: "81%", width: "100%" }}
+            opts={{ renderer: "canvas" }} // 强制使用Canvas
             notMerge={true}
           />
-          <div className="extra-value" style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // marginTop: '7px',
-            marginLeft: '0px'
-          }}>
+          <div
+            className="extra-value"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              // marginTop: '7px',
+              marginLeft: "0px",
+            }}
+          >
             {exportButton}
           </div>
         </>
       ) : (
-        <div style={{ height: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          {waiting == true ?
-            // <Empty description="输入参数开始计算"></Empty> 
+        <div
+          style={{
+            height: "80%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            gap: "20px",
+          }}
+        >
+          {waiting == true ? (
+            // 等待输入参数
             "输入参数开始计算"
-            : <Spin size="30" tip='正在计算中......' />}
+          ) : training ? (
+            // 训练中状态
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "25px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "36px",
+                    fontWeight: "600",
+                    color: "#165DFF",
+                    background: "rgba(22, 93, 255, 0.1)",
+                    borderRadius: "8px",
+                    padding: "10px 20px",
+                    boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+                    minWidth: "100px",
+                    textAlign: "center",
+                  }}
+                >
+                  {formatTime(elapsedTime)}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "10px",
+                    width: "300px",
+                  }}
+                >
+                  <Spin size="large" />
+                  <div
+                    style={{
+                      marginTop: "10px",
+                      fontSize: "16px",
+                      color: "#4E5969",
+                    }}
+                  >
+                    模型训练中，请耐心等待...
+                  </div>
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "8px",
+                      backgroundColor: "#E5E6EB",
+                      borderRadius: "4px",
+                      overflow: "hidden",
+                      marginTop: "8px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: `${getProgressPercentage()}%`,
+                        height: "100%",
+                        backgroundColor: "#165DFF",
+                        borderRadius: "4px",
+                        transition: "width 0.3s",
+                      }}
+                    />
+                  </div>
+                  {/* <div
+                    style={{
+                      fontSize: "14px",
+                      color: "#86909C",
+                      alignSelf: "flex-end",
+                      marginTop: "4px",
+                    }}
+                  >
+                    {getProgressPercentage()}%
+                  </div> */}
+                </div>
+              </div>
+            </>
+          ) : (
+            // 计算中状态
+            <Spin size="30" tip="正在计算中......" />
+          )}
         </div>
       )}
-
     </>
-  )
+  );
 }
