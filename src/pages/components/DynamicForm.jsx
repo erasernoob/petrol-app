@@ -65,7 +65,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                     overflowY: "auto",
                     alignItems: "center",
                     paddingTop: "10px",
-                    paddingRight: "7vw",
+                    paddingRight: "6vw",
                     boxSizing: "border-box",
                   }}
                 >
