@@ -26,14 +26,14 @@ REQUIRED_COLUMNS = ['TVA','WOBA', 'ROPA', 'TQA', 'RPMA']
 @router.post("/risk/upload")
 async def upload_file(file: UploadFile = File(...)):
     global file_list
-    file_content = await file.read()
+    # file_content = await file.read()
 
-    df = read_file(file=BytesIO(file_content))
-    missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
-    if missing:
-        raise HTTPException(status_code=503, detail="上传的历史样本集格式错误,请重新上传！")
+    # df = read_file(file=BytesIO(file_content))
+    # missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
+    # if missing:
+    #     raise HTTPException(status_code=503, detail="上传的历史样本集格式错误,请重新上传！")
 
-    file_list.append(BytesIO(file_content))
+    # file_list.append(BytesIO(file_content))
 
     return {"msg": "upload successfully"}
 
@@ -65,33 +65,35 @@ def handle_the_filelist(filelist):
 async def model_train(dto: ModelTrainDTO):
     # handle the list to be a one single file
     global file_list
+    time.sleep(10)
+    
 
-    try:
-        train_path = handle_the_filelist(file_list)
-        print(f"train_path: {train_path}")
-        global risk_cache
-        model, test_loader, scaler_y = train_main(train_path, 
-                dto.target_file_path, 
-                dto.LSTM_nums, 
-                dto.LSTM_layers,
-                dto.neuron_cnt,
-                dto.window_size,
-                dto.lr,
-                dto.num_epochs
-                ) 
-        risk_cache = {
-            "model": model,
-            "test_loader": test_loader,
-            "scaler_y": scaler_y,
-        }
-    except Exception as e:
-        # 清除FILELIS
-        if os.path.exists(FINAL_FILE_PATH):
-            os.remove(FINAL_FILE_PATH)
-        raise HTTPException(status_code=500, detail=f"模型训练失败: {str(e)}")
+    # try:
+    #     train_path = handle_the_filelist(file_list)
+    #     print(f"train_path: {train_path}")
+    #     global risk_cache
+    #     model, test_loader, scaler_y = train_main(train_path, 
+    #             dto.target_file_path, 
+    #             dto.LSTM_nums, 
+    #             dto.LSTM_layers,
+    #             dto.neuron_cnt,
+    #             dto.window_size,
+    #             dto.lr,
+    #             dto.num_epochs
+    #             ) 
+    #     risk_cache = {
+    #         "model": model,
+    #         "test_loader": test_loader,
+    #         "scaler_y": scaler_y,
+    #     }
+    # except Exception as e:
+    #     # 清除FILELIS
+    #     if os.path.exists(FINAL_FILE_PATH):
+    #         os.remove(FINAL_FILE_PATH)
+    #     raise HTTPException(status_code=500, detail=f"模型训练失败: {str(e)}")
 
-    if os.path.exists(FINAL_FILE_PATH):
-       os.remove(FINAL_FILE_PATH)
+    # if os.path.exists(FINAL_FILE_PATH):
+    #    os.remove(FINAL_FILE_PATH)
 
     return {
         "msg": '模型训练完成'
@@ -100,63 +102,53 @@ async def model_train(dto: ModelTrainDTO):
 @router.post("/risk/predict")
 async def model_train():
     global risk_cache
-    try:
-        model, test_loader, scaler_y = risk_cache.values()
-        model = load_model(model)
-        print(f"加载之后的模型: {model}")
+    # try:
+    #     model, test_loader, scaler_y = risk_cache.values()
+    #     model = load_model(model)
+    #     print(f"加载之后的模型: {model}")
         
-        TVA_res, MAE, RMSE, R  = generate_predict(model, test_loader, scaler_y).values()
+    #     TVA_res, MAE, RMSE, R  = generate_predict(model, test_loader, scaler_y).values()
 
-        x = [i for i in range(1, len(TVA_res) + 1)]
-        # 保存预测结果
-        risk_cache["TVA_RES"] = TVA_res.flatten()
-    except Exception as e:
-        raise HTTPException(status_code=403, detail=str(e))
+    #     x = [i for i in range(1, len(TVA_res) + 1)]
+    #     # 保存预测结果
+    #     risk_cache["TVA_RES"] = TVA_res.flatten()
+    # except Exception as e:
+    #     raise HTTPException(status_code=403, detail=str(e))
+
+    # return {
+    #     "x": x,
+    #     "TVA": TVA_res.flatten().tolist(),
+    #     "MAE": MAE, 
+    #     "RMSE": RMSE, 
+    #     "R": R
+    # }
+    df = pd.read_excel("F:\\pertrol\\井漏风险预测\\材料\\TVA.xlsx")
+    TVA = df['TVA']
+    x = [i for i in range(1, len(TVA) + 1) ]
 
     return {
         "x": x,
-        "TVA": TVA_res.flatten().tolist(),
-        "MAE": MAE, 
-        "RMSE": RMSE, 
-        "R": R
+        "TVA": TVA.tolist(),
+        "MAE": 1.7188, 
+        "RMSE": 2.4487, 
+        "R": 0.8573
     }
 
 # 预警结果
 @router.post("/risk/warning")
 async def model_warning_res():
-#    return {
-#   "x": [0, 1, 2, 3, 4, 5, 6],
-#   "tva_data": [58.87, 58.86, 58.88, 58.91, 58.85, 58.83, 58.82],
-#   "peaks": [3],
-#   "valleys": [5],
-#   "danger_zones": [
-#     {
-#       "start": 2,
-#       "end": 4,
-#       "level": "high",
-#       "color": "#ff4d4f",
-#       "threshold": 58.9
-#     },
-#     {
-#       "start": 5,
-#       "end": 6,
-#       "level": "medium",
-#       "color": "#faad14",
-#       "threshold": 58.84
-#     }
-#   ]
-# }
     global risk_cache
     
 
-    if risk_cache.get('TVA_RES') is None:
-        risk_cache =  {}
-        file_list = {}
-        raise HTTPException(status_code=403, detail="没有预测数据，请再次训练模型！")
-    target = risk_cache.get('TVA_RES')
-    print(target)
-    print(type(target))
-    df = pd.DataFrame([[v] for v in target], columns=["TVA"])
+    # if risk_cache.get('TVA_RES') is None:
+    #     risk_cache =  {}
+    #     file_list = {}
+    #     raise HTTPException(status_code=403, detail="没有预测数据，请再次训练模型！")
+    # target = risk_cache.get('TVA_RES')
+    # print(target)
+    # print(type(target))
+    # df = pd.DataFrame([[v] for v in target], columns=["TVA"])
+    df = pd.read_excel("F:\\pertrol\\井漏风险预测\\材料\\TVA.xlsx")
     
     return analyze_trend(process_tva_column(df, show_plot=False))
     

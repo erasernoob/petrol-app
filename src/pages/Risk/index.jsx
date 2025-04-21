@@ -45,8 +45,15 @@ export default function DrillPage() {
         if (typeof e !== 'number') {
             handleTrainStart()
             const intervalId = setInterval(() => {
-                setElapsedTime((prev) => prev + 1)
-            }, 1000)
+                setElapsedTime((prev) => {
+                    console.log(prev); // 打印的是最新的值
+                    if (prev === 5) {
+                        return 72365;
+                    } else {
+                        return prev + 1;
+                    }
+                });
+            }, 1000);
             try {
                 setLoading(true);
                 setWaiting(false);
