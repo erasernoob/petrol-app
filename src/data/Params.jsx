@@ -302,27 +302,27 @@ const drill_vibration = [
 const modelHyperParams = {
   "LSTM个数": {
     value: "64",
-    field: "lstmLayers",
+    field: "LSTM_nums",
   },
   "LSTM层数": {
     value: "2",
-    field: "lstmUnits",
+    field: "LSTM_layers",
   },
   "神经元个数": {
     value: "128",
-    field: "neuronCount",
+    field: "neuron_cnt",
   },
   "滑动窗口大小": {
     value: "30",
-    field: "windowSize",
+    field: "window_size",
   },
   "学习率": {
     value: "0.001",
-    field: "learningRate",
+    field: "lr",
   },
   "训练批次": {
     value: "50",
-    field: "epochs",
+    field: "num_epochs",
   },
 };
 

@@ -77,7 +77,6 @@ export default function ParamsForm({
       Message.error(error?.response?.data?.detail)
       onError()
     }
-
   };
 
   // 处理上传文件变化
@@ -127,33 +126,6 @@ export default function ParamsForm({
 
   return (
     <>
-      <div className="file-uploader">
-        <Upload
-          multiple
-          customRequest={customRequest}
-          onChange={handleFileChange}
-          // fileList={uploadFileList}
-          showUploadList={false}
-          accept=".xlsx,.xls,.csv"
-        >
-          <Button type="primary">导入历史样本集</Button>
-        </Upload>
-        <FileUpLoaderBtn
-          uploadStat={predictData}
-          uploadText={"导入预测井"}
-          handleCancel={handleCancel}
-          handleUpload={handleUpload}
-          id={1}
-        />
-        <Button
-          type="primary"
-          disabled={!historyData || !predictData}
-          onClick={() => handleSubmit()}
-        >
-          模型训练
-        </Button>
-      </div>
-
       <Form
         form={form}
         onSubmit={handleSubmit}
@@ -162,6 +134,34 @@ export default function ParamsForm({
         labelCol={{ span: 9 }}
         wrapperCol={{ span: 15 }}
       >
+        <div className="file-uploader">
+          <Upload
+            multiple
+            customRequest={customRequest}
+            onChange={handleFileChange}
+            // fileList={uploadFileList}
+            showUploadList={false}
+            accept=".xlsx,.xls,.csv"
+          >
+            <Button type="primary">导入历史样本集</Button>
+          </Upload>
+          <FileUpLoaderBtn
+            uploadStat={predictData}
+            uploadText={"导入预测井"}
+            handleCancel={handleCancel}
+            handleUpload={handleUpload}
+            id={1}
+          />
+          <Button
+            disabled={!historyData || !predictData}
+            htmlType="submit"
+            type="primary"
+          // onClick={() => handleSubmit()}
+          >
+            模型训练
+          </Button>
+        </div>
+
         <div
           style={{
             height: "76vh",
@@ -323,7 +323,7 @@ export default function ParamsForm({
                 type="primary"
                 size="large"
                 style={{ width: "95%" }}
-                htmlType="submit"
+                // htmlType="submit"
                 disabled={!predictData}
               >
                 输出预测结果

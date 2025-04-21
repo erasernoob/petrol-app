@@ -28,32 +28,23 @@ export default function ResultPage({
   // 
 
   // 训练完成的处理函数
-  const handleTrainingComplete = () => {
-    Message.success("模型训练完成！");
-    setTraining(false);
-    setWaiting(true);
-    setElapsedTime(0)
-  };
 
-  // 管理训练计时
-  useEffect(() => {
-    if (elapsedTime === 5) {
-      setElapsedTime(72000)
-    }
-    if (training && elapsedTime < totalTrainingTime) {
-      timerRef.current = setTimeout(() => {
-        setElapsedTime((prev) => prev + 1);
-      }, 1000);
-    } else if (training && elapsedTime >= totalTrainingTime) {
-      handleTrainingComplete();
-    }
+  // // 管理训练计时
+  // useEffect(() => {
+  //   if (training && elapsedTime < totalTrainingTime) {
+  //     timerRef.current = setTimeout(() => {
+  //       setElapsedTime((prev) => prev + 1);
+  //     }, 1000);
+  //   } else if (training && elapsedTime >= totalTrainingTime) {
+  //     handleTrainingComplete();
+  //   }
 
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [training, elapsedTime]);
+  //   return () => {
+  //     if (timerRef.current) {
+  //       clearTimeout(timerRef.current);
+  //     }
+  //   };
+  // }, [training, elapsedTime]);
 
   // 格式化时间
   const formatTime = (seconds) => {

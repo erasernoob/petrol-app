@@ -1,5 +1,5 @@
 import { Card, Message } from "@arco-design/web-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { post } from "../../components/axios";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
@@ -7,7 +7,7 @@ export default function DrillPage() {
     const [loading, setLoading] = useState(false);
     // 等待开始计算
     const [waiting, setWaiting] = useState(true);
-    const [training, setTraning] = useState(false);
+    const [training, setTraining] = useState(false);
     const [trainEnd, setTrainEnd] = useState(false);
 
     // 修改为数组类型
@@ -29,69 +29,61 @@ export default function DrillPage() {
 
     const totalTrainingTime = 72005;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            if (elapsedTime === totalTrainingTime) {
-                try {
-                    let response = await post("/risk/train", {
-                        file_path_list: []
-                    });
-
-                    setExtraData({
-                        MAE: response.MAE,
-                        RMSE: response.RMSE,
-                        R: response.R,
-                    });
-                } catch (error) {
-                    console.error("Training request failed:", error);
-                }
-            }
-        };
-
-        fetchData();
-    }, [elapsedTime]);
 
 
-
-    const handleTrain = async () => {
-        setTraning(true);
+    const handleTrainStart = async () => {
+        setTraining(true);
         setLoading(true);
         setWaiting(false);
     }
+    const handleTrainingComplete = () => {
+        Message.success("模型训练完成！");
+        setTraining(false);
+        setWaiting(true);
+        setElapsedTime(0)
+    };
 
     const handleSubmit = async (e) => {
-        try {
-            if (e) {
+        // warningData 对应的是预测图 
+        // predictData 对应的是预警图 
+        if (typeof e !== 'number') {
+            handleTrainStart()
+            const intervalId = setInterval(() => {
+                setElapsedTime((prev) => prev + 1)
+            }, 1000)
+            try {
                 setLoading(true);
                 setWaiting(false);
-                console.log(historyFile)
-                // 修改：使用第一个历史文件的路径
-                // if (historyFile.length > 0) {
-                // e.file_path = historyFile[0].path;
-                let response = await post("/risk/warning");
-                setWarningData(response);
+                e.target_file_path = predictFile?.path
+                // 开始训练 
 
-                // }
+                const response = await post("/risk/train", e)
+                clearInterval(intervalId)
+                handleTrainingComplete()
 
-                e.file_path = predictFile.path;
-                response = await post("/risk/predict", e);
-                let res = response.data;
-                // 预测图
-                setpredictResData(res);
-                // 设置不显示预警结果
-                setShowWarnRes(false)
-            } else {
-                // 训练
-                handleTrain()
+                // setShowWarnRes(false)
+            } catch (error) {
+                clearInterval(intervalId)
+                setWaiting(true);
+                setTraining(false)
+                setLoading(false);
+                setElapsedTime(0)
+                console.log(error)
+                Message.error("计算内部出现错误，请检查输入参数！");
+                Message.error(error?.response?.data?.detail)
+            } finally {
+                clearInterval(intervalId)
+                setElapsedTime(0)
+                setWaiting(true);
+                setTraining(false)
+                setLoading(false);
             }
-        } catch (error) {
-            Message.error("计算内部出现错误，请检查输入参数！");
-            Message.error(error?.response?.data?.detail)
-        } finally {
-            setWaiting(false);
-            setLoading(false);
+        } else if (e == 1) {
+            // get the predict data 
+
         }
     };
+
 
     return (
         <div className="main-content">
@@ -131,7 +123,6 @@ export default function DrillPage() {
                     setElapsedTime={setElapsedTime}
                     loading={loading}
                     training={training}
-                    setTraining={setTraning}
                     setWaiting={setWaiting}
                     waiting={waiting}
                     totalTrainingTime={totalTrainingTime}
