@@ -184,7 +184,6 @@ class MSEDTO(BaseModel):
     file_path: str
 
 class ModelTrainDTO(BaseModel):
-    file_path_list: List[str]
     target_file_path: str
     LSTM_nums: int # LSTM个数
     LSTM_layers: int # LSTM层数

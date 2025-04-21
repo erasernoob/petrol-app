@@ -8,13 +8,12 @@ export default function DrillPage() {
     // 等待开始计算
     const [waiting, setWaiting] = useState(true);
     const [training, setTraining] = useState(false);
-    const [trainEnd, setTrainEnd] = useState(false);
+    const [trainSucceed, setTrainSucceed] = useState(false);
 
     // 修改为数组类型
     const [historyFile, setHistoryFile] = useState([]);
     // 添加历史数据状态
     const [historyData, setHistoryData] = useState(false);
-
     const [predictFile, setpredictFile] = useState({ name: "", path: "" });
     const [predictResData, setpredictResData] = useState({});
     const [warningData, setWarningData] = useState({});
@@ -23,13 +22,10 @@ export default function DrillPage() {
 
     const [elapsedTime, setElapsedTime] = useState(0)
 
+    console.log(trainSucceed)
+
     // 区分是否展示预警结果
     const [showWarnRes, setShowWarnRes] = useState(false)
-    console.log(showWarnRes)
-
-    const totalTrainingTime = 72005;
-
-
 
     const handleTrainStart = async () => {
         setTraining(true);
@@ -37,7 +33,7 @@ export default function DrillPage() {
         setWaiting(false);
     }
     const handleTrainingComplete = () => {
-        Message.success("模型训练完成！");
+        Message.success("模型训练完成！点击按钮输出预测结果！");
         setTraining(false);
         setWaiting(true);
         setElapsedTime(0)
@@ -60,6 +56,7 @@ export default function DrillPage() {
                 const response = await post("/risk/train", e)
                 clearInterval(intervalId)
                 handleTrainingComplete()
+                setTrainSucceed(true)
 
                 // setShowWarnRes(false)
             } catch (error) {
@@ -79,8 +76,27 @@ export default function DrillPage() {
                 setLoading(false);
             }
         } else if (e == 1) {
-            // get the predict data 
+            try {
+                setLoading(true);
+                setWaiting(false);
 
+                // get the predict data 
+                const response = await post("/risk/predict")
+                setWarningData(response)
+                const { RMSE, R, MAE } = response
+                setExtraData({ RMSE, R, MAE })
+
+                // get the warning result
+                const res = await post("/risk/warning")
+                setpredictResData(res)
+                setLoading(false)
+
+            } catch (error) {
+                setWaiting(true)
+                setLoading(false)
+                Message.error(`计算内部出现错误! ${error?.response?.data?.detail}`);
+                Message.error("请先训练模型后再计算！");
+            }
         }
     };
 
@@ -102,6 +118,7 @@ export default function DrillPage() {
                 <Sider
                     handleSubmit={handleSubmit}
                     setShowWarnRes={setShowWarnRes}
+                    trainSucceed={trainSucceed}
                     warningData={warningData}
                     setHistoryFile={setHistoryFile}
                     historyFile={historyFile}
@@ -122,10 +139,10 @@ export default function DrillPage() {
                     elapsedTime={elapsedTime}
                     setElapsedTime={setElapsedTime}
                     loading={loading}
+                    trainSucceed={trainSucceed}
                     training={training}
                     setWaiting={setWaiting}
                     waiting={waiting}
-                    totalTrainingTime={totalTrainingTime}
                     warningData={warningData}
                     predictData={predictResData}
                     showWarnRes={showWarnRes}

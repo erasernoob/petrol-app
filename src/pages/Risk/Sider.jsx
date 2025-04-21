@@ -9,6 +9,7 @@ import ParamsForm from "./ParamsForm";
 export default function Sider({
   handleSubmit,
   setShowWarnRes,
+  trainSucceed,
   setHistoryFile,
   warningData,
   historyFile,
@@ -83,6 +84,7 @@ export default function Sider({
         data={modelHyperParams}
         warningData={warningData}
         predictData={predictData}
+        trainSucceed={trainSucceed}
         historyData={historyData}
         setHistoryData={setHistoryData}
         historyFile={historyFile}

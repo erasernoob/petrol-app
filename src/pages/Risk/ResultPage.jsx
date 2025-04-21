@@ -1,6 +1,6 @@
-import { Button, Grid, Message, Radio, Spin } from "@arco-design/web-react";
+import { Button, Grid, Radio, Spin } from "@arco-design/web-react";
 import ReactECharts from "echarts-for-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { saveAtFrontend } from '../utils/utils';
 
 const RadioGroup = Radio.Group;
@@ -22,29 +22,6 @@ export default function ResultPage({
   setElapsedTime
 }) {
   const [curValue, setCurValue] = useState("泥浆池体积预测");
-
-  // 添加计时状态
-  const timerRef = useRef(null);
-  // 
-
-  // 训练完成的处理函数
-
-  // // 管理训练计时
-  // useEffect(() => {
-  //   if (training && elapsedTime < totalTrainingTime) {
-  //     timerRef.current = setTimeout(() => {
-  //       setElapsedTime((prev) => prev + 1);
-  //     }, 1000);
-  //   } else if (training && elapsedTime >= totalTrainingTime) {
-  //     handleTrainingComplete();
-  //   }
-
-  //   return () => {
-  //     if (timerRef.current) {
-  //       clearTimeout(timerRef.current);
-  //     }
-  //   };
-  // }, [training, elapsedTime]);
 
   // 格式化时间
   const formatTime = (seconds) => {

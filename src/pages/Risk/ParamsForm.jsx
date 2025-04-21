@@ -21,6 +21,7 @@ export default function ParamsForm({
   historyFile,
   setShowWarnRes,
   warningData,
+  trainSucceed,
   handleRiskResult,
   handleUpload,
   predictData,
@@ -139,7 +140,7 @@ export default function ParamsForm({
             multiple
             customRequest={customRequest}
             onChange={handleFileChange}
-            // fileList={uploadFileList}
+            fileList={uploadFileList}
             showUploadList={false}
             accept=".xlsx,.xls,.csv"
           >
@@ -323,8 +324,8 @@ export default function ParamsForm({
                 type="primary"
                 size="large"
                 style={{ width: "95%" }}
-                // htmlType="submit"
-                disabled={!predictData}
+                disabled={!trainSucceed}
+                onClick={() => handleSubmit(1)}
               >
                 输出预测结果
               </Button>
@@ -335,7 +336,7 @@ export default function ParamsForm({
                 size="large"
                 style={{ width: "95%" }}
                 onClick={() => setShowWarnRes(true)}
-                disabled={!predictData && Object.keys(warningData).length !== 0}
+                disabled={!trainSucceed}
               >
                 输出预警结果
               </Button>

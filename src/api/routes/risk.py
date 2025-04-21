@@ -99,17 +99,19 @@ async def model_train(dto: ModelTrainDTO):
 
 @router.post("/risk/predict")
 async def model_train():
-    # 加载模型，并开始出图
     global risk_cache
-    model, test_loader, scaler_y = risk_cache.values()
-    model = load_model(model)
-    print(f"加载之后的模型: {model}")
-    
-    TVA_res, MAE, RMSE, R  = generate_predict(model, test_loader, scaler_y).values()
+    try:
+        model, test_loader, scaler_y = risk_cache.values()
+        model = load_model(model)
+        print(f"加载之后的模型: {model}")
+        
+        TVA_res, MAE, RMSE, R  = generate_predict(model, test_loader, scaler_y).values()
 
-    x = [i for i in range(1, len(TVA_res) + 1)]
-    # 保存预测结果
-    risk_cache["TVA_RES"] = TVA_res.flatten()
+        x = [i for i in range(1, len(TVA_res) + 1)]
+        # 保存预测结果
+        risk_cache["TVA_RES"] = TVA_res.flatten()
+    except Exception as e:
+        raise HTTPException(status_code=403, detail=str(e))
 
     return {
         "x": x,
@@ -122,8 +124,40 @@ async def model_train():
 # 预警结果
 @router.post("/risk/warning")
 async def model_warning_res():
+#    return {
+#   "x": [0, 1, 2, 3, 4, 5, 6],
+#   "tva_data": [58.87, 58.86, 58.88, 58.91, 58.85, 58.83, 58.82],
+#   "peaks": [3],
+#   "valleys": [5],
+#   "danger_zones": [
+#     {
+#       "start": 2,
+#       "end": 4,
+#       "level": "high",
+#       "color": "#ff4d4f",
+#       "threshold": 58.9
+#     },
+#     {
+#       "start": 5,
+#       "end": 6,
+#       "level": "medium",
+#       "color": "#faad14",
+#       "threshold": 58.84
+#     }
+#   ]
+# }
     global risk_cache
-    df =  pd.DataFrame(risk_cache['TVA_RES'], columns='TVA')
+    
+
+    if risk_cache.get('TVA_RES') is None:
+        risk_cache =  {}
+        file_list = {}
+        raise HTTPException(status_code=403, detail="没有预测数据，请再次训练模型！")
+    target = risk_cache.get('TVA_RES')
+    print(target)
+    print(type(target))
+    df = pd.DataFrame([[v] for v in target], columns=["TVA"])
+    
     return analyze_trend(process_tva_column(df, show_plot=False))
     
 
