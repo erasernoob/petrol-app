@@ -104,6 +104,8 @@ export default function LimitPage() {
         setCurveFile(response2)
         const res2 = Papa.parse(response2, { header: true, dynamicTyping: true }).data
         setCurveData(res2)
+      } else {
+        setCalcCurve(false)
       }
 
       setChartData(res)
