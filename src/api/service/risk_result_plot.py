@@ -10,8 +10,8 @@ from pathlib import Path
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
-def process_tva_column(input_path, show_plot=True, window_size=60, cutoff=0.1, lamb=100):
-    df = pd.read_excel(input_path, engine='openpyxl')
+def process_tva_column(df, show_plot=True, window_size=60, cutoff=0.1, lamb=100):
+    # df = pd.read_excel(input_path, engine='openpyxl')
     print(df.head)
     if 'TVA' not in df.columns:
         raise ValueError("数据文件中未找到TVA列")

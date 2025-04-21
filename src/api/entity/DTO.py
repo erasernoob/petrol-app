@@ -185,6 +185,13 @@ class MSEDTO(BaseModel):
 
 class ModelTrainDTO(BaseModel):
     file_path_list: List[str]
+    target_file_path: str
+    LSTM_nums: int # LSTM个数
+    LSTM_layers: int # LSTM层数
+    neuron_cnt: int
+    window_size: int
+    lr: float
+    num_epochs: int # 训练批次
 
 class ModelPredictDTO(BaseModel):
     file_path: str

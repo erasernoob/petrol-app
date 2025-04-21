@@ -108,16 +108,14 @@ class DrillingDataset(Dataset):
 
 
 class CNNBiLSTMAttention(nn.Module):
-    def __init__(self, input_size, hidden_size, num_layers, output_size):
+    def __init__(self, input_size, hidden_size, num_layers, output_size, LSTM_nums):
         super().__init__()
         self.conv = nn.Sequential(
-
-            # 神经元个数
-            nn.Conv1d(input_size, 64, kernel_size=3, padding=1),
+            nn.Conv1d(input_size, LSTM_nums, kernel_size=3, padding=1),
             nn.ReLU(),
             nn.MaxPool1d(kernel_size=2)
         )
-        self.bilstm = nn.LSTM(64, hidden_size, num_layers,
+        self.bilstm = nn.LSTM(LSTM_nums, hidden_size, num_layers,
                               bidirectional=True, batch_first=True)
         self.attention = nn.Sequential(
             nn.Linear(2 * hidden_size, hidden_size),
@@ -141,8 +139,16 @@ class CNNBiLSTMAttention(nn.Module):
 def prepare_data(train_path, test_path, window_size=10):
     """直接从分开的训练集和测试集文件准备数据"""
     # 读取训练集和测试集
-    train_df = pd.read_excel(train_path)
-    test_df = pd.read_excel(test_path)
+    # 判断是否是excel 或者 csv
+    if is_csv(train_path):
+        train_df = pd.read_csv(train_path)
+    else:
+        train_df = pd.read_excel(train_path)
+
+    if is_csv(test_path):
+        test_df = pd.read_csv(test_path)
+    else:
+        test_df = pd.read_excel(test_path)
 
     # 预处理TVA数据
     train_df['TVA_trend'] = preprocess_tva_data(train_df)
@@ -192,6 +198,16 @@ def train_model(model, train_loader, criterion, optimizer, num_epochs=100):
 
         print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {total_loss / len(train_loader):.4f}')
 
+    # 训练完成后输出标识并保存模型
+    print("✅ 训练完成！模型已训练完毕，正在保存模型...")
+    torch.save(model.state_dict(), 'trained_model.pth')  # 保存训练好的模型
+
+
+def load_model(model, model_path='trained_model.pth'):
+    model.load_state_dict(torch.load(model_path))  # 加载训练好的模型
+    model.eval()  # 切换到评估模式
+    return model
+
 
 def evaluate_model(model, test_loader, scaler):
     model.eval()
@@ -208,9 +224,17 @@ def evaluate_model(model, test_loader, scaler):
             y_true.extend(targets.cpu().numpy())
             y_pred.extend(outputs.cpu().numpy())
 
+    y_true = np.array(y_true).reshape(-1, 1)
+    y_pred = np.array(y_pred).reshape(-1, 1)
+
+    # 检查 y_true 是否有效（没有实际值或全是NaN）
+    if np.isnan(y_true).all() or len(y_true) == 0:
+        print("⚠️ 测试集中没有有效的真实TVA值，指标设置为0")
+        return 0, 0, 0, y_true, y_pred
+
     # 逆标准化
-    y_true = scaler.inverse_transform(np.array(y_true).reshape(-1, 1))
-    y_pred = scaler.inverse_transform(np.array(y_pred).reshape(-1, 1))
+    y_true = scaler.inverse_transform(y_true)
+    y_pred = scaler.inverse_transform(y_pred)
 
     # 计算指标
     mae = mean_absolute_error(y_true, y_pred)
@@ -219,42 +243,66 @@ def evaluate_model(model, test_loader, scaler):
 
     return mae, rmse, r2, y_true, y_pred
 
+def is_csv(filename):
+    try:
+        pd.read_csv(filename)
+        return True
+    except Exception:
+        return False
 
-if __name__ == "__main__":
-    # 参数设置
-    input_size = 4  # 特征数量
-    hidden_size = 128
-    num_layers = 2 # LSTM层数
-    output_size = 1 
+def train_main(
+    train_path,
+    test_path,
+    LSTM_nums = 64, # LSTM个数
+    LSTM_layers = 2, # LSTM层数
+    neuron_cnt = 128,
+    window_size = 30,
+    lr = 0.001,
+    num_epochs = 50, # 训练批次
+):
+    input_size = 4  # 特征数量，注意只包括 WOBA, ROPA, TQA, RPMA（TVA 是目标）
+    output_size = 1
     window_size = 30
 
-    # 训练集和测试集路径（直接使用两个独立的文件）
-    train_path = 'F:\\井漏预测\\测试集\\20201205_190000_JX1-1-B38.xlsx'  # 替换为您的训练集路径
-    test_path = 'F:\\井漏预测\\测试集\\20201205_190000_JX1-1-B38.xlsx'  # 替换为您的测试集路径
-
+    # test_path = "F:\\pertrol\\井漏风险预测\\录井数据-标签\\JX-1-1-B38\\20201205_190000_JX1-1-B38.csv"
+    # train_path = "F:\\pertrol\\井漏风险预测\\录井数据-标签\\JX-1-1-B38\\20201205_190000_JX1-1-B38.csv"
+    
     # 准备数据
     train_loader, test_loader, scaler_y = prepare_data(train_path, test_path, window_size)
 
     # 初始化模型
-    model = CNNBiLSTMAttention(input_size, hidden_size, num_layers, output_size)
+    model = CNNBiLSTMAttention(input_size, neuron_cnt, LSTM_layers, output_size, LSTM_nums)
+    model_obj = CNNBiLSTMAttention(input_size, neuron_cnt, LSTM_layers, output_size, LSTM_nums)
     criterion = nn.L1Loss()
-    optimizer = optim.Adam(model.parameters(), lr=0.001) # 学习率
+    optimizer = optim.Adam(model.parameters(), lr)
 
     # 训练模型
-    train_model(model, train_loader, criterion, optimizer, num_epochs=50) # 训练批次
+    print("正在训练模型...")
+    model = train_model(model, train_loader, criterion, optimizer, num_epochs)
+    return model_obj, test_loader, scaler_y
 
-    # 评估模型
+def generate_predict(model, test_loader, scaler_y):
+    # 加载训练好的模型
+    print("正在加载训练好的模型...")
+    model = load_model(model)
+
+    # 测试模型
+    print("\n正在测试模型...")
     mae, rmse, r2, y_true, y_pred = evaluate_model(model, test_loader, scaler_y)
-    print(f'MAE: {mae:.4f}')
-    print(f'RMSE: {rmse:.4f}')
-    print(f'R²: {r2:.4f}')
+    print(f'\n📊 测试指标:\nMAE: {mae:.4f}\nRMSE: {rmse:.4f}\nR²: {r2:.4f}')
 
-    # 绘制对比曲线
-    plt.figure(figsize=(12, 6))
-    plt.plot(y_true, label='实际趋势')
-    plt.plot(y_pred, label='预测趋势', alpha=0.7)
-    plt.title('实际趋势 vs 预测趋势')
-    plt.xlabel('时间步')
-    plt.ylabel('TVA趋势')
-    plt.legend()
-    plt.show()
+    #  返回预测值和测试指标
+    return {
+        "TVA": y_pred,
+        "MAE": round(mae, 4),
+        "RMSE": round(rmse, 4),
+        "R": round(r2, 4),
+    }
+
+    # # 绘制预测曲线（不显示真实值）
+    # plt.figure(figsize=(12, 6))
+    # plt.plot(y_pred, label='TVA预测值', alpha=0.7)  # 仅绘制预测值
+    # plt.xlabel('时间（s）')
+    # plt.ylabel('TVA(${m^3}$)')
+    # plt.legend()
+    # plt.show()
