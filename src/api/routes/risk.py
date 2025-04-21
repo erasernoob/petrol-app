@@ -21,11 +21,17 @@ file_list = []
 
 # 最终集合成一个文件的path
 FINAL_FILE_PATH = os.path.join(os.environ['USERPROFILE'], 'PETRO_APP_MODEL_TRAIN.xlsx')
+REQUIRED_COLUMNS = ['TVA','WOBA', 'ROPA', 'TQA', 'RPMA']
 
 @router.post("/risk/upload")
 async def upload_file(file: UploadFile = File(...)):
     global file_list
     file_content = await file.read()
+
+    df = read_file(file=BytesIO(file_content))
+    missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
+    if missing:
+        raise HTTPException(status_code=503, detail="上传的历史样本集格式错误,请重新上传！")
 
     file_list.append(BytesIO(file_content))
 

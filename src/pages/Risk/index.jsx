@@ -64,6 +64,7 @@ export default function DrillPage() {
             if (e) {
                 setLoading(true);
                 setWaiting(false);
+                console.log(historyFile)
                 // 修改：使用第一个历史文件的路径
                 // if (historyFile.length > 0) {
                 // e.file_path = historyFile[0].path;
@@ -85,7 +86,7 @@ export default function DrillPage() {
             }
         } catch (error) {
             Message.error("计算内部出现错误，请检查输入参数！");
-            Message.error(error)
+            Message.error(error?.response?.data?.detail)
         } finally {
             setWaiting(false);
             setLoading(false);

@@ -68,17 +68,16 @@ export default function ParamsForm({
           'Content-Type': 'multipart/form-data',  // 让 Axios 知道上传的是表单数据
         }
       })
-      console.log(res)
+      onSuccess({
+        url: URL.createObjectURL(file),
+        name: file.name
+      })
 
     } catch (error) {
-      console.log(error)
-      Message.error(error)
-
+      Message.error(error?.response?.data?.detail)
+      onError()
     }
-    onSuccess({
-      url: URL.createObjectURL(file),
-      name: file.name
-    })
+
   };
 
   // 处理上传文件变化

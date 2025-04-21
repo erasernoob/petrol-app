@@ -26,14 +26,8 @@ export default function Sider({
     if (Array.isArray(filePaths)) {
       try {
         // 保存所有文件的信息
-        const fileInfos = await Promise.all(
-          filePaths.map(async (filePath) => {
-            const filename = await basename(filePath);
-            return { name: filename, path: filePath };
-          })
-        );
-
         // 更新历史文件列表
+
         setHistoryFile(fileInfos);
         setHistoryData(true);
 

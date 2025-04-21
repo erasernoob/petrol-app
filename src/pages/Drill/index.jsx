@@ -61,7 +61,7 @@ export default function DrillPage() {
       console.log(error);
       setLoading(false);
       setWaiting(true);
-      Message.error(error);
+      Message.error(error?.response?.data?.detail);
       Message.error("计算内部出现错误，请检查输入参数！");
     }
   };
@@ -84,7 +84,7 @@ export default function DrillPage() {
       console.log(error);
       setLoading(false);
       setWaiting(true);
-      Message.error(error);
+      Message.error(error?.response?.data?.detail);
       Message.error("计算内部出现错误，请检查输入参数！");
     }
   };
