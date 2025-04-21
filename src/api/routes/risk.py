@@ -1,9 +1,10 @@
 # api/routes/hydro.py
 import time
-from fastapi import Response
+from fastapi import Response, UploadFile, File, HTTPException
 import pandas as pd
 import numpy as np
 import os
+from io import BytesIO
 from fastapi import APIRouter
 from service import hydra
 from service.risk_model import train_main, generate_predict, load_model
@@ -16,14 +17,27 @@ from service.risk_result_plot import analyze_trend, process_tva_column
 router = APIRouter()
 
 risk_cache = {}
+file_list = []
+
+# 最终集合成一个文件的path
+FINAL_FILE_PATH = os.path.join(os.environ['USERPROFILE'], 'PETRO_APP_MODEL_TRAIN.xlsx')
+
+@router.post("/risk/upload")
+async def upload_file(file: UploadFile = File(...)):
+    global file_list
+    file_content = await file.read()
+
+    file_list.append(BytesIO(file_content))
+
+    return {"msg": "upload successfully"}
 
 # handle the csv and the excel
-def read_file(filepath):
+def read_file(file):
     try:
-        df = pd.read_csv(filepath)
+        df = pd.read_csv(file)
         return df
     except Exception:
-        df = pd.read_excel(filepath)
+        df = pd.read_excel(file)
         return df
     
 
@@ -37,31 +51,42 @@ def handle_the_filelist(filelist):
     df_res = pd.concat(dfs, ignore_index=True)
     print(f"df_res: {df_res}")
     # get the user path
-    path = os.path.join(os.environ['USERPROFILE'], 'PETRO_APP_MODEL_TRAIN.xlsx')
+    path = os.path.join(FINAL_FILE_PATH)
     df_res.to_excel(path, index=True)
     return path
 
 @router.post("/risk/train")
 async def model_train(dto: ModelTrainDTO):
     # handle the list to be a one single file
+    global file_list
 
-    train_path = handle_the_filelist(dto.file_path_list)
-    print(f"train_path: {train_path}")
-    global risk_cache
-    model, test_loader, scaler_y = train_main(train_path, 
-               dto.target_file_path, 
-               dto.LSTM_nums, 
-               dto.LSTM_layers,
-               dto.neuron_cnt,
-               dto.window_size,
-               dto.lr,
-               dto.num_epochs
-               ) 
-    risk_cache = {
-        "model": model,
-        "test_loader": test_loader,
-        "scaler_y": scaler_y,
-    }
+    try:
+        train_path = handle_the_filelist(file_list)
+        print(f"train_path: {train_path}")
+        global risk_cache
+        model, test_loader, scaler_y = train_main(train_path, 
+                dto.target_file_path, 
+                dto.LSTM_nums, 
+                dto.LSTM_layers,
+                dto.neuron_cnt,
+                dto.window_size,
+                dto.lr,
+                dto.num_epochs
+                ) 
+        risk_cache = {
+            "model": model,
+            "test_loader": test_loader,
+            "scaler_y": scaler_y,
+        }
+    except Exception as e:
+        # 清除FILELIS
+        if os.path.exists(FINAL_FILE_PATH):
+            os.remove(FINAL_FILE_PATH)
+        raise HTTPException(status_code=500, detail=f"模型训练失败: {str(e)}")
+
+    if os.path.exists(FINAL_FILE_PATH):
+       os.remove(FINAL_FILE_PATH)
+
     return {
         "msg": '模型训练完成'
     }

@@ -4,10 +4,12 @@ import {
   Form,
   Grid,
   Input,
+  Message,
   Tag,
-  Upload,
+  Upload
 } from "@arco-design/web-react";
 import { useEffect, useState } from "react";
+import { post } from "../../components/axios";
 import FileUpLoaderBtn from "../components/FileUploadBtn";
 
 export default function ParamsForm({
@@ -55,8 +57,24 @@ export default function ParamsForm({
   }, [historyFile]);
 
   // 自定义上传请求
-  const customRequest = (options) => {
+  const customRequest = async (options) => {
     const { onSuccess, file, onError } = options;
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await post("/risk/upload", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',  // 让 Axios 知道上传的是表单数据
+        }
+      })
+      console.log(res)
+
+    } catch (error) {
+      console.log(error)
+      Message.error(error)
+
+    }
     onSuccess({
       url: URL.createObjectURL(file),
       name: file.name
@@ -74,10 +92,9 @@ export default function ParamsForm({
     // 如果有文件，就更新 historyData 状态
     if (files && files.length > 0) {
       setHistoryData(true);
-
       // 将上传的文件转换为符合 handleUpload 需要的格式
       const paths = files.map((file) => file.url);
-      handleUpload(paths);
+      // handleUpload(paths);
     } else {
       // 如果没有文件，设置 historyData 为 false 并调用 handleCancel
       setHistoryData(false);
@@ -116,15 +133,22 @@ export default function ParamsForm({
           multiple
           customRequest={customRequest}
           onChange={handleFileChange}
-          fileList={uploadFileList}
+          // fileList={uploadFileList}
           showUploadList={false}
           accept=".xlsx,.xls,.csv"
         >
           <Button type="primary">导入历史样本集</Button>
         </Upload>
+        <FileUpLoaderBtn
+          uploadStat={predictData}
+          uploadText={"导入预测井"}
+          handleCancel={handleCancel}
+          handleUpload={handleUpload}
+          id={1}
+        />
         <Button
           type="primary"
-          disabled={!historyData}
+          disabled={!historyData || !predictData}
           onClick={() => handleSubmit()}
         >
           模型训练
@@ -294,19 +318,8 @@ export default function ParamsForm({
 
         <div>
           <Row gutter={16} style={{ marginTop: "20px" }}>
-            <Col span={8} style={{ textAlign: "center" }}>
-              <FileUpLoaderBtn
-                uploadStat={predictData}
-                uploadText={"导入预测井"}
-                handleCancel={handleCancel}
-                handleUpload={handleUpload}
-                id={1}
-                style={{
-                  width: "95%",
-                }}
-              />
-            </Col>
-            <Col span={8} style={{ textAlign: "center" }}>
+
+            <Col span={12} style={{ textAlign: "center" }}>
               <Button
                 type="primary"
                 size="large"
@@ -317,7 +330,7 @@ export default function ParamsForm({
                 输出预测结果
               </Button>
             </Col>
-            <Col span={8} style={{ textAlign: "center" }}>
+            <Col span={12} style={{ textAlign: "center" }}>
               <Button
                 type="primary"
                 size="large"
