@@ -5,9 +5,9 @@ import { post } from '../../components/axios';
 import { hydro } from '../../data/Params';
 import DynamicForm from "../components/DynamicForm";
 import '../style.css';
+import { dealWithTheDataUnit } from "../utils/utils";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
-import { dealWithTheDataUnit } from "../utils/utils";
 
 const tabsName = ['基本参数', '钻井液', '钻头', '钻杆接头', '地面管汇', '岩屑床']
 export default function HydroPage() {
@@ -44,7 +44,7 @@ export default function HydroPage() {
         } catch (error) {
             setLoading(false)
             setWaiting(true)
-            console.log(error)
+            Message.error(error?.response?.data?.detail)
             Message.error('计算内部出现错误，请检查输入参数！')
         }
     }

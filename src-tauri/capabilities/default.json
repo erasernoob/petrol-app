@@ -8,14 +8,17 @@
   "permissions": [
     {
       "identifier": "fs:scope",
-      "allow": [{ "path": "$HOME/**/*" }]
+      "allow": [
+        {
+          "path": "$HOME/**/*"
+        }
+      ]
     },
-
-
     "core:default",
     "opener:default",
     "dialog:default",
     "fs:write-all",
+    "fs:read-all",
     "fs:write-files",
     "fs:allow-write",
     "fs:allow-write-text-file",

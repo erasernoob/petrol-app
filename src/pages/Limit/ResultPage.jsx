@@ -16,15 +16,6 @@ export default function ResultPage({ curCondition, activeRoute, curveFile, typeO
 
     const option1 = Option(chartData,
         {
-            type: 'value',
-            name: '井深 (m）',
-            axisLine: {
-                onZero: false
-            },
-            position: 'left',
-            inverse: true
-        }, [
-        {
             name: 'ECD（g/cm3）',
             type: 'value',
             min: ecdMinVal,
@@ -36,18 +27,27 @@ export default function ResultPage({ curCondition, activeRoute, curveFile, typeO
             alignTicks: true,
             position: 'top',
         }
-    ], [
+        , [
+            {
+                type: 'value',
+                name: '井深 (m）',
+                axisLine: {
+                    // onZero: false
+                },
+                position: 'left',
+            },
+        ], [
         {
             name: 'ECD（g/cm3）',
             type: 'line',
             yAxisIndex: 0,
-            encode: { x: 'ECD', y: 'Sk' },
+            encode: { y: 'ECD', x: 'Sk' },
             sampling: 'lttb',
             smooth: false,
             lineStyle: { width: 1.5 },
             showSymbol: true
         }
-    ],)
+    ], "", 1)
     const option4 = Option(chartData,
         {
             type: 'value',

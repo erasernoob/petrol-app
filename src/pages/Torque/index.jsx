@@ -3,10 +3,10 @@ import Papa from 'papaparse'
 import { useState } from 'react'
 import { post } from "../../components/axios"
 import { torque } from '../../data/Params'
+import { dealWithTheDataUnit } from "../utils/utils"
 import MyForm from "./MyForm"
 import ResultPage from "./ResultPage"
 import Sider from "./Sider"
-import { dealWithTheDataUnit } from "../utils/utils"
 
 const options = ['轴向力', '扭矩']
 const work_conditions = ['旋转钻进', '滑动钻进', '起钻', '下钻', '倒划眼']
@@ -45,6 +45,7 @@ export default function TorquePage() {
             setLoading(false)
             // setFileList([{ name: '', path: '' }])
             setWaiting(true)
+            Message.error(error?.response?.data?.detail)
             Message.error('计算内部出现错误，请检查输入参数！')
         }
 

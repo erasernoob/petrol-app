@@ -1,7 +1,7 @@
 [package]
 # name = "petrol-app"
 name = "petrol-app"
-version = "0.9.5"
+version = "1.3.0"
 description = "大位移井钻井关键参数联动分析软件"
 authors = ["erasernoob"]
 edition = "2021"

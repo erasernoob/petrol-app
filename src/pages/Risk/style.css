@@ -1,0 +1,18 @@
+.second-card .arco-card-body {
+    height: 100px !important;
+    padding: 0px !important;
+}
+
+.arco-card .arco-card-size-default .arco-card-bordered {
+    padding: 0px !important;
+}
+
+.input-page-risk {
+    height: 100% !important;
+    color: #a8b8b4;
+}
+
+.arco-upload-type-text {
+    display: none !important;
+
+}

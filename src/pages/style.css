@@ -96,7 +96,7 @@
 .arco-tabs-content-vertical {
   height: 100%;
   border-bottom: 0px !important;
-  overflow-y: auto;
+  overflow-y: hidden;
   color: var(--font-color) !important;
 }
 

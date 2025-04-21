@@ -30,7 +30,8 @@ export const defaultFileList = { orbit: { name: '', path: '' }, drill: { name: '
 const postPath = ['/limit/eye', '/limit/hydro', '/limit/mechanism', '/limit/curve']
 const typeOptions = [
   [],
-  ['总循环压耗', '立管压力'],
+  // ['总循环压耗', '立管压力'],
+  ['总循环压耗'],
   ['井口轴向力', '井口扭矩', '安全系数'],
   ['井口轴向力', '井口扭矩', '安全系数', '屈曲临界载荷'],
 ]
@@ -103,6 +104,8 @@ export default function LimitPage() {
         setCurveFile(response2)
         const res2 = Papa.parse(response2, { header: true, dynamicTyping: true }).data
         setCurveData(res2)
+      } else {
+        setCalcCurve(false)
       }
 
       setChartData(res)
@@ -112,6 +115,7 @@ export default function LimitPage() {
       console.log(error)
       setLoading(false)
       setWaiting(true)
+      Message.error(error?.response?.data?.detail)
       Message.error('计算内部出现错误，请检查输入参数！')
     }
   }

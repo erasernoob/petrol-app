@@ -37,6 +37,8 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
         hydro_dto.yxmd, hydro_dto.H, hydro_dto.yx
     )
 
+    print(ECD)
+
 
     df = pd.DataFrame({
         "井深 (m)": pd.Series(Sk.flatten()),  

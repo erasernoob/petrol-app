@@ -60,11 +60,12 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
                     width: "100%",
                     display: "flex",
                     flexDirection: "column",
+                    height: "80vh",
                     gap: "2vh",
                     overflowY: "auto",
                     alignItems: "center",
                     paddingTop: "10px",
-                    paddingRight: "7vw",
+                    paddingRight: "6vw",
                     boxSizing: "border-box",
                   }}
                 >
