@@ -123,7 +123,7 @@ def analyze_trend(tva_data):
                 ratio = current_diff / current_threshold
                 if ratio >= 1.5:
                     danger_zones.append((start_idx, end_idx, 'Ⅱ', 'red', current_threshold))
-                elif ratio >= 1.0:
+                elif ratio >= 1.2:
                     danger_zones.append((start_idx, end_idx, 'Ⅰ', 'gold', current_threshold))
                 dynamic_thresholds.append(current_diff)
         else:
