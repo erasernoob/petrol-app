@@ -1,11 +1,11 @@
 const hydro = [
   {
     fundamental: {
-      pailiang: { name: "排量 (L/min)", value: 1500 },
+      pailiang: { name: "排量 (L/min)", value: 1700 },
       Dw: { name: "井眼直径 (mm)", value: 215.9 },
       Rzz: { name: "钻柱外径 (mm)", value: 127 },
       rzz: { name: "钻柱内径 (mm)", value: 108.6 },
-      Lzz: { name: "钻柱长度 (m)", value: 4190 },
+      Lzz: { name: "钻柱长度 (m)", value: 6199 },
       Rzt: { name: "钻铤外径 (mm)", value: 158.75 },
       rzt: { name: "钻铤内径 (mm)", value: 71.44 },
       Lzt: { name: "钻铤长度 (m)", value: 10 },
@@ -89,26 +89,26 @@ const torque = {
         { label: "倒划眼", value: 5 },
       ],
     },
-    v: { name: "钻进速度 (m/h)", value: 25.704 },
-    omega: { name: "转速 (r/min)", value: 50 },
-    T0: { name: "钻压 (kN)", value: 58.9 },
+    v: { name: "钻进速度 (m/h)", value: 23.10 },
+    omega: { name: "转速 (r/min)", value: 90 },
+    T0: { name: "钻压 (kN)", value: 39.22 },
     rhoi: { name: "钻井液密度 (kg/m³)", value: 1200 },
     Dw: { name: "井眼直径 (mm)", value: 215.9 },
-    tgxs: { name: "套管下深 (m)", value: 3500 },
+    tgxs: { name: "套管下深 (m)", value: 5976 },
     miua11: { name: "套管段摩阻系数", value: 0.15 },
     miua22: { name: "裸眼段摩阻系数", value: 0.2 },
-    js: { name: "计算井深 (m)", value: 4200 },
+    js: { name: "计算井深 (m)", value: 6209 },
   },
 };
 
 const limit_eye = [
   {
     fundamental: {
-      pailiang: { name: "排量 (L/min)", value: 1500 },
+      pailiang: { name: "排量 (L/min)", value: 1700 },
       Dw: { name: "井眼直径 (mm)", value: 215.9 },
       Rzz: { name: "钻柱外径 (mm)", value: 127 },
       rzz: { name: "钻柱内径 (mm)", value: 108.6 },
-      Lzz: { name: "钻柱长度 (m)", value: 4190 },
+      Lzz: { name: "钻柱长度 (m)", value: 6199 },
       Rzt: { name: "钻铤外径 (mm)", value: 158.75 },
       rzt: { name: "钻铤内径 (mm)", value: 71.44 },
       Lzt: { name: "钻铤长度 (m)", value: 10 },
@@ -150,11 +150,11 @@ const limit_eye = [
 const limit_hydro = [
   {
     fundamental: {
-      pailiang: { name: "排量 (L/min)", value: 1500 },
+      pailiang: { name: "排量 (L/min)", value: 1700 },
       Dw: { name: "井眼直径 (mm)", value: 215.9 },
       Rzz: { name: "钻柱外径 (mm)", value: 127 },
       rzz: { name: "钻柱内径 (mm)", value: 108.6 },
-      Lzz: { name: "钻柱长度 (m)", value: 4190 },
+      Lzz: { name: "钻柱长度 (m)", value: 6199 },
       Rzt: { name: "钻铤外径 (mm)", value: 158.75 },
       rzt: { name: "钻铤内径 (mm)", value: 71.44 },
       Lzt: { name: "钻铤长度 (m)", value: 10 },
@@ -235,12 +235,12 @@ const limit_mechanism = {
         { label: "倒划眼", value: 5 },
       ],
     },
-    v: { name: "钻进速度 (m/h)", value: 25.704 },
-    omega: { name: "转速 (r/min)", value: 50 },
-    T0: { name: "钻压 (kN)", value: 58.9 },
+    v: { name: "钻进速度 (m/h)", value: 23.10 },
+    omega: { name: "转速 (r/min)", value: 90 },
+    T0: { name: "钻压 (kN)", value: 39.22 },
     rhoi: { name: "钻井液密度 (kg/m³)", value: 1200 },
     Dw: { name: "井眼直径 (mm)", value: 215.9 },
-    tgxs: { name: "套管下深 (m)", value: 3500 },
+    tgxs: { name: "套管下深 (m)", value: 5976 },
     miua11: { name: "套管段摩阻系数", value: 0.15 },
     miua22: { name: "裸眼段摩阻系数", value: 0.2 },
     qfqd: { name: "钻柱屈服强度 (MPa)", value: 931 },
@@ -253,7 +253,7 @@ const limit_mechanism = {
 const limit_curve = {
   Holedia: { name: "井眼直径 (mm)", value: 215.9 },
   ml: { name: "钻柱弹性模量 (MPa)", value: 2.1e5 },
-  js: { name: "计算井深 (m)", value: 4200 },
+  js: { name: "计算井深 (m)", value: 6209 },
 };
 
 const drill_vibration = [
@@ -277,7 +277,7 @@ const drill_vibration = [
   },
   {
     fluid_parameters: {
-      uf: { name: "钻井液塑性粘度 (mPa.s)", value: 67 },
+      uf: { name: "钻井液塑性粘度 (mPa.s)", value: 21 },
       sita3: { name: "旋转粘度计读数（3转）", value: 7 },
       sita100: { name: "旋转粘度计读数（100转）", value: 41 },
       sita200: { name: "旋转粘度计读数（200转）", value: 69 },
@@ -285,8 +285,8 @@ const drill_vibration = [
   },
   {
     calculation_parameters: {
-      wob: { name: "钻压 (kN)", value: 100 },
-      V: { name: "转速 (r/min)", value: 90 },
+      wob: { name: "钻压 (kN)", value: 58.8 },
+      V: { name: "转速 (r/min)", value: 50 },
       miusb: { name: "静摩擦系数", value: 0.8 },
       miucb: { name: "动摩擦系数", value: 0.5 },
       Lv: { name: "垂直段长度 (m)", value: 3306 },

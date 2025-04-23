@@ -2,7 +2,8 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routes import hydro, limit, drill, torque, risk   # 导入拆分的路由
+# from routes import hydro, limit, drill, torque, risk   # 导入拆分的路由
+from routes import hydro, limit, drill, torque   # 导入拆分的路由
 
 app = FastAPI()
 
@@ -24,7 +25,7 @@ app.include_router(hydro.router)  # 注册 hydro 相关 API
 app.include_router(limit.router)  # 注册  相关 API
 app.include_router(torque.router)  # 注册 s 相关 API
 app.include_router(drill.router)  # 注册 s 相关 API
-app.include_router(risk.router)  # 注册 s 相关 API
+# app.include_router(risk.router)  # 注册 s 相关 API
 
 
 @app.get("/")
