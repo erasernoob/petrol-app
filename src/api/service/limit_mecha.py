@@ -317,8 +317,8 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
         if working_condition == 2 or working_condition == 3 or working_condition == 4:
             M[:] = 0
         # TODO FOR THE weired point in 4000m  
-        if working_condition == 2 and js == 4000:
-            T = T * 4
+        # if working_condition == 2 and js == 4000:
+        #     T = T * 4
 
         # aq = qfqd / ((T[0] * 1000 / (np.pi * (((Dtrans[-1] / 2) ** 2) - ((dtrans[-1] / 2) ** 2))) / 1000000))
         lyl = T[0] * 1000 / (np.pi * ((Dtrans[-1] / 2) ** 2 - (dtrans[-1] / 2) ** 2)) / 1_000_000
