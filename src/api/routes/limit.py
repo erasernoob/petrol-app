@@ -17,7 +17,7 @@ torque_cache = {}
 @router.post('/limit/eye')
 def get_limit_eye(limit_eye_dto : LimitEyeDTO):
     # 从 DTO 获取参数
-    guiji = pd.read_excel(limit_eye_dto.file_path, header=None).values  
+    guiji = pd.read_excel(limit_eye_dto.file_path).values  
 
     lbmx = limit_eye_dto.lbmx
     pailiang = limit_eye_dto.pailiang
@@ -140,8 +140,11 @@ async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
 @router.post("/limit/curve")
 async def get_limit_curve_result(limit_curve_dto: LimitCurveDTO ):
     # 读取上传的 Excel 文件
-    guiji = pd.read_excel(limit_curve_dto.file_path1, header=None).values  
-    zuanju = pd.read_excel(limit_curve_dto.file_path2, header=None).values  
+    guiji = pd.read_excel(limit_curve_dto.file_path1).values  
+    
+    # 钻具组合去掉第一列的列名
+    zuanju = pd.read_excel(limit_curve_dto.file_path2, header=None)
+    zuanju = zuanju.iloc[:, 1:].values
 
     fh, fs = limit_curve.main(
         guiji, 
