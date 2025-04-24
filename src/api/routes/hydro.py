@@ -22,7 +22,7 @@ async def get_hydro_chart_result(hydro_dto: HydroDTO):
 
     # 读取 Excel 文件
     # TODO: change this to upload the file
-    guiji = pd.read_excel(hydro_dto.file_path, header=None).values  
+    guiji = pd.read_excel(hydro_dto.file_path).values  
 
     # 计算结果
     Sk, Pgn, Phk, ECD, P, Plg, Pdm, dertaPzt = hydra.main(
