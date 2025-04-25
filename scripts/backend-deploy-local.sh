@@ -28,5 +28,8 @@ fi
 # 移动可执行文件
 cp dist/$EXECUTABLE ../../src-tauri/bin/
 
+cd ..
+pnpm tauri build
+
 deactivate
 # rm -rf venv/ build/ dist/

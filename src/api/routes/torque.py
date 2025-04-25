@@ -18,8 +18,9 @@ async def get_torque_data(torque_dto: TorqueDTO):
     global torque_cache
 
     # 轨迹和钻具组合
-    orbit = pd.read_excel(torque_dto.file_path1, header=None).to_numpy()
-    zuanju = pd.read_excel(torque_dto.file_path2, header=None).to_numpy()  
+    orbit = pd.read_excel(torque_dto.file_path1).to_numpy()
+    zuanju = pd.read_excel(torque_dto.file_path2, header=None)
+    zuanju = zuanju.iloc[:, 1:].to_numpy()
 
     # 云图 N E TCS T M Sk
     N, E, TCS, T, M, Sk = torque.mainfunc(

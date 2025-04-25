@@ -42,6 +42,7 @@ export default function DrillPage() {
       setLoading(true);
       const response = await post(
         "/drill/mse",
+
         JSON.stringify({ file_path: file.path })
       );
       const res = Papa.parse(response, {
@@ -61,7 +62,7 @@ export default function DrillPage() {
       console.log(error);
       setLoading(false);
       setWaiting(true);
-      Message.error(error?.response?.data?.detail);
+      Message.error(error?.message);
       Message.error("计算内部出现错误，请检查输入参数！");
     }
   };
@@ -84,7 +85,7 @@ export default function DrillPage() {
       console.log(error);
       setLoading(false);
       setWaiting(true);
-      Message.error(error?.response?.data?.detail);
+      Message.error(error?.message);
       Message.error("计算内部出现错误，请检查输入参数！");
     }
   };

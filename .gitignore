@@ -33,3 +33,4 @@ __pycache__/
 *.sln
 *.sw?
 mock/
+src-tauri/bin/backend.exe

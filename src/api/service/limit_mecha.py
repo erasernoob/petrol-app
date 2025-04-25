@@ -317,8 +317,8 @@ def mainfunc(guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, qfqd, jsjg, 
         if working_condition == 2 or working_condition == 3 or working_condition == 4:
             M[:] = 0
         # TODO FOR THE weired point in 4000m  
-        if working_condition == 2 and js == 4000:
-            T = T * 4
+        # if working_condition == 2 and js == 4000:
+        #     T = T * 4
 
         # aq = qfqd / ((T[0] * 1000 / (np.pi * (((Dtrans[-1] / 2) ** 2) - ((dtrans[-1] / 2) ** 2))) / 1000000))
         lyl = T[0] * 1000 / (np.pi * ((Dtrans[-1] / 2) ** 2 - (dtrans[-1] / 2) ** 2)) / 1_000_000
@@ -451,8 +451,9 @@ def plot_and_export(data, ylabel, filename, jsjg, yssd):
 
 def main(dto: LimitMechanismDTO ):
     # 读取井眼轨迹数据，并转换为 NumPy 数组
-    guiji = pd.read_excel(dto.file_path1, header=None).values
-    zuanju = pd.read_excel(dto.file_path2, header=None).values
+    guiji = pd.read_excel(dto.file_path1).values
+    zuanju = pd.read_excel(dto.file_path2)
+    zuanju = zuanju.iloc[:, 1:].values
 
     # 输出参数（调试用）
     print("参数初始化完成，准备进行计算...")

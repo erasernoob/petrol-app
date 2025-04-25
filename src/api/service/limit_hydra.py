@@ -7,7 +7,7 @@ from service import utils
 
 def main(dto: LimitHydroDTO):
     # 读取井眼轨迹
-    guiji = pd.read_excel(dto.file_path, header=None).values
+    guiji = pd.read_excel(dto.file_path).values
 
     # 输出参数（调试用）
     print("参数初始化完成，准备进行计算...")
