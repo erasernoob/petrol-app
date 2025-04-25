@@ -16,7 +16,6 @@ pyinstaller --onefile --name backend \
   --add-data="routes:routes" \
   --add-data="entity:entity" \
   --add-data="service:service" \
-  --exclude-module=torch \
   backend_main.py
 
 # 处理不同平台的可执行文件后缀

@@ -47,7 +47,7 @@ fn main() {
         .plugin(tauri_plugin_fs::init())
         .setup(|app| {
             // Determine the backend executable name based on the OS
-            let is_dev = true;
+            let is_dev = false;
             if !is_dev {
                 let file_name = format!("backend{}", env::consts::EXE_SUFFIX); // Automatically adds .exe on Windows
 
