@@ -58,6 +58,13 @@ class TorqueDTO(BaseModel):
     miua22: Optional[float]    # 裸眼段摩阻系数
     js: Optional[int]          # 计算井深 (m)
 
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
 class LimitEyeDTO(BaseModel):
     file_path: Optional[str]
     pailiang: Optional[float]  # 排量 (L/min)
@@ -78,6 +85,14 @@ class LimitEyeDTO(BaseModel):
     yxmd: Optional[float]
     H: Optional[float]
     jsjg: Optional[int]        # 井深计算间隔 (m)
+
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
 
 class LimitHydroDTO(BaseModel):
     file_path: Optional[str]
@@ -123,6 +138,14 @@ class LimitHydroDTO(BaseModel):
     yxmd: Optional[float]      # 岩屑密度 (kg/m³)
     H: Optional[float]         # 岩屑床高度 (%)
 
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
+
 class LimitMechanismDTO(BaseModel):
     file_path1: Optional[str]
     file_path2: Optional[str]
@@ -139,12 +162,28 @@ class LimitMechanismDTO(BaseModel):
     jsjg: Optional[int]        # 井深计算间隔 (m)
     ml: Optional[int]          # 钻柱模量
 
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
+
 class LimitCurveDTO(BaseModel):
     file_path1: Optional[str]
     file_path2: Optional[str]
     Holedia: Optional[float]   # 井眼直径 (m)
     ml: Optional[float]        # 钻柱弹性模量 (MPa)
     js: Optional[float]        # 计算井深 (m)
+
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
 
 class DrillVibrationDTO(BaseModel):
     # 钻头参数
@@ -177,8 +216,25 @@ class DrillVibrationDTO(BaseModel):
     TIME: Optional[float]      # 计算时长 (s)
     Dt: Optional[float]        # 时间步长 (s)
 
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
+
 class MSEDTO(BaseModel):
     file_path: Optional[str]
+
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
+
 
 class ModelTrainDTO(BaseModel):
     target_file_path: Optional[str]
@@ -189,5 +245,20 @@ class ModelTrainDTO(BaseModel):
     lr: Optional[float]
     num_epochs: Optional[int]  # 训练批次
 
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
 class ModelPredictDTO(BaseModel):
     file_path: Optional[str]
+
+    @validator('*', pre=True)
+    def empty_str_to_none(cls, v):
+        if v == "":
+            return None
+        return v
+
+
+
+
