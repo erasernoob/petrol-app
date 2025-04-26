@@ -31,6 +31,7 @@ def get_timestamp():
 
 
 def hydro_limit_eye(guiji, lbmx, pailiang, fluidden, n, K, miu, taof, Dw, Rzz, rzz, Lzz, Rzt, rzt, Lzt, yx, yxmd, H):
+    print(yx)
     """Main hydraulic calculation function"""
     data = guiji
     wc = lbmx
