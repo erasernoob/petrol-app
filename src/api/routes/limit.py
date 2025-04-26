@@ -1,4 +1,5 @@
 # api/routes/torque.py
+import numpy as np
 from fastapi import Response
 from pathlib import Path
 from service import limit_eye, limit_mecha, limit_mecha_curve
@@ -120,12 +121,18 @@ async def get_limit_mecanism_curve(dto: LimitMechanismDTO):
 @router.post("/limit/mechanism")
 async def get_limit_mechanism_result(limit_mechanism_dto: LimitMechanismDTO ):
     T_result, M_reuslt, aq_result, x_coords = limit_mecha.main(limit_mechanism_dto)
+    T_result = T_result.flatten()
+    aq_result = aq_result.flatten()
+
+    for index, t in enumerate(T_result):
+        if t <= 0:
+            aq_result[index] = np.nan
 
     df = pd.DataFrame({
         "Sk": x_coords.flatten(),   
-        "T": T_result.flatten(), # 井口轴向力
+        "T": T_result, # 井口轴向力
         "M": M_reuslt.flatten(), # 井口扭矩
-        "aq": aq_result.flatten() # 安全系数
+        "aq": aq_result # 安全系数
     })
 
     # **转换为 CSV 格式**
