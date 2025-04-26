@@ -6,6 +6,18 @@ import { BaseDirectory, writeFile } from '@tauri-apps/plugin-fs';
 import Big from 'big.js';
 import * as XLSX from "xlsx";
 
+const handleTheError = (error) => {
+  if (!error.response) {
+    Message.error("系统内部计算出现问题，请检查输入参数！")
+  }
+  const code = error.status
+  if (code === 422) {
+    Message.error("输入参数出现问题,请检查输入参数！")
+  } else if (code === 500) {
+    Message.error("系统内部计算出现问题，请检查！")
+  }
+}
+
 const saveData = async (data = [], name) => {
   data = data.map((value, index) => ({ value }))
   const worksheet = XLSX.utils.json_to_sheet(data, { skipHeader: true });
@@ -140,5 +152,5 @@ const dealWithTheDataUnit = (data, idx) => {
 const useTheInitialValue = true
 
 
-export { dealWithTheDataUnit, handleUpload, save2Data, saveAtFrontend, saveCurveFile, saveData, useTheInitialValue };
+export { dealWithTheDataUnit, handleTheError, handleUpload, save2Data, saveAtFrontend, saveCurveFile, saveData, useTheInitialValue };
 

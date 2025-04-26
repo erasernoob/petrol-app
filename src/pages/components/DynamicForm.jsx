@@ -6,7 +6,7 @@ import {
   Select,
   Tabs,
 } from "@arco-design/web-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = false }) => {
@@ -23,6 +23,12 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
   const FormItem = Form.Item;
 
   const [form] = Form.useForm();
+  useEffect(() => {
+    form.setFieldValue("y", 0)
+    form.setFieldValue("yx", 1)
+
+  }, [])
+
 
   return (
     <div className="form-wrapper">
@@ -172,6 +178,14 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
               type="primary"
               className="button submit-button"
               disabled={file.name == ""}
+              onClick={async () => {
+                try {
+                  console.log(await form.validate())
+                } catch (error) {
+                  console.log(error.errors)
+
+                }
+              }}
               htmlType="submit"
             >
               计算
