@@ -452,8 +452,10 @@ def plot_and_export(data, ylabel, filename, jsjg, yssd):
 def main(dto: LimitMechanismDTO ):
     # 读取井眼轨迹数据，并转换为 NumPy 数组
     guiji = pd.read_excel(dto.file_path1).values
-    zuanju = pd.read_excel(dto.file_path2)
+    zuanju = pd.read_excel(dto.file_path2, header=None)
+    print(zuanju)
     zuanju = zuanju.iloc[:, 1:].values
+    print(zuanju)
 
     # 输出参数（调试用）
     print("参数初始化完成，准备进行计算...")

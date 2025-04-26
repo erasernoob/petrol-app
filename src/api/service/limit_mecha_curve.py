@@ -9,7 +9,7 @@ from entity.DTO import LimitMechanismDTO
 # guiji, zuanju, wc, T0, rhoi, Dw, tgxs, miua11, miua22, max_depth, jsjg, v, omega
 def main(dto: LimitMechanismDTO):
     guiji = pd.read_excel(dto.file_path1).values
-    zuanju = pd.read_excel(dto.file_path2)
+    zuanju = pd.read_excel(dto.file_path2, header=None)
     zuanju = zuanju.iloc[:, 1:].values
     
     print("屈曲载荷 参数初始化完成，准备进行计算...")

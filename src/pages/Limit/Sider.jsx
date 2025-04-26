@@ -59,7 +59,9 @@ export default function Sider({
             setDrillState(false);
             setWaiting(true);
             setLoading(false);
-            setChartData([]);
+            if (setChartData) {
+              setChartData([]);
+            }
             setFile({ name: "", path: "" });
             setFileList(defaultFileList);
             setParams(false);

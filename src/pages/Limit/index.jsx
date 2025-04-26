@@ -1,4 +1,4 @@
-import { Card, Message } from "@arco-design/web-react";
+import { Card } from "@arco-design/web-react";
 import Papa from 'papaparse';
 import { useEffect, useState } from "react";
 import { post } from "../../components/axios";
@@ -10,7 +10,7 @@ import {
 } from "../../data/Params";
 import DynamicForm from "../components/DynamicForm";
 import MyForm from "../Torque/MyForm";
-import { dealWithTheDataUnit } from "../utils/utils";
+import { dealWithTheDataUnit, handleTheError } from "../utils/utils";
 import ResultPage from "./ResultPage";
 import Sider from "./Sider";
 
@@ -115,8 +115,7 @@ export default function LimitPage() {
       console.log(error)
       setLoading(false)
       setWaiting(true)
-      Message.error(error?.message);
-      Message.error('计算内部出现错误，请检查输入参数！')
+      handleTheError(error)
     }
   }
 
