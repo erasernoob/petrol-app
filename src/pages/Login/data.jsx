@@ -4,7 +4,7 @@ export default [
         'password': '88888888'
     },
     {
-        'username': 'root',
+        'username': 'erasernoob',
         'password': '88888888'
     }
 ]
