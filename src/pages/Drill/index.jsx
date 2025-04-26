@@ -1,4 +1,4 @@
-import { Card, Message } from "@arco-design/web-react";
+import { Card } from "@arco-design/web-react";
 import Papa from "papaparse";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -6,7 +6,7 @@ import { post } from "../../components/axios";
 import { drill_vibration } from "../../data/Params";
 import Sider from "../Limit/Sider";
 import DynamicForm from "../components/DynamicForm";
-import { dealWithTheDataUnit } from "../utils/utils";
+import { dealWithTheDataUnit, handleTheError } from "../utils/utils";
 import ResultPage from "./ResultPage";
 
 const subRoutesOptions = [
@@ -62,8 +62,7 @@ export default function DrillPage() {
       console.log(error);
       setLoading(false);
       setWaiting(true);
-      Message.error(error?.message);
-      Message.error("计算内部出现错误，请检查输入参数！");
+      handleTheError(error)
     }
   };
 
@@ -85,8 +84,7 @@ export default function DrillPage() {
       console.log(error);
       setLoading(false);
       setWaiting(true);
-      Message.error(error?.message);
-      Message.error("计算内部出现错误，请检查输入参数！");
+      handleTheError(error)
     }
   };
 

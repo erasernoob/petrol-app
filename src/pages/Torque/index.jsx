@@ -1,9 +1,9 @@
-import { Card, Message } from "@arco-design/web-react"
+import { Card } from "@arco-design/web-react"
 import Papa from 'papaparse'
 import { useState } from 'react'
 import { post } from "../../components/axios"
 import { torque } from '../../data/Params'
-import { dealWithTheDataUnit } from "../utils/utils"
+import { dealWithTheDataUnit, handleTheError } from "../utils/utils"
 import MyForm from "./MyForm"
 import ResultPage from "./ResultPage"
 import Sider from "./Sider"
@@ -45,8 +45,7 @@ export default function TorquePage() {
             setLoading(false)
             // setFileList([{ name: '', path: '' }])
             setWaiting(true)
-            Message.error(error?.message);
-            Message.error('计算内部出现错误，请检查输入参数！')
+            handleTheError(error)
         }
 
     }
