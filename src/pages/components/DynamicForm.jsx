@@ -25,7 +25,7 @@ const DynamicForm = ({ datas, handleSubmit, tabs, file, drill = false, limit = f
   const [form] = Form.useForm();
   useEffect(() => {
     form.setFieldValue("y", 0)
-    form.setFieldValue("yx", 1)
+    form.setFieldValue("yx", 0)
 
   }, [])
 

@@ -1,5 +1,5 @@
 import { Button, Checkbox, Form, Input, Select } from "@arco-design/web-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
@@ -13,6 +13,11 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const useTheInitialValue = useSelector((state) => state.data.useTheInitialValue)
   // 是否勾选计算屈曲
   const [checked, setChecked] = useState(false)
+
+  useEffect(() => {
+    form.setFieldValue("ml", 0)
+  }, [])
+
 
   return (
     <div className="form-wrapper-custom">
