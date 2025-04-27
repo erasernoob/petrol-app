@@ -43,6 +43,7 @@
 
 .arco-tabs-content-inner {
   /* height: 100%; */
+  /* overflow-y: hidden; */
   color: var(--font-color) !important;
 }
 
@@ -96,7 +97,7 @@
 .arco-tabs-content-vertical {
   height: 100%;
   border-bottom: 0px !important;
-  overflow-y: hidden;
+  overflow-y: auto;
   color: var(--font-color) !important;
 }
 
