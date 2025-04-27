@@ -1,5 +1,5 @@
-import { Button, Checkbox, Form, Input, Select } from "@arco-design/web-react";
-import { useState, useEffect } from "react";
+import { Button, Form, Input, Select } from "@arco-design/web-react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
@@ -15,9 +15,8 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
   const [checked, setChecked] = useState(false)
 
   useEffect(() => {
-    form.setFieldValue("ml", 0)
+    form.setFieldValue("calcCurve", 1)
   }, [])
-
 
   return (
     <div className="form-wrapper-custom">
@@ -57,9 +56,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
                       <FormItem
                         field={key}
                         key={key}
-                        disabled={
-                          !checked && key === "ml"
-                        }
                         label={field.name}
                         initialValue={useTheInitialValue ? field.value : ""}
 
@@ -84,31 +80,6 @@ const MyForm = ({ datas, handleSubmit, tabs, fileList, limit = false }) => {
 
                     if (values.wc === 4 && key === "calcCurve") {
                       return (<>
-                        <hr style={{
-                          display: 'block',
-                          marginTop: '2px',
-                          height: '1px',
-                          backgroundColor: '#000',
-                          width: 'calc(100% + 58px)', // 通过 calc() 来覆盖掉 padding
-                          marginLeft: '-60px' // 向左偏移 60px，覆盖 padding
-                        }}></hr>
-
-
-                        <FormItem
-                          key={key}
-                          label={field.name}
-                          field={key}
-                        >
-                          {/* 添加一条线作为额外的标签 */}
-                          <Checkbox
-                            checked={checked}
-                            onChange={(check) => {
-                              form.setFieldValue(key, check ? 1 : 0)
-                              setChecked(check)
-                              console.log(check)
-                            }}
-                          ></Checkbox>
-                        </FormItem >
                       </>)
                     }
 

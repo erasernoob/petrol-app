@@ -96,7 +96,7 @@ export default function LimitPage() {
       const res = Papa.parse(response, { header: true, dynamicTyping: true }).data
 
 
-      if (activeRoute === 3) {
+      if (activeRoute === 3 && data.wc === 4) {
         setCalcCurve(true)
 
         console.log("进入计算curve逻辑")
